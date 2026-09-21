@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>나만의 웹앱 만들기 : 바이브코딩 완벽 실습 가이드</title>
+<style>
+/* ============ FONT : SUIT ============ */
+@font-face{
+  font-family:'SUIT Variable';
+  src:url('https://cdn.jsdelivr.net/gh/sun-typeface/SUIT@2/fonts/variable/woff2/SUIT-Variable.woff2') format('woff2-variations');
+  font-weight:100 900; font-style:normal; font-display:swap;
+}
+@font-face{
+  font-family:'SUIT';
+  src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_suit@1.0/SUIT-Regular.woff2') format('woff2');
+  font-weight:400; font-display:swap;
+}
+@font-face{
+  font-family:'SUIT';
+  src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_suit@1.0/SUIT-Bold.woff2') format('woff2');
+  font-weight:700; font-display:swap;
+}
+
+/* ============ TOKENS ============ */
+:root{
+  --bg:#F5F5F5;
+  --ink:#26262B;
+  --red:#E62B1E;
+  --charcoal:#1A1A1A;
+  --ink-70:#55555E;
+  --ink-45:#8A8A92;
+  --ink-25:#B9B9C0;
+  --line:#E2E2E4;
+  --line-soft:#ECECEE;
+  --white:#FFFFFF;
+  --d-line:rgba(255,255,255,.14);
+  --d-text:rgba(255,255,255,.72);
+  --d-dim:rgba(255,255,255,.45);
+  --font:'SUIT Variable','SUIT','Pretendard','Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+}
+
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;}
+body{
+  background:#DCDCDE;
+  font-family:var(--font);
+  color:var(--ink);
+  overflow:hidden;
+  -webkit-font-smoothing:antialiased;
+  letter-spacing:-.02em;
+}
+
+/* ============ STAGE (16:9 fixed, scaled) ============ */
+#viewport{position:fixed;inset:0;overflow:hidden;}
+#stage{
+  width:1600px;height:900px;position:absolute;left:50%;top:50%;
+  transform-origin:center center;
+  transform:translate(-50%,-50%) scale(1);
+  box-shadow:0 30px 80px rgba(0,0,0,.18);
+}
+.slide{
+  position:absolute;inset:0;
+  background:var(--bg);
+  padding:74px 88px 70px;
+  display:none;
+  overflow:hidden;
+}
+.slide.on{display:flex;flex-direction:column;animation:fade .38s ease;}
+.fill{flex:1;min-height:0;}
+.fill.grid{display:grid;align-items:stretch;}
+.fill .card{height:100%;}
+.colstack{display:flex;flex-direction:column;}
+.colstack>.card{height:auto;}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.slide.dark{background:var(--charcoal);color:#fff;}
+
+/* ============ COMMON PARTS ============ */
+.eyebrow{
+  font-size:14px;font-weight:700;letter-spacing:.22em;color:var(--ink-45);
+  display:flex;align-items:center;gap:12px;margin-bottom:18px;text-transform:uppercase;
+}
+.eyebrow::before{content:"";width:22px;height:2px;background:var(--red);display:block;}
+.dark .eyebrow{color:var(--d-dim);}
+
+h1.title{font-size:54px;font-weight:800;line-height:1.22;letter-spacing:-.035em;}
+h2.title{font-size:50px;font-weight:800;line-height:1.24;letter-spacing:-.035em;}
+.title .r{color:var(--red);}
+.dark .title{color:#fff;}
+
+.lead{font-size:22px;line-height:1.8;color:var(--ink-70);font-weight:500;}
+.dark .lead{color:var(--d-text);}
+.lead .b{color:var(--ink);font-weight:700;}
+.dark .lead .b{color:#fff;}
+.lead .r{color:var(--red);font-weight:700;}
+
+.rule{height:1px;background:var(--line);margin:26px 0;}
+.dark .rule{background:var(--d-line);}
+
+.pager{
+  position:absolute;right:88px;bottom:38px;
+  font-size:13px;font-weight:700;letter-spacing:.14em;color:var(--ink-25);
+}
+.dark .pager{color:rgba(255,255,255,.3);}
+.pager b{color:var(--red);}
+.mark{
+  position:absolute;left:88px;bottom:38px;
+  font-size:12px;font-weight:700;letter-spacing:.2em;color:var(--ink-25);
+}
+.dark .mark{color:rgba(255,255,255,.3);}
+
+.card{
+  background:var(--white);border:1px solid var(--line);border-radius:4px;padding:40px 40px 38px;
+}
+.dark .card{background:#232329;border-color:var(--d-line);}
+.card.accent{border-top:3px solid var(--red);}
+
+.chip{
+  display:inline-flex;align-items:center;gap:8px;height:34px;padding:0 15px;
+  border:1px solid var(--line);border-radius:999px;background:#fff;
+  font-size:14px;font-weight:700;color:var(--ink-70);
+}
+.chip.red{background:var(--red);border-color:var(--red);color:#fff;}
+.chip.ink{background:var(--ink);border-color:var(--ink);color:#fff;}
+
+.num{font-size:15px;font-weight:800;color:var(--red);letter-spacing:.06em;}
+.kicker{font-size:25px;font-weight:800;letter-spacing:-.03em;}
+.body{font-size:18.5px;line-height:1.8;color:var(--ink-70);font-weight:500;}
+.dark .body{color:var(--d-text);}
+.body .r{color:var(--red);font-weight:700;}
+.body .b{color:var(--ink);font-weight:700;}
+.dark .body .b{color:#fff;}
+
+.dot{width:6px;height:6px;border-radius:50%;background:var(--red);flex:none;margin-top:9px;}
+ul.list{list-style:none;display:flex;flex-direction:column;gap:12px;}
+ul.list li{display:flex;gap:13px;font-size:18.5px;line-height:1.7;color:var(--ink-70);font-weight:500;}
+.dark ul.list li{color:var(--d-text);}
+
+.icon{width:28px;height:28px;stroke:var(--ink);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;}
+.icon.red{stroke:var(--red);}
+.icon.w{stroke:#fff;}
+.ibox{
+  width:60px;height:60px;border:1px solid var(--line);border-radius:3px;
+  display:grid;place-items:center;background:#fff;
+}
+.dark .ibox{background:#2B2B32;border-color:var(--d-line);}
+.ibox.red{background:var(--red);border-color:var(--red);}
+.ibox.ink{background:var(--ink);border-color:var(--ink);}
+
+.quote{
+  border-left:3px solid var(--red);padding:12px 0 12px 18px;
+  font-size:19px;font-weight:700;line-height:1.6;color:var(--ink);
+}
+.dark .quote{color:#fff;}
+
+.stat-n{font-size:70px;font-weight:800;line-height:1;letter-spacing:-.05em;color:var(--red);}
+.stat-l{font-size:15px;font-weight:600;color:var(--ink-45);margin-top:10px;letter-spacing:-.01em;}
+.dark .stat-l{color:var(--d-dim);}
+
+/* red circle deco (ref1) */
+.deco-dot{position:absolute;border-radius:50%;background:var(--red);}
+
+/* ============ PRINT (PDF 내보내기) ============ */
+@page{size:1600px 900px;margin:0;}
+@media print{
+  body{background:#fff;overflow:visible;}
+  #viewport{position:static;display:block;}
+  #stage{position:static;transform:none;box-shadow:none;width:1600px;height:auto;}
+  .slide{display:flex !important;flex-direction:column;position:relative;
+         width:1600px;height:900px;break-after:page;animation:none;}
+  #nav,#bar{display:none !important;}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+}
+
+/* ============ NAV ============ */
+#bar{position:fixed;left:0;top:0;height:3px;background:var(--red);z-index:20;transition:width .3s ease;}
+#nav{
+  position:fixed;right:22px;bottom:18px;z-index:20;display:flex;gap:8px;align-items:center;
+  opacity:.28;transition:opacity .2s;
+}
+#nav:hover{opacity:1;}
+#nav button{
+  width:34px;height:34px;border:1px solid #BEBEC2;background:#fff;color:var(--ink);
+  border-radius:3px;cursor:pointer;font-size:15px;font-family:var(--font);font-weight:700;
+}
+#nav button:hover{background:var(--ink);color:#fff;border-color:var(--ink);}
+#nav .idx{font-size:13px;font-weight:700;color:#4A4A50;padding:0 6px;}
+</style>
+</head>
+<body>
+
+<!-- ICON SPRITE -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-monitor" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="13" rx="1.5"/><path d="M8 21h8M12 17v4"/></symbol>
+  <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v11m0 0 4-4m-4 4-4-4"/><path d="M4 17v3h16v-3"/></symbol>
+  <symbol id="i-browser" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="1.5"/><path d="M2 9h20M6 6.5h.01M9 6.5h.01"/></symbol>
+  <symbol id="i-puzzle" viewBox="0 0 24 24"><path d="M10 4a2 2 0 1 1 4 0v1h4a1 1 0 0 1 1 1v4h1a2 2 0 1 1 0 4h-1v4a1 1 0 0 1-1 1h-4v-1a2 2 0 1 0-4 0v1H6a1 1 0 0 1-1-1v-4H4a2 2 0 1 1 0-4h1V6a1 1 0 0 1 1-1h4z"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 14v7"/><path d="M9 3h6l-1 6 3 3H7l3-3-1-6z"/></symbol>
+  <symbol id="i-github" viewBox="0 0 24 24"><path d="M9 19c-4 1.3-4-2-6-2.5m12 4.5v-3.4c0-1 .1-1.4-.5-2 2.3-.3 4.5-1.2 4.5-5.1a4 4 0 0 0-1.1-2.8 3.7 3.7 0 0 0-.1-2.8s-.9-.3-3 1.1a10.3 10.3 0 0 0-5.6 0C7.1 4.6 6.2 4.9 6.2 4.9a3.7 3.7 0 0 0-.1 2.8A4 4 0 0 0 5 10.5c0 3.9 2.2 4.8 4.5 5.1-.4.4-.5.9-.5 1.5V21"/></symbol>
+  <symbol id="i-cloud" viewBox="0 0 24 24"><path d="M6.5 19a4.5 4.5 0 0 1-.4-9A6 6 0 0 1 18 10.2 4.4 4.4 0 0 1 17.5 19h-11z"/><path d="M12 16v-5m0 0-2.2 2.2M12 11l2.2 2.2"/></symbol>
+  <symbol id="i-db" viewBox="0 0 24 24"><ellipse cx="12" cy="5.5" rx="8" ry="3"/><path d="M4 5.5v13c0 1.7 3.6 3 8 3s8-1.3 8-3v-13"/><path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></symbol>
+  <symbol id="i-chip" viewBox="0 0 24 24"><rect x="7" y="7" width="10" height="10" rx="1"/><path d="M10 3v4M14 3v4M10 17v4M14 17v4M3 10h4M3 14h4M17 10h4M17 14h4"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="11" rx="1.5"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/><path d="M12 15v2"/></symbol>
+  <symbol id="i-unlock" viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="11" rx="1.5"/><path d="M8 10V7a4 4 0 0 1 7.5-1.9"/><path d="M12 15v2"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M4 12.5 9.5 18 20 6.5"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4 12h15m0 0-5.5-5.5M19 12l-5.5 5.5"/></symbol>
+  <symbol id="i-warn" viewBox="0 0 24 24"><path d="M12 4 2.5 20h19L12 4z"/><path d="M12 10v4.5M12 17.4h.01"/></symbol>
+  <symbol id="i-rocket" viewBox="0 0 24 24"><path d="M12 2c3.5 2.2 5.5 6 5.5 10l-2.6 3H9.1l-2.6-3C6.5 8 8.5 4.2 12 2z"/><path d="M9 15l-2.5 4.5L10 18M15 15l2.5 4.5L14 18"/><circle cx="12" cy="9.5" r="1.7"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M16.5 16.5 21 21"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></symbol>
+  <symbol id="i-bot" viewBox="0 0 24 24"><rect x="4" y="7" width="16" height="12" rx="2"/><path d="M12 3v4M8 19v2M16 19v2"/><circle cx="9.2" cy="12.5" r="1"/><circle cx="14.8" cy="12.5" r="1"/></symbol>
+  <symbol id="i-img" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="1.5"/><circle cx="8.5" cy="9.5" r="1.7"/><path d="M4 18l5.2-5.2 3.3 3.3 2.8-2.6L20 18"/></symbol>
+  <symbol id="i-cursor" viewBox="0 0 24 24"><path d="M5 3l14 8-6.2 1.6L9.6 19 5 3z"/></symbol>
+  <symbol id="i-code" viewBox="0 0 24 24"><path d="M9 7 4 12l5 5M15 7l5 5-5 5"/></symbol>
+  <symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2"/><path d="M12 2.5v3M12 18.5v3M21.5 12h-3M5.5 12h-3M18.7 5.3l-2.1 2.1M7.4 16.6l-2.1 2.1M18.7 18.7l-2.1-2.1M7.4 7.4 5.3 5.3"/></symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24"><path d="M4 5h16a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H9l-5 4V6a1 1 0 0 1 1-1z"/></symbol>
+  <symbol id="i-brain" viewBox="0 0 24 24"><path d="M12 5a3 3 0 0 0-5.6-1.5A2.8 2.8 0 0 0 4 8.2a3 3 0 0 0 .6 4.6A3 3 0 0 0 7.5 18a3 3 0 0 0 4.5.6z"/><path d="M12 5a3 3 0 0 1 5.6-1.5A2.8 2.8 0 0 1 20 8.2a3 3 0 0 1-.6 4.6A3 3 0 0 1 16.5 18a3 3 0 0 1-4.5.6z"/><path d="M12 5v15"/></symbol>
+  <symbol id="i-link" viewBox="0 0 24 24"><path d="M10.5 13.5a4 4 0 0 0 5.7 0l2.6-2.6a4 4 0 0 0-5.7-5.7l-1.3 1.3"/><path d="M13.5 10.5a4 4 0 0 0-5.7 0l-2.6 2.6a4 4 0 0 0 5.7 5.7l1.3-1.3"/></symbol>
+  <symbol id="i-layers" viewBox="0 0 24 24"><path d="M12 3 3 8l9 5 9-5-9-5z"/><path d="M3 13l9 5 9-5M3 17.5l9 5 9-5"/></symbol>
+  <symbol id="i-skip" viewBox="0 0 24 24"><path d="M5 5l9 7-9 7V5zM18 5v14"/></symbol>
+</svg>
+
+<div id="bar"></div>
+<div id="viewport"><div id="stage">
+
+<!-- ================= 01 TITLE ================= -->
+<section class="slide on">
+  <div class="deco-dot" style="width:128px;height:128px;left:-62px;bottom:-62px;"></div>
+  <div style="position:absolute;right:0;top:0;width:640px;height:900px;background:#EDEDEF;"></div>
+
+  <div style="position:relative;z-index:2;width:820px;">
+    <div class="eyebrow">Vibe Coding Blueprint · 2026</div>
+    <h1 class="title" style="font-size:60px;">
+      나만의 웹앱 만들기<span class="r">:</span><br>
+      <span class="r">바이브코딩</span> 완벽 실습 가이드
+    </h1>
+    <div style="font-size:23px;font-weight:600;color:var(--ink-70);margin-top:22px;">
+      내 컴퓨터에 천재 AI 개발자 온보딩하기
+    </div>
+    <div class="rule" style="width:520px;margin:38px 0 30px;"></div>
+    <p class="lead" style="width:560px;">
+      코딩 지식 제로. 깃허브 · 버셀 · 데이터베이스의 높은 진입장벽.<br>
+      이 모든 것을 무너뜨릴 <span class="r">‘바이브코딩(Vibe Coding)’ 초기 환경 세팅</span>의
+      모든 것을 <span class="b">단계별 설계도</span>로 펼쳐 드립니다.
+    </p>
+
+    <div style="display:flex;gap:58px;margin-top:56px;">
+      <div>
+        <div class="stat-n">0</div>
+        <div class="stat-l">필요한 코딩 지식</div>
+      </div>
+      <div style="width:1px;background:var(--line);"></div>
+      <div>
+        <div class="stat-n">3</div>
+        <div class="stat-l">필수 인프라</div>
+      </div>
+      <div style="width:1px;background:var(--line);"></div>
+      <div>
+        <div class="stat-n">1<span style="font-size:30px;font-weight:700;">시간</span></div>
+        <div class="stat-l">단 한 번의 초기 세팅</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- right graphic -->
+  <svg viewBox="0 0 480 620" style="position:absolute;right:82px;top:140px;width:480px;height:620px;z-index:3;">
+    <defs><pattern id="gridA" width="26" height="26" patternUnits="userSpaceOnUse">
+      <path d="M26 0H0V26" fill="none" stroke="#DCDCDE" stroke-width="1"/></pattern></defs>
+    <rect x="0" y="0" width="480" height="620" fill="url(#gridA)" opacity=".9"/>
+    <rect x="40" y="60" width="180" height="180" fill="#26262B"/>
+    <rect x="248" y="60" width="180" height="180" fill="none" stroke="#26262B" stroke-width="1.5"/>
+    <rect x="40" y="268" width="180" height="180" fill="none" stroke="#26262B" stroke-width="1.5"/>
+    <rect x="248" y="268" width="180" height="180" fill="#E62B1E"/>
+    <g stroke="#fff" stroke-width="1.6" fill="none" stroke-linecap="round">
+      <use href="#i-bot" x="102" y="122" width="56" height="56" class="icon w" style="stroke-width:1.2"/>
+    </g>
+    <use href="#i-rocket" x="310" y="330" width="56" height="56" style="stroke:#fff;fill:none;stroke-width:1.2;stroke-linecap:round;stroke-linejoin:round"/>
+    <use href="#i-code" x="310" y="122" width="56" height="56" style="stroke:#26262B;fill:none;stroke-width:1.2;stroke-linecap:round;stroke-linejoin:round"/>
+    <use href="#i-layers" x="102" y="330" width="56" height="56" style="stroke:#26262B;fill:none;stroke-width:1.2;stroke-linecap:round;stroke-linejoin:round"/>
+    <path d="M40 500h388" stroke="#26262B" stroke-width="1.5"/>
+    <circle cx="40" cy="500" r="5" fill="#E62B1E"/>
+    <circle cx="428" cy="500" r="5" fill="#26262B"/>
+    <text x="40" y="530" font-family="SUIT Variable,sans-serif" font-size="13" font-weight="700" fill="#8A8A92" letter-spacing="2">IDEA</text>
+    <text x="428" y="530" text-anchor="end" font-family="SUIT Variable,sans-serif" font-size="13" font-weight="700" fill="#8A8A92" letter-spacing="2">WEB APP</text>
+  </svg>
+
+  <div class="mark">VIBE CODING</div>
+  <div class="pager"><b>01</b> / 13</div>
+</section>
+
+<!-- ================= 02 본질 ================= -->
+<section class="slide">
+  <div class="eyebrow">Intro · 개념 정의</div>
+  <h2 class="title">바이브코딩의 본질<span class="r">:</span> 나만의 <span class="r">AI 직원</span> 온보딩</h2>
+
+  <div class="fill grid" style="grid-template-columns:1fr 1fr;gap:70px;margin-top:46px;">
+    <div style="display:flex;flex-direction:column;justify-content:center;">
+      <p class="lead">
+        바이브코딩은 단순히 질문에 답을 얻는 <span class="b">검색이 아닙니다.</span>
+        내 PC에 상주하며 명확한 <span class="b">‘업무 지시(프롬프트)’</span>에 따라
+        결과물을 알아서 구축하는 <span class="r">전담 개발자</span>를 두는 것입니다.
+      </p>
+      <div class="rule" style="width:120px;margin:30px 0;"></div>
+      <p class="lead">
+        오늘 우리의 유일한 목표는 이 천재 직원이 스스로 일할 수 있는
+        <span class="r">완벽한 업무 환경(Workspace)</span>을 세팅하는 것입니다.
+      </p>
+    </div>
+
+    <!-- compare : 검색 vs 전담 개발자 -->
+    <div class="colstack" style="gap:18px;">
+      <div class="card" style="flex:1;padding:32px 32px;background:#EDEDEF;border-color:#E2E2E4;display:flex;flex-direction:column;justify-content:center;">
+        <div style="display:flex;align-items:center;gap:14px;">
+          <div class="ibox" style="background:#EDEDEF;border-color:#D8D8DB;"><svg class="icon" style="stroke:#8A8A92"><use href="#i-search"/></svg></div>
+          <div>
+            <div style="font-size:12px;font-weight:800;letter-spacing:.18em;color:var(--ink-25);">BEFORE</div>
+            <div class="kicker" style="color:var(--ink-45);">검색형 AI</div>
+          </div>
+        </div>
+        <div style="margin-top:18px;height:10px;background:#DCDCDE;width:36%;"></div>
+        <div class="body" style="margin-top:14px;font-size:16px;color:var(--ink-45);">답변만 제공 · 실행은 사람의 몫 · 매번 수동 개입</div>
+      </div>
+
+      <div style="display:grid;place-items:center;"><svg class="icon red" style="width:22px;height:22px;transform:rotate(90deg)"><use href="#i-arrow"/></svg></div>
+
+      <div class="card accent" style="flex:1;padding:32px 32px;display:flex;flex-direction:column;justify-content:center;">
+        <div style="display:flex;align-items:center;gap:14px;">
+          <div class="ibox red"><svg class="icon w"><use href="#i-bot"/></svg></div>
+          <div>
+            <div style="font-size:12px;font-weight:800;letter-spacing:.18em;color:var(--red);">AFTER</div>
+            <div class="kicker">상주형 AI 직원</div>
+          </div>
+        </div>
+        <div style="margin-top:18px;height:10px;background:var(--red);width:100%;"></div>
+        <div class="body" style="margin-top:14px;font-size:16px;">지시 → <span class="b">구축 · 배포까지 자동 수행</span> · 사람은 방향만 결정</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mark">VIBE CODING</div>
+  <div class="pager"><b>02</b> / 13</div>
+</section>
+
+<!-- ================= 03 PHASE 1 ================= -->
+<section class="slide">
+  <div class="eyebrow">Phase 01 · 직원 선발</div>
+  <h2 class="title">프로젝트에 맞는 <span class="r">직원 프로필 선택</span></h2>
+  <p class="lead" style="margin-top:18px;">만들려는 앱의 성격에 따라 함께 일할 AI를 먼저 고릅니다.</p>
+
+  <div class="fill grid" style="grid-template-columns:1fr 1fr;gap:34px;margin-top:38px;">
+    <!-- ChatGPT -->
+    <div class="card" style="padding:0;overflow:hidden;display:flex;flex-direction:column;">
+      <div style="background:var(--ink);padding:30px 38px;display:flex;align-items:center;gap:14px;">
+        <svg class="icon w" style="width:24px;height:24px"><use href="#i-code"/></svg>
+        <div style="color:#fff;font-size:28px;font-weight:800;letter-spacing:-.03em;">ChatGPT <span style="opacity:.55">(Codex)</span></div>
+      </div>
+      <div style="flex:1;padding:36px 38px 40px;display:flex;flex-direction:column;justify-content:space-between;gap:20px;">
+        <div style="flex:1;display:flex;flex-direction:column;justify-content:center;">
+          <div style="font-size:13px;font-weight:800;letter-spacing:.14em;color:var(--ink-25);margin-bottom:9px;">주특기</div>
+          <div class="body" style="color:var(--ink);font-weight:600;">시각적 작업, 카드뉴스 생성, 이미지 활용 앱 제작</div>
+        </div>
+        <div style="height:1px;background:var(--line-soft);flex:none;"></div>
+        <div style="flex:1;display:flex;flex-direction:column;justify-content:center;">
+          <div style="font-size:13px;font-weight:800;letter-spacing:.14em;color:var(--ink-25);margin-bottom:9px;">접근성</div>
+          <div class="body">구독 없이도 <span class="b">일정 할당량 내에서 무료 사용 가능</span></div>
+        </div>
+        <div style="height:1px;background:var(--line-soft);flex:none;"></div>
+        <div style="flex:1;display:flex;flex-direction:column;justify-content:center;">
+          <div style="font-size:13px;font-weight:800;letter-spacing:.14em;color:var(--ink-25);margin-bottom:9px;">작업 환경</div>
+          <div class="body">바탕화면 전용 앱의 <span class="b">‘Codex’ 모드</span>로 실행</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Claude -->
+    <div class="card" style="padding:0;overflow:hidden;border-color:var(--red);display:flex;flex-direction:column;">
+      <div style="background:var(--red);padding:30px 38px;display:flex;align-items:center;gap:14px;">
+        <svg class="icon w" style="width:24px;height:24px"><use href="#i-layers"/></svg>
+        <div style="color:#fff;font-size:28px;font-weight:800;letter-spacing:-.03em;">Claude <span style="opacity:.7">(Code)</span></div>
+      </div>
+      <div style="flex:1;padding:36px 38px 40px;display:flex;flex-direction:column;justify-content:space-between;gap:20px;">
+        <div style="flex:1;display:flex;flex-direction:column;justify-content:center;">
+          <div style="font-size:13px;font-weight:800;letter-spacing:.14em;color:var(--red);margin-bottom:9px;">주특기</div>
+          <div class="body" style="color:var(--ink);font-weight:600;">시스템 로직 구축, 데이터 분석, 복잡한 내부 구조 앱 제작</div>
+        </div>
+        <div style="height:1px;background:var(--line-soft);flex:none;"></div>
+        <div style="flex:1;display:flex;flex-direction:column;justify-content:center;">
+          <div style="font-size:13px;font-weight:800;letter-spacing:.14em;color:var(--red);margin-bottom:9px;">접근성</div>
+          <div class="body"><span class="b">유료 구독 필요</span></div>
+        </div>
+        <div style="height:1px;background:var(--line-soft);flex:none;"></div>
+        <div style="flex:1;display:flex;flex-direction:column;justify-content:center;">
+          <div style="font-size:13px;font-weight:800;letter-spacing:.14em;color:var(--red);margin-bottom:9px;">주의사항</div>
+          <div class="body">코드 충돌 방지를 위해 반드시 <span class="r">개별 ‘새 프로젝트’ 폴더 분리 필수</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mark">VIBE CODING</div>
+  <div class="pager"><b>03</b> / 13</div>
+</section>
+
+<!-- ================= 04 PHASE 2 ================= -->
+<section class="slide">
+  <div class="eyebrow">Phase 02 · 작업 환경</div>
+  <h2 class="title">직원의 <span class="r">주 작업대</span> 마련하기</h2>
+
+  <div class="fill grid" style="grid-template-columns:1fr 92px 1fr;margin-top:46px;">
+    <div class="card accent" style="display:flex;flex-direction:column;">
+      <div style="display:flex;align-items:center;gap:16px;">
+        <div class="ibox ink"><svg class="icon w"><use href="#i-download"/></svg></div>
+        <div>
+          <div class="num">01</div>
+          <div class="kicker" style="margin-top:2px;">데스크톱 전용 앱 설치</div>
+        </div>
+      </div>
+      <div class="rule" style="margin:24px 0 22px;"></div>
+      <p class="body">
+        웹사이트 접속이 아닌, 반드시 <span class="b">PC에 직접 설치된</span>
+        ChatGPT 앱(Codex) 또는 Claude 앱(Code)을 실행합니다.
+        이곳이 <span class="r">AI 직원의 본부</span>입니다.
+      </p>
+      <div style="display:flex;gap:10px;margin-top:auto;">
+        <span class="chip">ChatGPT Desktop</span>
+        <span class="chip">Claude Desktop</span>
+      </div>
+    </div>
+
+    <div style="display:grid;place-items:center;">
+      <svg class="icon red" style="width:30px;height:30px"><use href="#i-arrow"/></svg>
+    </div>
+
+    <div class="card accent" style="display:flex;flex-direction:column;">
+      <div style="display:flex;align-items:center;gap:16px;">
+        <div class="ibox ink"><svg class="icon w"><use href="#i-browser"/></svg></div>
+        <div>
+          <div class="num">02</div>
+          <div class="kicker" style="margin-top:2px;">기본 브라우저 Chrome 설정</div>
+        </div>
+      </div>
+      <div class="rule" style="margin:24px 0 22px;"></div>
+      <p class="body">
+        우측 상단 <span class="b">설정 &gt; 기본 브라우저 &gt; Chrome</span> 선택.
+        AI 직원이 모든 작업을 자동화하기 위해 반드시 필요한
+        <span class="r">표준 작업대</span>입니다.
+      </p>
+      <div style="margin-top:auto;display:flex;flex-direction:column;gap:10px;width:320px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;background:#FDEDEC;border:1px solid var(--red);padding:13px 16px;">
+          <span style="font-size:16px;font-weight:700;color:var(--red);">Chrome</span>
+          <svg class="icon red" style="width:17px;height:17px"><use href="#i-check"/></svg>
+        </div>
+        <div style="display:flex;align-items:center;padding:13px 16px;border:1px solid var(--line);background:#fff;font-size:16px;font-weight:600;color:var(--ink-25);">Edge</div>
+        <div style="display:flex;align-items:center;padding:13px 16px;border:1px solid var(--line);background:#fff;font-size:16px;font-weight:600;color:var(--ink-25);">Safari</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mark">VIBE CODING</div>
+  <div class="pager"><b>04</b> / 13</div>
+</section>
+
+<!-- ================= 05 PHASE 2+ (EMPHASIS / DARK) ================= -->
+<section class="slide dark">
+  <div class="deco-dot" style="width:520px;height:520px;right:-190px;top:-190px;background:#E62B1E;opacity:.1;"></div>
+  
+
+  <div class="fill" style="position:relative;z-index:2;display:flex;flex-direction:column;">
+    <div class="eyebrow">Phase 02+ · Key Point</div>
+    <h2 class="title" style="font-size:52px;">AI 직원에게 <span class="r">물리적인 손발</span> 달아주기</h2>
+
+    <div class="fill grid" style="grid-template-columns:1.05fr .95fr;gap:70px;margin-top:44px;">
+      <div style="display:flex;flex-direction:column;">
+        <p class="lead" style="font-size:25px;line-height:1.75;">
+          크롬 웹스토어에서 <span class="r">AI 맞춤 확장프로그램</span>을 설치하고
+          <span class="b">핀으로 고정</span>합니다.<br>
+          이 확장 프로그램이 없으면 직원은 끊임없이
+          <span class="r">수동 개입</span>을 요구합니다.
+        </p>
+
+        <div style="display:flex;gap:16px;margin-top:auto;padding-top:40px;">
+          <div style="flex:1;border:1px solid var(--d-line);padding:28px 24px;">
+            <svg class="icon" style="stroke:var(--red);width:24px;height:24px"><use href="#i-puzzle"/></svg>
+            <div style="margin-top:14px;font-size:17px;font-weight:700;color:#fff;">확장프로그램 설치</div>
+            <div style="margin-top:6px;font-size:14px;color:var(--d-dim);">Chrome Web Store</div>
+          </div>
+          <div style="flex:1;border:1px solid var(--d-line);padding:28px 24px;">
+            <svg class="icon" style="stroke:var(--red);width:24px;height:24px"><use href="#i-pin"/></svg>
+            <div style="margin-top:14px;font-size:17px;font-weight:700;color:#fff;">핀으로 고정</div>
+            <div style="margin-top:6px;font-size:14px;color:var(--d-dim);">항상 호출 가능 상태</div>
+          </div>
+          <div style="flex:1;border:1px solid var(--red);padding:28px 24px;background:rgba(230,43,30,.12);">
+            <svg class="icon" style="stroke:var(--red);width:24px;height:24px"><use href="#i-link"/></svg>
+            <div style="margin-top:14px;font-size:17px;font-weight:700;color:#fff;">계정 인증 연결</div>
+            <div style="margin-top:6px;font-size:14px;color:var(--red);font-weight:700;">Authentication Linked</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="border-left:3px solid var(--red);display:flex;flex-direction:column;">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <svg class="icon" style="stroke:var(--red);width:22px;height:22px"><use href="#i-warn"/></svg>
+          <div style="font-size:24px;font-weight:800;color:#fff;">필수 확인 사항</div>
+        </div>
+        <div class="rule" style="margin:20px 0 22px;"></div>
+        <ul class="list" style="gap:16px;">
+          <li><span class="dot"></span><span>설치 후 반드시 클릭하여 <b style="color:#fff">로그인 및 계정 인증</b>을 완료하세요.</span></li>
+          <li><span class="dot"></span><span>브라우저 창 우측에 <b style="color:#fff">채팅창이 나타나야</b> 직원이 마우스를 쥐고 일할 준비가 된 것입니다.</span></li>
+        </ul>
+        <div style="margin-top:auto;display:flex;align-items:center;gap:10px;border:1px dashed var(--d-line);padding:18px 20px;">
+          <svg class="icon" style="stroke:var(--red);width:20px;height:20px"><use href="#i-chat"/></svg>
+          <span style="font-size:15px;color:var(--d-text);font-weight:600;">우측 사이드 채팅창 = 준비 완료 신호</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mark">VIBE CODING</div>
+  <div class="pager"><b style="color:var(--red)">05</b> / 13</div>
+</section>
+
+<!-- ================= 06 PHASE 3 ================= -->
+<section class="slide">
+  <div class="eyebrow">Phase 03 · 인프라</div>
+  <h2 class="title">완벽한 자동화를 위한 <span class="r">3대 인프라 구축</span></h2>
+  <p class="lead" style="margin-top:18px;width:900px;">
+    웹앱이 세상에 나오기 위해 필요한 <span class="b">3가지 필수 요소</span>입니다.
+    한 시간의 번거로운 가입 과정을 거치고 나면, 이후의 모든 복잡한 서버 설정은 <span class="r">AI가 대신 처리</span>합니다.
+  </p>
+
+  <div class="fill grid" style="grid-template-columns:repeat(3,1fr);gap:30px;margin-top:44px;">
+    <div class="card" style="display:flex;flex-direction:column;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+        <div class="ibox ink"><svg class="icon w"><use href="#i-github"/></svg></div>
+        <div style="font-size:44px;font-weight:800;color:var(--line);letter-spacing:-.04em;">01</div>
+      </div>
+      <div class="kicker" style="margin-top:auto;padding-top:26px;">GitHub</div>
+      <div style="font-size:15px;font-weight:700;color:var(--red);margin-top:4px;">저장소</div>
+      <div class="rule" style="margin:20px 0;"></div>
+      <p class="body" style="font-size:17px;">코드와 수정 이력을 안전하게 보관하는 온라인 금고</p>
+    </div>
+
+    <div class="card" style="display:flex;flex-direction:column;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+        <div class="ibox ink"><svg class="icon w"><use href="#i-cloud"/></svg></div>
+        <div style="font-size:44px;font-weight:800;color:var(--line);letter-spacing:-.04em;">02</div>
+      </div>
+      <div class="kicker" style="margin-top:auto;padding-top:26px;">Vercel</div>
+      <div style="font-size:15px;font-weight:700;color:var(--red);margin-top:4px;">배포</div>
+      <div class="rule" style="margin:20px 0;"></div>
+      <p class="body" style="font-size:17px;">코드를 실제 접속 가능한 웹 주소로 바꾸는 호스팅</p>
+    </div>
+
+    <div class="card" style="display:flex;flex-direction:column;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+        <div class="ibox ink"><svg class="icon w"><use href="#i-db"/></svg></div>
+        <div style="font-size:44px;font-weight:800;color:var(--line);letter-spacing:-.04em;">03</div>
+      </div>
+      <div class="kicker" style="margin-top:auto;padding-top:26px;">Supabase</div>
+      <div style="font-size:15px;font-weight:700;color:var(--red);margin-top:4px;">데이터베이스</div>
+      <div class="rule" style="margin:20px 0;"></div>
+      <p class="body" style="font-size:17px;">사용자의 입력을 실시간으로 저장·관리하는 그릇</p>
+    </div>
+  </div>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-top:34px;padding:26px 32px;background:var(--ink);">
+    <svg class="icon w" style="width:22px;height:22px"><use href="#i-chip"/></svg>
+    <div style="color:#fff;font-size:17px;font-weight:600;">
+      세 축의 중심에는 <span style="color:#fff;font-weight:800;">AI 직원</span>이 있습니다 — 가입만 끝내면
+      <span style="color:var(--red);font-weight:800;">연결과 운영은 전부 자동</span>입니다.
+    </div>
+  </div>
+
+  <div class="mark">VIBE CODING</div>
+  <div class="pager"><b>06</b> / 13</div>
+</section>
+
+<!-- ================= 07 GITHUB ================= -->
+<section class="slide">
+  <div class="eyebrow">Infrastructure 01</div>
+  <h2 class="title">GitHub <span class="r">(소스 코드 금고)</span></h2>
+
+  <div class="fill grid" style="grid-template-columns:1fr 1.08fr;gap:40px;margin-top:40px;">
+    <!-- public vs private compare -->
+    <div class="colstack" style="gap:22px;">
+      <div style="display:flex;gap:22px;flex:none;">
+        <div class="card" style="flex:1;background:#EDEDEF;border-color:#E2E2E4;padding:32px 30px;">
+          <svg class="icon" style="stroke:var(--ink-25);width:28px;height:28px"><use href="#i-unlock"/></svg>
+          <div style="font-size:20px;font-weight:800;color:var(--ink-45);margin-top:16px;">Public</div>
+          <div style="font-size:14px;color:var(--ink-25);font-weight:600;margin-top:4px;">공개 · 기본값 주의</div>
+          <div style="margin-top:20px;height:8px;background:#DCDCDE;"></div>
+        </div>
+        <div class="card" style="flex:1;border-color:var(--red);padding:32px 30px;">
+          <svg class="icon red" style="width:28px;height:28px"><use href="#i-lock"/></svg>
+          <div style="font-size:20px;font-weight:800;color:var(--ink);margin-top:16px;">Private</div>
+          <div style="font-size:14px;color:var(--red);font-weight:700;margin-top:4px;">비공개 · 권장 설정</div>
+          <div style="margin-top:20px;height:8px;background:var(--red);"></div>
+        </div>
+      </div>
+
+      <div class="card" style="flex:1;display:flex;flex-direction:column;justify-content:center;">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <svg class="icon" style="width:22px;height:22px"><use href="#i-github"/></svg>
+          <div style="font-size:20px;font-weight:800;">역할</div>
+        </div>
+        <div class="rule" style="margin:16px 0;"></div>
+        <p class="body">
+          내가 만든 앱의 <span class="b">모든 코드와 수정 이력</span>이 안전하게 보관되고
+          버전이 관리되는 온라인 저장소입니다. 구글 계정 연동으로 간편하게 가입합니다.
+        </p>
+      </div>
+    </div>
+
+    <!-- security tip -->
+    <div class="card accent" style="display:flex;flex-direction:column;">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <svg class="icon red" style="width:24px;height:24px"><use href="#i-warn"/></svg>
+        <div style="font-size:24px;font-weight:800;">보안 핵심 꿀팁</div>
+      </div>
+      <div class="rule" style="margin:18px 0;"></div>
+      <p class="body">
+        직원이 코드를 업로드할 때 기본값이 <span class="b">Public(공개)</span>일 수 있습니다.
+        나만의 아이디어가 유출되지 않도록 <span class="r">반드시 지시하세요.</span>
+      </p>
+      <div style="margin-top:26px;background:var(--ink);padding:26px 28px;">
+        <div style="font-size:12px;font-weight:800;letter-spacing:.2em;color:rgba(255,255,255,.4);">PROMPT</div>
+        <div style="margin-top:12px;font-size:19px;line-height:1.6;color:#fff;font-weight:600;">
+          “혹시 깃허브에 <span style="color:var(--red);font-weight:800;">퍼블릭</span>으로 반영되어 있으면
+          <span style="color:var(--red);font-weight:800;">프라이빗(Private)</span>으로 바꿔줘.”
+        </div>
+      </div>
+      <ul class="list" style="margin-top:auto;padding-top:24px;">
+        <li><span class="dot"></span><span>구글 계정 연동 가입 → 30초</span></li>
+        <li><span class="dot"></span><span>업로드 직후 공개 범위 한 번 더 확인</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="mark">VIBE CODING</div>
+  <div class="pager"><b>07</b> / 13</div>
+</section>
+
+<!-- ================= 08 VERCEL ================= -->
+<section class="slide">
+  <div class="eyebrow">Infrastructure 02</div>
+  <h2 class="title">Vercel <span class="r">(URL 주소 생성기)</span></h2>
+
+  <div style="display:grid;grid-template-columns:1fr 1.15fr;gap:44px;margin-top:36px;align-items:center;">
+    <p class="lead">
+      코드를 세상 사람들이 스마트폰으로 접속할 수 있는
+      <span class="r">실제 웹사이트 주소</span>로 감싸주는 <span class="b">호스팅 서비스</span>입니다.
+    </p>
+
+    <div class="card accent" style="display:flex;flex-direction:column;">
+      <div style="font-size:22px;font-weight:800;">필수 체크리스트</div>
+      <div class="rule" style="margin:16px 0 18px;"></div>
+      <ul class="list" style="gap:14px;">
+        <li><svg class="icon red" style="width:19px;height:19px;flex:none;margin-top:3px"><use href="#i-check"/></svg><span>GitHub 계정으로 <b class="b">연동 가입</b> (Continue with GitHub)</span></li>
+        <li><svg class="icon red" style="width:19px;height:19px;flex:none;margin-top:3px"><use href="#i-check"/></svg><span>Hobby / Personal <b class="b">(무료 버전)</b> 선택</span></li>
+        <li><svg class="icon red" style="width:19px;height:19px;flex:none;margin-top:3px"><use href="#i-check"/></svg><span>이름은 <b class="b">영문</b>으로 기입</span></li>
+        <li><svg class="icon red" style="width:19px;height:19px;flex:none;margin-top:3px"><use href="#i-skip"/></svg><span>결제나 복잡한 설정 팝업이 뜨면 <span class="r">과감히 스킵(Skip)</span></span></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- flow -->
+  <div class="fill grid" style="grid-template-columns:1fr 70px 1fr 70px 1fr;align-items:center;margin-top:40px;">
+    <div class="card" style="text-align:center;padding:40px 24px;display:block;">
+      <div class="ibox ink" style="margin:0 auto;"><svg class="icon w"><use href="#i-github"/></svg></div>
+      <div style="font-size:19px;font-weight:800;margin-top:16px;">GitHub Vault</div>
+      <div style="font-size:14px;color:var(--ink-45);font-weight:600;margin-top:5px;">코드 보관</div>
+    </div>
+    <div style="display:grid;place-items:center;"><svg class="icon red" style="width:24px;height:24px"><use href="#i-arrow"/></svg></div>
+    <div class="card" style="text-align:center;padding:40px 24px;border-color:var(--red);display:block;">
+      <div class="ibox red" style="margin:0 auto;"><svg class="icon w"><use href="#i-gear"/></svg></div>
+      <div style="font-size:19px;font-weight:800;margin-top:16px;">Vercel Build</div>
+      <div style="font-size:14px;color:var(--red);font-weight:700;margin-top:5px;">자동 배포 · 포장</div>
+    </div>
+    <div style="display:grid;place-items:center;"><svg class="icon red" style="width:24px;height:24px"><use href="#i-arrow"/></svg></div>
+    <div style="text-align:center;padding:40px 24px;background:var(--ink);align-self:stretch;display:flex;flex-direction:column;justify-content:center;">
+      <div class="ibox" style="margin:0 auto;background:#2F2F36;border-color:rgba(255,255,255,.16);"><svg class="icon w"><use href="#i-link"/></svg></div>
+      <div style="font-size:22px;font-weight:800;margin-top:16px;color:#fff;">.vercel.app</div>
+      <div style="font-size:14px;color:rgba(255,255,255,.5);font-weight:600;margin-top:5px;">누구나 접속 가능한 주소</div>
+    </div>
+  </div>
+
+  <div class="mark">VIBE CODING</div>
+  <div class="pager"><b>08</b> / 13</div>
+</section>
+
+<!-- ================= 09 SUPABASE ================= -->
+<section class="slide">
+  <div class="eyebrow">Infrastructure 03</div>
+  <h2 class="title">Supabase <span class="r">(유저 데이터 그릇)</span></h2>
+
+  <div class="fill grid" style="grid-template-columns:.92fr 1.08fr;gap:40px;margin-top:38px;">
+    <div class="colstack" style="gap:22px;">
+      <div class="card" style="flex:1;display:flex;flex-direction:column;justify-content:center;">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <svg class="icon" style="width:22px;height:22px"><use href="#i-db"/></svg>
+          <div style="font-size:20px;font-weight:800;">역할</div>
+        </div>
+        <div class="rule" style="margin:16px 0;"></div>
+        <p class="body">
+          회원가입, 로그인, 설문조사 등 사용자의 입력을 <span class="b">실시간으로 저장하고 관리</span>해야 하는
+          <span class="r">‘진짜 앱’</span>을 만들 때 필수적인 데이터베이스입니다.
+        </p>
+        <div style="display:flex;gap:9px;margin-top:22px;flex-wrap:wrap;">
+          <span class="chip"><svg class="icon" style="width:15px;height:15px"><use href="#i-user"/></svg>회원가입</span>
+          <span class="chip"><svg class="icon" style="width:15px;height:15px"><use href="#i-lock"/></svg>로그인</span>
+          <span class="chip"><svg class="icon" style="width:15px;height:15px"><use href="#i-layers"/></svg>설문 · 기록</span>
+        </div>
+      </div>
+
+      <!-- free project gauge -->
+      <div class="card" style="flex:none;">
+        <div style="display:flex;align-items:flex-end;gap:20px;">
+          <div class="stat-n">2</div>
+          <div style="padding-bottom:8px;">
+            <div style="font-size:17px;font-weight:700;">무료 프로젝트 한도</div>
+            <div style="font-size:14px;color:var(--ink-45);font-weight:600;margin-top:3px;">회원가입 후 생성 가능 개수</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:22px;">
+          <div style="flex:1;height:14px;background:var(--red);"></div>
+          <div style="flex:1;height:14px;background:var(--red);"></div>
+          <div style="flex:1;height:14px;background:#E2E2E4;"></div>
+          <div style="flex:1;height:14px;background:#E2E2E4;"></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-top:10px;font-size:13px;font-weight:700;color:var(--ink-25);">
+          <span style="color:var(--red)">무료 사용 구간</span><span>추가 생성 시 유료</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card accent" style="display:flex;flex-direction:column;">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <svg class="icon red" style="width:24px;height:24px"><use href="#i-warn"/></svg>
+        <div style="font-size:24px;font-weight:800;">과금 주의사항</div>
+      </div>
+      <div class="rule" style="margin:18px 0;"></div>
+      <ul class="list" style="gap:20px;">
+        <li><span class="dot"></span><span>회원가입 후 생성되는 <span class="r" style="font-weight:700">무료 프로젝트는 최대 2개</span>입니다.</span></li>
+        <li><span class="dot"></span><span>비밀번호 설정, 리전(Region) 선택 등 복잡한 프로젝트 생성 과정은 <b class="b">스킵해도 무방</b>합니다.</span></li>
+        <li><span class="dot"></span><span><b class="b">API 키 결제 유도 창</b>이 뜨면 일단 무시하고 진행하세요.</span></li>
+      </ul>
+      <div style="margin-top:auto;border:1px dashed var(--line);padding:22px 24px;display:flex;gap:14px;align-items:center;">
+        <svg class="icon" style="stroke:var(--ink-45);width:20px;height:20px;flex:none"><use href="#i-skip"/></svg>
+        <div class="body" style="font-size:16px;">지금 단계의 목표는 <b class="b">계정 생성</b>까지. 세부 설정은 AI 직원이 처리합니다.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mark">VIBE CODING</div>
+  <div class="pager"><b>09</b> / 13</div>
+</section>
+
+<!-- ================= 10 MASTER PROMPT ================= -->
+<section class="slide">
+  <div class="eyebrow">Master Prompt</div>
+  <h2 class="title">모든 생태계를 한 번에 작동시키는 <span class="r">마스터 프롬프트</span></h2>
+
+  <div class="fill" style="background:var(--charcoal);margin-top:36px;padding:52px 54px;position:relative;display:flex;flex-direction:column;justify-content:center;">
+    <div style="position:absolute;left:0;top:0;width:4px;height:100%;background:var(--red);"></div>
+    <div style="font-size:12px;font-weight:800;letter-spacing:.22em;color:rgba(255,255,255,.4);">PROMPT INPUT</div>
+    <div style="margin-top:20px;font-size:21px;line-height:1.8;color:rgba(255,255,255,.7);font-weight:500;">
+      내가 만들고 싶은 앱에 대한 상세한 설명과 요구사항을 작성한 뒤…
+    </div>
+    <div style="margin-top:14px;font-size:27px;line-height:1.72;color:#fff;font-weight:700;">
+      완성되면 기본 브라우저 <span style="color:var(--red);border-bottom:2px solid var(--red);">확장 프로그램을 이용해서</span>,
+      <span style="color:var(--red);border-bottom:2px solid var(--red);">GitHub에 올리고 Vercel로 주소를 생성</span>하고,
+      <span style="color:var(--red);border-bottom:2px solid var(--red);">Supabase를 이용해</span> 데이터베이스를 연동해줘.
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:26px;margin-top:28px;flex:none;">
+    <div class="card" style="padding:28px 30px;">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <svg class="icon red" style="width:20px;height:20px"><use href="#i-cursor"/></svg>
+        <div style="font-size:18px;font-weight:800;">수동 개입 차단 · 자동화 트리거</div>
+      </div>
+      <div class="body" style="font-size:15px;margin-top:10px;">확장 프로그램 호출 → 직원이 직접 클릭</div>
+    </div>
+    <div class="card" style="padding:28px 30px;">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <svg class="icon red" style="width:20px;height:20px"><use href="#i-cloud"/></svg>
+        <div style="font-size:18px;font-weight:800;">자동 배포 및 호스팅 명령</div>
+      </div>
+      <div class="body" style="font-size:15px;margin-top:10px;">GitHub 업로드 → Vercel 주소 생성</div>
+    </div>
+    <div class="card" style="padding:28px 30px;">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <svg class="icon red" style="width:20px;height:20px"><use href="#i-db"/></svg>
+        <div style="font-size:18px;font-weight:800;">데이터 저장소 구조화 명령</div>
+      </div>
+      <div class="body" style="font-size:15px;margin-top:10px;">Supabase 연동 → 테이블 자동 설계</div>
+    </div>
+  </div>
+
+  <div class="mark">VIBE CODING</div>
+  <div class="pager"><b>10</b> / 13</div>
+</section>
+
+<!-- ================= 11 WORKFLOW ================= -->
+<section class="slide">
+  <div class="eyebrow">Workflow</div>
+  <h2 class="title">디지털 워크스페이스 가동<span class="r">:</span> 아이디어가 웹앱이 되기까지</h2>
+  <p class="lead" style="margin-top:18px;width:1080px;">
+    한 시간의 번거로운 초기 세팅이 끝났습니다. 이제 복잡한 서버 설정 없이,
+    아이디어와 지시만으로 웹앱을 무한정 찍어낼 수 있는 <span class="r">나만의 자동화 공장</span>을 소유하게 되었습니다.
+  </p>
+  <div style="display:flex;gap:12px;margin-top:24px;flex:none;">
+    <span class="chip ink">사람의 일 · 아이디어와 지시</span>
+    <span class="chip red">AI 직원의 일 · 구축부터 배포까지</span>
+  </div>
+
+  <div class="fill grid" style="grid-template-columns:repeat(7,1fr);gap:12px;margin-top:40px;align-items:center;">
+    <div style="text-align:center;">
+      <div class="ibox ink" style="margin:0 auto;"><svg class="icon w"><use href="#i-chat"/></svg></div>
+      <div style="font-size:12px;font-weight:800;color:var(--ink-25);margin-top:14px;letter-spacing:.1em;">STEP 01</div>
+      <div style="font-size:17px;font-weight:800;margin-top:4px;line-height:1.35;">프롬프트<br>입력</div>
+    </div>
+    <div style="text-align:center;">
+      <div class="ibox ink" style="margin:0 auto;"><svg class="icon w"><use href="#i-brain"/></svg></div>
+      <div style="font-size:12px;font-weight:800;color:var(--ink-25);margin-top:14px;letter-spacing:.1em;">STEP 02</div>
+      <div style="font-size:17px;font-weight:800;margin-top:4px;line-height:1.35;">AI 로컬<br>작업</div>
+    </div>
+    <div style="text-align:center;">
+      <div class="ibox ink" style="margin:0 auto;"><svg class="icon w"><use href="#i-puzzle"/></svg></div>
+      <div style="font-size:12px;font-weight:800;color:var(--ink-25);margin-top:14px;letter-spacing:.1em;">STEP 03</div>
+      <div style="font-size:17px;font-weight:800;margin-top:4px;line-height:1.35;">크롬<br>확장프로그램</div>
+    </div>
+    <div style="text-align:center;">
+      <div class="ibox ink" style="margin:0 auto;"><svg class="icon w"><use href="#i-github"/></svg></div>
+      <div style="font-size:12px;font-weight:800;color:var(--ink-25);margin-top:14px;letter-spacing:.1em;">STEP 04</div>
+      <div style="font-size:17px;font-weight:800;margin-top:4px;line-height:1.35;">GitHub<br>업로드</div>
+    </div>
+    <div style="text-align:center;">
+      <div class="ibox ink" style="margin:0 auto;"><svg class="icon w"><use href="#i-cloud"/></svg></div>
+      <div style="font-size:12px;font-weight:800;color:var(--ink-25);margin-top:14px;letter-spacing:.1em;">STEP 05</div>
+      <div style="font-size:17px;font-weight:800;margin-top:4px;line-height:1.35;">Vercel<br>주소 배포</div>
+    </div>
+    <div style="text-align:center;">
+      <div class="ibox ink" style="margin:0 auto;"><svg class="icon w"><use href="#i-db"/></svg></div>
+      <div style="font-size:12px;font-weight:800;color:var(--ink-25);margin-top:14px;letter-spacing:.1em;">STEP 06</div>
+      <div style="font-size:17px;font-weight:800;margin-top:4px;line-height:1.35;">Supabase<br>연동</div>
+    </div>
+    <div style="text-align:center;">
+      <div class="ibox red" style="margin:0 auto;"><svg class="icon w"><use href="#i-rocket"/></svg></div>
+      <div style="font-size:12px;font-weight:800;color:var(--red);margin-top:14px;letter-spacing:.1em;">FINISH</div>
+      <div style="font-size:17px;font-weight:800;margin-top:4px;line-height:1.35;color:var(--red);">나만의<br>웹앱 탄생</div>
+    </div>
+  </div>
+
+  <!-- process line -->
+  <svg viewBox="0 0 1424 40" style="width:1424px;height:40px;margin-top:0;margin-bottom:26px;flex:none;">
+    <line x1="10" y1="20" x2="1414" y2="20" stroke="#E2E2E4" stroke-width="2"/>
+    <line x1="10" y1="20" x2="1414" y2="20" stroke="#26262B" stroke-width="2" stroke-dasharray="1200 400"/>
+    <g fill="#26262B">
+      <circle cx="10" cy="20" r="5"/><circle cx="244" cy="20" r="5"/><circle cx="478" cy="20" r="5"/>
+      <circle cx="712" cy="20" r="5"/><circle cx="946" cy="20" r="5"/><circle cx="1180" cy="20" r="5"/>
+    </g>
+    <circle cx="1414" cy="20" r="8" fill="#E62B1E"/>
+  </svg>
+
+  <div class="mark">VIBE CODING</div>
+  <div class="pager"><b>11</b> / 13</div>
+</section>
+
+<!-- ================= 12 관리의 기술 ================= -->
+<section class="slide">
+  <div class="eyebrow">Management</div>
+  <h2 class="title">AI 직원 관리의 기술<span class="r">:</span> 보스답게 지시하세요</h2>
+
+  <div class="fill grid" style="grid-template-columns:1fr 1fr;gap:34px;margin-top:42px;">
+    <div class="card" style="display:flex;flex-direction:column;">
+      <div style="display:flex;align-items:center;gap:14px;">
+        <div class="ibox ink"><svg class="icon w"><use href="#i-cursor"/></svg></div>
+        <div>
+          <div class="num" style="color:var(--ink-25);">CASE 01</div>
+          <div class="kicker" style="margin-top:2px;">직원이 <span style="color:var(--red)">근무 태만</span>을 보일 때</div>
+        </div>
+      </div>
+      <div class="rule" style="margin:24px 0;"></div>
+      <p class="body">
+        수동으로 버튼을 누르라고 요구하거나 절차를 생략하려 할 때
+        <span class="r">단호하게 명령을 재입력하세요.</span>
+      </p>
+      <div style="margin-top:auto;background:var(--charcoal);padding:30px 32px;">
+        <div style="font-size:12px;font-weight:800;letter-spacing:.2em;color:rgba(255,255,255,.4);">RE-PROMPT</div>
+        <div style="margin-top:12px;font-size:20px;line-height:1.6;color:#fff;font-weight:700;">
+          “기본 브라우저 <span style="color:var(--red)">확장 프로그램을 이용해서</span> 니가 좀 알아서 해줘.”
+        </div>
+      </div>
+      <div style="display:flex;gap:9px;margin-top:24px;">
+        <span class="chip">재지시</span><span class="chip">절차 생략 금지</span><span class="chip">자동화 유지</span>
+      </div>
+    </div>
+
+    <div class="card" style="display:flex;flex-direction:column;">
+      <div style="display:flex;align-items:center;gap:14px;">
+        <div class="ibox ink"><svg class="icon w"><use href="#i-img"/></svg></div>
+        <div>
+          <div class="num" style="color:var(--ink-25);">CASE 02</div>
+          <div class="kicker" style="margin-top:2px;">화면 수정 및 <span style="color:var(--red)">오류가 발생</span>했을 때</div>
+        </div>
+      </div>
+      <div class="rule" style="margin:24px 0;"></div>
+      <p class="body">
+        <span class="b">텍스트로만 설명하지 마세요.</span>
+        에러 화면을 캡처하거나 파일을 그대로 채팅창에 <span class="r">드래그 앤 드롭</span>하여 직관적으로 지시하세요.
+      </p>
+      <div style="margin-top:auto;background:var(--charcoal);padding:30px 32px;">
+        <div style="font-size:12px;font-weight:800;letter-spacing:.2em;color:rgba(255,255,255,.4);">IMAGE + PROMPT</div>
+        <div style="margin-top:12px;font-size:20px;line-height:1.6;color:#fff;font-weight:700;">
+          “<span style="color:var(--red)">여기를</span> 이렇게 바꿔줘.”
+        </div>
+      </div>
+      <div style="display:flex;gap:9px;margin-top:24px;">
+        <span class="chip">스크린샷</span><span class="chip">드래그 앤 드롭</span><span class="chip">직관적 지시</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="mark">VIBE CODING</div>
+  <div class="pager"><b>12</b> / 13</div>
+</section>
+
+<!-- ================= 13 NEXT STEP (DARK) ================= -->
+<section class="slide dark">
+  <div class="deco-dot" style="width:420px;height:420px;right:-140px;bottom:-140px;opacity:.12;"></div>
+
+  <div class="fill grid" style="position:relative;z-index:2;grid-template-columns:1.05fr .95fr;gap:70px;align-items:center;">
+    <div>
+      <div class="eyebrow">Next Step</div>
+      <h2 class="title" style="font-size:52px;">깃허브 <span class="r">보물창고</span> 탐험하기</h2>
+      <p class="lead" style="margin-top:26px;font-size:21px;">
+        AI 직원의 디자인 감각이 아쉬운가요?<br>
+        깃허브(GitHub)는 전 세계 개발자들이 올려둔
+        <span class="b">훌륭한 기능과 디자인 레퍼런스의 보물창고</span>입니다.
+      </p>
+
+      <div style="margin-top:34px;border:1px solid var(--d-line);padding:22px 26px;display:flex;gap:14px;align-items:center;">
+        <svg class="icon" style="stroke:var(--red);width:22px;height:22px;flex:none"><use href="#i-cursor"/></svg>
+        <div style="font-size:18px;color:#fff;font-weight:600;">
+          마음에 드는 <span style="color:var(--red);font-weight:800;">깃허브 코드 URL</span>을 복사하여 직원에게 던져주세요.
+        </div>
+      </div>
+
+      <div style="margin-top:18px;background:#232329;border-left:3px solid var(--red);padding:24px 26px;">
+        <div style="font-size:12px;font-weight:800;letter-spacing:.2em;color:rgba(255,255,255,.4);">PROMPT</div>
+        <div style="margin-top:10px;font-size:21px;line-height:1.6;color:#fff;font-weight:700;">
+          “이 주소의 디자인을 참고해서 내 앱을 똑같이 업데이트해 줘.”
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div style="font-size:40px;font-weight:800;line-height:1.4;letter-spacing:-.035em;color:#fff;">
+        상상하는 모든 것은<br>이미 <span class="r">존재합니다.</span>
+      </div>
+      <div class="rule" style="width:100px;margin:30px 0;background:var(--red);height:3px;"></div>
+      <div style="font-size:26px;font-weight:600;line-height:1.55;color:var(--d-text);">
+        이제 여러분만의 상상을<br><span style="color:#fff;font-weight:800;">현실로 배포할 시간</span>입니다.
+      </div>
+
+      <div style="display:flex;gap:14px;margin-top:48px;">
+        <div style="flex:1;border:1px solid var(--d-line);padding:20px;text-align:center;">
+          <svg class="icon" style="stroke:var(--red);width:22px;height:22px"><use href="#i-github"/></svg>
+          <div style="font-size:14px;color:var(--d-text);font-weight:700;margin-top:10px;">레퍼런스 수집</div>
+        </div>
+        <div style="flex:1;border:1px solid var(--d-line);padding:20px;text-align:center;">
+          <svg class="icon" style="stroke:var(--red);width:22px;height:22px"><use href="#i-chat"/></svg>
+          <div style="font-size:14px;color:var(--d-text);font-weight:700;margin-top:10px;">URL 전달</div>
+        </div>
+        <div style="flex:1;border:1px solid var(--red);padding:20px;text-align:center;background:rgba(230,43,30,.12);">
+          <svg class="icon" style="stroke:var(--red);width:22px;height:22px"><use href="#i-rocket"/></svg>
+          <div style="font-size:14px;color:#fff;font-weight:700;margin-top:10px;">즉시 재배포</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mark">VIBE CODING</div>
+  <div class="pager"><b>13</b> / 13</div>
+</section>
+
+</div></div>
+
+<div id="nav">
+  <button id="prev" aria-label="이전 슬라이드">‹</button>
+  <span class="idx"><span id="cur">1</span> / <span id="tot">13</span></span>
+  <button id="next" aria-label="다음 슬라이드">›</button>
+</div>
+
+<script>
+(function(){
+  var stage = document.getElementById('stage');
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var i = 0;
+  document.getElementById('tot').textContent = slides.length;
+
+  function fit(){
+    var s = Math.min(window.innerWidth / 1600, window.innerHeight / 900);
+    stage.style.transform = 'translate(-50%,-50%) scale(' + s + ')';
+  }
+  function show(n){
+    i = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach(function(el, k){ el.classList.toggle('on', k === i); });
+    document.getElementById('cur').textContent = i + 1;
+    document.getElementById('bar').style.width = ((i + 1) / slides.length * 100) + 'vw';
+  }
+  window.addEventListener('resize', fit);
+  document.getElementById('prev').onclick = function(){ show(i - 1); };
+  document.getElementById('next').onclick = function(){ show(i + 1); };
+  document.addEventListener('keydown', function(e){
+    if (['ArrowRight','ArrowDown','PageDown',' '].indexOf(e.key) > -1){ e.preventDefault(); show(i + 1); }
+    if (['ArrowLeft','ArrowUp','PageUp'].indexOf(e.key) > -1){ e.preventDefault(); show(i - 1); }
+    if (e.key === 'Home') show(0);
+    if (e.key === 'End') show(slides.length - 1);
+  });
+  document.addEventListener('click', function(e){
+    if (e.target.closest('#nav')) return;
+    show(i + 1);
+  });
+  fit(); show(0);
+})();
+</script>
+</body>
+</html>

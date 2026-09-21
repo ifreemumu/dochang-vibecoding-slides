@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Apple 스타일 미리보기 · 1–2쪽</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+/* ===== 한글 본문용 SUIT + 라틴은 SF Pro / Inter ===== */
+@font-face{
+  font-family:'SUIT Variable';
+  src:url('https://cdn.jsdelivr.net/gh/sun-typeface/SUIT@2/fonts/variable/woff2/SUIT-Variable.woff2') format('woff2-variations');
+  font-weight:100 900; font-display:swap;
+}
+
+/* ===== Apple design tokens (DESIGN-apple.md) ===== */
+:root{
+  --primary:#0066cc;          /* Action Blue */
+  --primary-focus:#0071e3;
+  --primary-on-dark:#2997ff;  /* Sky Link Blue */
+  --ink:#1d1d1f;
+  --on-dark:#ffffff;
+  --body-muted:#cccccc;
+  --ink-muted-80:#333333;
+  --ink-muted-48:#7a7a7a;
+  --hairline:#e0e0e0;
+  --divider-soft:#f0f0f0;
+  --canvas:#ffffff;
+  --parchment:#f5f5f7;
+  --pearl:#fafafc;
+  --tile-1:#272729;
+  --tile-3:#252527;
+  --black:#000000;
+
+  --font:-apple-system,BlinkMacSystemFont,'SF Pro Display','SF Pro Text','Inter','SUIT Variable',system-ui,sans-serif;
+
+  --sp-lg:24px; --sp-xl:32px; --sp-xxl:48px; --sp-section:80px;
+  --r-sm:8px; --r-md:11px; --r-lg:18px; --r-pill:9999px;
+}
+
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;}
+body{
+  background:#dcdcde;font-family:var(--font);color:var(--ink);
+  overflow:hidden;-webkit-font-smoothing:antialiased;
+}
+
+/* ===== 무대(16:9) — 기존 덱과 동일한 스케일링 ===== */
+#viewport{position:fixed;inset:0;overflow:hidden;}
+#stage{
+  width:1600px;height:900px;position:absolute;left:50%;top:50%;
+  transform-origin:center center;transform:translate(-50%,-50%) scale(1);
+  box-shadow:0 30px 80px rgba(0,0,0,.18);
+}
+.slide{position:absolute;inset:0;display:none;padding:var(--sp-section);overflow:hidden;}
+.slide.on{display:flex;flex-direction:column;animation:fade .4s ease;}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.rise{animation:rise .75s cubic-bezier(.22,1,.36,1) both;}
+.d1{animation-delay:.05s}.d2{animation-delay:.16s}.d3{animation-delay:.27s}.d4{animation-delay:.38s}.d5{animation-delay:.5s}
+
+/* ===== 타일 ===== */
+.tile-dark{background:var(--tile-1);color:var(--on-dark);}
+.tile-light{background:var(--parchment);color:var(--ink);}
+
+/* ===== 타이포 ===== */
+.eyebrow{
+  font-size:14px;font-weight:600;line-height:1.29;letter-spacing:-.224px;
+  color:var(--ink-muted-48);
+}
+.tile-dark .eyebrow{color:var(--body-muted);}
+.hero{
+  font-size:72px;font-weight:600;line-height:1.07;letter-spacing:-.03em;
+}
+.display{
+  font-size:64px;font-weight:600;line-height:1.08;letter-spacing:-.03em;
+}
+.lead{
+  font-size:28px;font-weight:400;line-height:1.36;letter-spacing:.196px;
+  color:var(--ink-muted-80);
+}
+.tile-dark .lead{color:var(--body-muted);}
+.tagline{font-size:21px;font-weight:600;line-height:1.19;letter-spacing:.231px;}
+.body{font-size:17px;font-weight:400;line-height:1.47;letter-spacing:-.374px;color:var(--ink-muted-80);}
+.tile-dark .body{color:var(--body-muted);}
+.body-strong{font-size:17px;font-weight:600;line-height:1.24;letter-spacing:-.374px;color:var(--ink);}
+.caption{font-size:14px;font-weight:400;line-height:1.43;letter-spacing:-.224px;color:var(--ink-muted-48);}
+.fine{font-size:12px;font-weight:400;line-height:1;letter-spacing:-.12px;color:var(--ink-muted-48);}
+.tile-dark .fine{color:rgba(255,255,255,.45);}
+
+/* ===== 버튼 : 유일한 액션 컬러 = Action Blue, 모양은 pill ===== */
+.btn{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:var(--font);font-size:17px;font-weight:400;letter-spacing:-.374px;
+  border-radius:var(--r-pill);padding:11px 22px;border:1px solid transparent;
+  cursor:pointer;transition:transform .2s cubic-bezier(.22,1,.36,1),background .2s ease;
+}
+.btn-primary{background:var(--primary);color:#fff;}
+.btn-primary:active{transform:scale(.95);}
+.btn-primary:focus-visible{outline:2px solid var(--primary-focus);outline-offset:3px;}
+.btn-ghost{background:transparent;color:var(--primary);border-color:var(--primary);}
+.tile-dark .btn-ghost{color:var(--primary-on-dark);border-color:var(--primary-on-dark);}
+.btn-ghost:active{transform:scale(.95);}
+.link{
+  color:var(--primary);font-size:17px;font-weight:400;letter-spacing:-.374px;
+  text-decoration:none;display:inline-flex;align-items:center;gap:4px;
+}
+.tile-dark .link{color:var(--primary-on-dark);}
+
+/* ===== 유틸리티 카드 : 1px 헤어라인, 18px 라운드, 그림자 없음 ===== */
+.card{
+  background:var(--canvas);border:1px solid var(--hairline);border-radius:var(--r-lg);
+  padding:var(--sp-lg);transition:transform .25s cubic-bezier(.22,1,.36,1);
+}
+.card:active{transform:scale(.99);}
+.thumb{
+  aspect-ratio:16/9;border-radius:var(--r-sm);background:var(--pearl);
+  display:grid;place-items:center;border:1px solid var(--divider-soft);
+}
+.badge{
+  display:inline-flex;align-items:center;height:28px;padding:0 12px;border-radius:var(--r-md);
+  background:var(--pearl);border:1px solid var(--divider-soft);
+  font-size:14px;font-weight:400;letter-spacing:-.224px;color:var(--ink-muted-80);
+}
+
+/* 유일한 그림자 : 제품 이미지에만 */
+.product-shadow{box-shadow:rgba(0,0,0,.22) 3px 5px 30px 0;}
+
+/* ===== 전체화면 영상 플레이어 ===== */
+#vover{position:fixed;inset:0;z-index:90;background:#000;display:none;place-items:center;}
+#vover.on{display:grid;}
+#vover video{width:100%;height:100%;object-fit:contain;background:#000;}
+#vclose{
+  position:absolute;right:40px;top:34px;z-index:4;background:rgba(210,210,215,.64);
+  border:none;color:var(--ink);border-radius:var(--r-pill);padding:11px 22px;
+  font-family:var(--font);font-size:14px;letter-spacing:-.224px;cursor:pointer;
+}
+
+/* ===== 내비 ===== */
+#nav{position:fixed;right:22px;bottom:18px;z-index:20;display:flex;gap:8px;align-items:center;opacity:.35;transition:opacity .2s;}
+#nav:hover{opacity:1;}
+#nav button{
+  width:44px;height:44px;border-radius:var(--r-pill);border:none;
+  background:rgba(210,210,215,.64);color:var(--ink);font-size:15px;cursor:pointer;font-family:var(--font);
+}
+#nav .idx{font-size:14px;letter-spacing:-.224px;color:#4a4a50;padding:0 8px;}
+#note{
+  position:fixed;left:22px;bottom:22px;z-index:20;
+  font-size:12px;letter-spacing:-.12px;color:#6e6e73;opacity:.65;font-family:var(--font);
+}
+</style>
+</head>
+<body>
+
+<div id="viewport"><div id="stage">
+
+<!-- ============ 1쪽 · OPENING (product-tile-dark) ============ -->
+<section class="slide tile-dark on">
+  <!-- 장식 최소화 : 링만 아주 낮은 명도로 남김 (원본 모션그래픽의 조용한 버전) -->
+  <svg style="position:absolute;inset:0;width:100%;height:100%;z-index:0;" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <circle cx="1230" cy="450" r="268" fill="none" stroke="rgba(255,255,255,.07)"/>
+    <circle cx="1230" cy="450" r="352" fill="none" stroke="rgba(255,255,255,.05)"/>
+    <circle cx="1230" cy="182" r="4" fill="var(--primary-on-dark)"/>
+  </svg>
+
+  <div style="position:relative;z-index:2;flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;">
+    <div class="eyebrow rise d1">OPENING · 도창초등학교 교원 연수</div>
+    <h1 class="hero rise d2" style="margin-top:20px;max-width:1100px;">
+      도창초등학교 선생님들의<br>바이브 코딩 입문을<br>진심으로 응원합니다.
+    </h1>
+    <p class="lead rise d3" style="margin-top:28px;">새로운 배움의 시작을 함께합니다</p>
+
+    <div class="rise d4" style="display:flex;gap:16px;margin-top:40px;">
+      <button class="btn btn-primary vbtn" type="button" data-video="assets/opening-video.mp4">응원 영상 재생</button>
+      <button class="btn btn-ghost" type="button">연수 안내 보기 &nbsp;›</button>
+    </div>
+
+    <div class="fine rise d5" style="margin-top:28px;">30초 · 내레이션 포함</div>
+  </div>
+
+  <div class="fine" style="position:absolute;left:80px;bottom:44px;">도창초등학교 교원 연수</div>
+  <div class="fine" style="position:absolute;right:80px;bottom:44px;">01 / 78</div>
+</section>
+
+<!-- ============ 2쪽 · 연수 개요 (product-tile-light / parchment) ============ -->
+<section class="slide tile-light">
+  <div style="flex:1;display:flex;flex-direction:column;justify-content:center;">
+    <div style="text-align:center;">
+      <div class="eyebrow rise d1">교원 실습 연수 · 도창초등학교</div>
+      <h2 class="display rise d2" style="margin-top:18px;">ChatGPT 사용법과 바이브 코딩</h2>
+      <p class="lead rise d3" style="margin-top:22px;">수업 자료를 만들고, 작은 교실 도구를 완성하기</p>
+      <div class="rise d3" style="display:flex;gap:16px;justify-content:center;margin-top:28px;">
+        <a class="link" href="#">오늘의 목표 보기 ›</a>
+        <a class="link" href="#">준비물 확인 ›</a>
+      </div>
+    </div>
+
+    <div class="rise d4" style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:52px;max-width:1160px;width:100%;margin-left:auto;margin-right:auto;">
+      <div class="card">
+        <div class="thumb">
+          <svg width="112" height="112" viewBox="0 0 24 24" fill="none" stroke="#1d1d1f" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="product-shadow" style="border-radius:8px;background:#fff;padding:14px;">
+            <path d="M4 5h16a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H9l-5 4V6a1 1 0 0 1 1-1z"/>
+          </svg>
+        </div>
+        <div class="caption" style="margin-top:20px;">RESULT 01</div>
+        <div class="body-strong" style="margin-top:6px;font-size:21px;letter-spacing:-.4px;">수업 자료 만들기</div>
+        <p class="body" style="margin-top:8px;">학년 · 목표 · 조건을 담은 프롬프트로 오늘 쓸 활동안을 완성합니다.</p>
+        <a class="link" href="#" style="margin-top:14px;">실습 1 미리 보기 ›</a>
+      </div>
+
+      <div class="card">
+        <div class="thumb">
+          <svg width="112" height="112" viewBox="0 0 24 24" fill="none" stroke="#1d1d1f" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="product-shadow" style="border-radius:8px;background:#fff;padding:14px;">
+            <path d="M9 7 4 12l5 5M15 7l5 5-5 5"/>
+          </svg>
+        </div>
+        <div class="caption" style="margin-top:20px;">RESULT 02</div>
+        <div class="body-strong" style="margin-top:6px;font-size:21px;letter-spacing:-.4px;">작은 교실 도구</div>
+        <p class="body" style="margin-top:8px;">문제 제시 → 정답 확인 → 다시 풀기가 작동하는 퀴즈 앱을 만듭니다.</p>
+        <a class="link" href="#" style="margin-top:14px;">실습 2 미리 보기 ›</a>
+      </div>
+    </div>
+
+    <div class="rise d5" style="display:flex;gap:10px;justify-content:center;margin-top:36px;">
+      <span class="badge">약 45–50분</span>
+      <span class="badge">초등학교 교직원 대상</span>
+      <span class="badge">컴퓨터 · 크롬 준비</span>
+    </div>
+  </div>
+
+  <div class="fine" style="position:absolute;left:80px;bottom:44px;">도창초등학교 교원 연수</div>
+  <div class="fine" style="position:absolute;right:80px;bottom:44px;">02 / 78</div>
+</section>
+
+</div></div>
+
+<div id="vover">
+  <video id="vplayer" controls preload="metadata" playsinline>
+    <source src="assets/opening-video.mp4" type="video/mp4">
+  </video>
+  <button id="vclose" type="button">닫기 (ESC)</button>
+</div>
+
+<div id="note">Apple 스타일 미리보기 · 1–2쪽만 적용 (원본 덱은 그대로입니다)</div>
+<div id="nav">
+  <button id="prev" aria-label="이전">‹</button>
+  <span class="idx"><span id="cur">1</span> / 2</span>
+  <button id="next" aria-label="다음">›</button>
+</div>
+
+<script>
+(function(){
+  var stage=document.getElementById('stage');
+  var slides=[].slice.call(document.querySelectorAll('.slide'));
+  var i=0,scale=1,vopen=false;
+  var vover=document.getElementById('vover'),vfilm=document.getElementById('vplayer');
+
+  function fit(){
+    scale=Math.min(window.innerWidth/1600,window.innerHeight/900);
+    stage.style.transform='translate(-50%,-50%) scale('+scale+')';
+  }
+  function show(n){
+    closeVideo();
+    i=Math.max(0,Math.min(slides.length-1,n));
+    slides.forEach(function(el,k){el.classList.toggle('on',k===i);});
+    document.getElementById('cur').textContent=i+1;
+  }
+  function enterFS(el){
+    var fn=el.requestFullscreen||el.webkitRequestFullscreen;
+    if(fn){try{var r=fn.call(el);if(r&&r.catch)r.catch(function(){});}catch(e){}}
+  }
+  function exitFS(){
+    if(!(document.fullscreenElement||document.webkitFullscreenElement))return;
+    var fn=document.exitFullscreen||document.webkitExitFullscreen;
+    if(fn){try{var r=fn.call(document);if(r&&r.catch)r.catch(function(){});}catch(e){}}
+  }
+  function openVideo(){
+    if(vopen)return;vopen=true;vover.classList.add('on');enterFS(vover);
+    try{vfilm.currentTime=0;var p=vfilm.play();if(p&&p.catch)p.catch(function(){});}catch(e){}
+  }
+  function closeVideo(){
+    if(!vopen)return;vopen=false;vover.classList.remove('on');
+    try{vfilm.pause();vfilm.currentTime=0;}catch(e){}
+    exitFS();
+  }
+  [].forEach.call(document.querySelectorAll('.vbtn'),function(b){
+    b.addEventListener('click',function(e){e.stopPropagation();openVideo();});
+  });
+  document.getElementById('vclose').addEventListener('click',function(e){e.stopPropagation();closeVideo();});
+  vfilm.addEventListener('ended',closeVideo);
+  ['fullscreenchange','webkitfullscreenchange'].forEach(function(ev){
+    document.addEventListener(ev,function(){
+      if(!(document.fullscreenElement||document.webkitFullscreenElement)&&vopen)closeVideo();
+    });
+  });
+
+  window.addEventListener('resize',fit);
+  document.getElementById('prev').onclick=function(e){e.stopPropagation();show(i-1);};
+  document.getElementById('next').onclick=function(e){e.stopPropagation();show(i+1);};
+  document.addEventListener('keydown',function(e){
+    if(vopen){if(e.key==='Escape')closeVideo();return;}
+    if(['ArrowRight','ArrowDown',' '].indexOf(e.key)>-1){e.preventDefault();show(i+1);}
+    if(['ArrowLeft','ArrowUp'].indexOf(e.key)>-1){e.preventDefault();show(i-1);}
+  });
+  document.addEventListener('click',function(e){
+    if(vopen||e.target.closest('#nav')||e.target.closest('.vbtn')||e.target.closest('#vover')||e.target.closest('a'))return;
+    show(i+1);
+  });
+  fit();show(0);
+})();
+</script>
+</body>
+</html>

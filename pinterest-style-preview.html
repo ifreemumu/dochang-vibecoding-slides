@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pinterest 스타일 미리보기 · 1–2쪽</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ===== 한글 SUIT + 라틴 Inter (Pin Sans 대체) ===== */
+@font-face{
+  font-family:'SUIT Variable';
+  src:url('https://cdn.jsdelivr.net/gh/sun-typeface/SUIT@2/fonts/variable/woff2/SUIT-Variable.woff2') format('woff2-variations');
+  font-weight:100 900; font-display:swap;
+}
+
+/* ===== Pinterest design tokens (DESIGN-pinterest.md) ===== */
+:root{
+  --primary:#e60023;            /* Pinterest Red */
+  --primary-pressed:#cc001f;
+  --on-primary:#ffffff;
+  --ink:#000000;
+  --ink-soft:#211922;
+  --body:#33332e;
+  --charcoal:#262622;
+  --mute:#62625b;
+  --ash:#91918c;
+  --stone:#c8c8c1;
+  --hairline:#dadad3;
+  --hairline-soft:#e5e5e0;
+  --secondary-bg:#e5e5e0;
+  --secondary-pressed:#c8c8c1;
+  --canvas:#ffffff;
+  --surface-soft:#fbfbf9;
+  --surface-card:#f6f6f3;
+  --surface-dark:#262622;
+  --on-dark:#ffffff;
+  --focus-outer:#435ee5;
+
+  --font:'Inter','SUIT Variable',-apple-system,system-ui,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
+
+  --sp-sm:8px; --sp-md:12px; --sp-lg:16px; --sp-xl:24px; --sp-xxl:32px; --sp-section:64px;
+  --r-sm:8px; --r-md:16px; --r-lg:32px; --r-full:9999px;
+}
+
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;}
+body{background:#dcdcde;font-family:var(--font);color:var(--body);overflow:hidden;-webkit-font-smoothing:antialiased;}
+
+/* ===== 무대(16:9) ===== */
+#viewport{position:fixed;inset:0;overflow:hidden;}
+#stage{
+  width:1600px;height:900px;position:absolute;left:50%;top:50%;
+  transform-origin:center center;transform:translate(-50%,-50%) scale(1);
+  box-shadow:0 30px 80px rgba(0,0,0,.18);
+}
+.slide{position:absolute;inset:0;display:none;background:var(--surface-soft);overflow:hidden;}
+.slide.on{display:flex;flex-direction:column;animation:fade .35s ease;}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.rise{animation:rise .7s cubic-bezier(.22,1,.36,1) both;}
+.d1{animation-delay:.04s}.d2{animation-delay:.12s}.d3{animation-delay:.2s}.d4{animation-delay:.28s}.d5{animation-delay:.36s}
+
+/* ===== 타이포 ===== */
+.display-xl{font-size:70px;font-weight:600;line-height:1.1;letter-spacing:-1.2px;color:var(--ink);}
+.display-lg{font-size:44px;font-weight:700;line-height:1.15;letter-spacing:-.8px;color:var(--ink);}
+.heading-xl{font-size:28px;font-weight:700;line-height:1.2;letter-spacing:-1.2px;color:var(--ink);}
+.heading-lg{font-size:22px;font-weight:600;line-height:1.25;color:var(--ink);}
+.heading-md{font-size:18px;font-weight:600;line-height:1.3;color:var(--ink);}
+.body-md{font-size:16px;font-weight:400;line-height:1.4;color:var(--body);}
+.body-strong{font-size:16px;font-weight:600;line-height:1.4;color:var(--ink);}
+.body-sm{font-size:14px;font-weight:400;line-height:1.4;color:var(--mute);}
+.body-sm-strong{font-size:14px;font-weight:700;line-height:1.4;color:var(--ink);}
+.caption-sm{font-size:12px;font-weight:400;line-height:1.4;color:var(--mute);}
+.link-inline{font-size:16px;font-weight:600;color:var(--ink-soft);text-decoration:none;}
+
+/* ===== 버튼 : 빨강은 한 폴드에 하나 ===== */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  height:40px;padding:6px 14px;border:none;border-radius:var(--r-md);
+  font-family:var(--font);font-size:14px;font-weight:700;line-height:1;cursor:pointer;
+  transition:background .18s ease,transform .18s ease;
+}
+.btn-lg{height:52px;padding:8px 24px;font-size:16px;border-radius:var(--r-md);}
+.btn-primary{background:var(--primary);color:var(--on-primary);}
+.btn-primary:active{background:var(--primary-pressed);}
+.btn-primary:focus-visible{outline:4px solid var(--focus-outer);outline-offset:2px;}
+.btn-secondary{background:var(--secondary-bg);color:var(--ink);}
+.btn-secondary:active{background:var(--secondary-pressed);}
+.btn-tertiary{background:transparent;color:var(--ink);}
+
+/* ===== 칩 · 검색바 ===== */
+.chip{
+  display:inline-flex;align-items:center;height:40px;padding:8px 16px;border-radius:var(--r-full);
+  background:var(--surface-card);color:var(--ink);font-size:14px;font-weight:700;line-height:1;
+}
+.chip-active{background:var(--ink);color:var(--on-dark);}
+.searchbar{
+  display:flex;align-items:center;gap:10px;height:48px;padding:11px 18px;border-radius:var(--r-full);
+  background:var(--surface-card);color:var(--ash);font-size:16px;font-weight:400;flex:1;
+}
+
+/* ===== 상단 내비 ===== */
+.nav{
+  height:64px;flex:none;background:var(--canvas);display:flex;align-items:center;gap:20px;
+  padding:0 32px;
+}
+.wordmark{display:flex;align-items:center;gap:8px;font-size:18px;font-weight:700;color:var(--primary);letter-spacing:-.4px;}
+.wordmark .dot{width:28px;height:28px;border-radius:var(--r-full);background:var(--primary);display:grid;place-items:center;color:#fff;font-size:15px;font-weight:700;}
+
+/* ===== 핀 카드 : 이미지가 곧 카드 ===== */
+.pin{border-radius:var(--r-md);overflow:hidden;background:var(--surface-card);position:relative;display:block;}
+.pin-lg{border-radius:var(--r-lg);}
+.pin img{width:100%;height:100%;object-fit:cover;display:block;}
+.pin-pill{
+  position:absolute;left:12px;bottom:12px;background:var(--canvas);color:var(--ink);
+  font-size:12px;font-weight:700;line-height:1;padding:6px 12px;border-radius:var(--r-full);
+}
+.pin-text{
+  display:flex;flex-direction:column;justify-content:flex-end;padding:20px;
+}
+.masonry{column-count:2;column-gap:8px;}
+.masonry > *{break-inside:avoid;margin-bottom:8px;}
+
+/* ===== 카드 ===== */
+.card{background:var(--canvas);border-radius:var(--r-md);padding:32px;}
+.card-soft{background:var(--surface-card);border-radius:var(--r-md);padding:32px;}
+.tile{background:var(--surface-card);border-radius:var(--r-md);padding:16px;}
+
+/* ===== 전체화면 영상 ===== */
+#vover{position:fixed;inset:0;z-index:90;background:rgba(0,0,0,.5);display:none;place-items:center;}
+#vover.on{display:grid;background:#000;}
+#vover video{width:100%;height:100%;object-fit:contain;background:#000;}
+#vclose{
+  position:absolute;right:32px;top:28px;z-index:4;height:40px;padding:6px 14px;border:none;
+  border-radius:var(--r-md);background:var(--canvas);color:var(--ink);
+  font-family:var(--font);font-size:14px;font-weight:700;cursor:pointer;
+}
+
+/* ===== 슬라이드 내비 ===== */
+#nav{position:fixed;right:22px;bottom:18px;z-index:20;display:flex;gap:8px;align-items:center;opacity:.35;transition:opacity .2s;}
+#nav:hover{opacity:1;}
+#nav button{
+  width:40px;height:40px;border-radius:var(--r-full);border:none;background:var(--surface-card);
+  color:var(--ink);font-size:15px;font-weight:700;cursor:pointer;font-family:var(--font);
+}
+#nav .idx{font-size:14px;font-weight:700;color:#4a4a50;padding:0 8px;}
+#note{position:fixed;left:22px;bottom:22px;z-index:20;font-size:12px;color:#6e6e73;opacity:.7;font-family:var(--font);}
+</style>
+</head>
+<body>
+
+<div id="viewport"><div id="stage">
+
+<!-- ================= 1쪽 · OPENING (home hero + 핀 그리드) ================= -->
+<section class="slide on">
+  <div class="nav">
+    <div class="wordmark"><span class="dot">도</span>도창초 연수</div>
+    <div class="searchbar">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#91918c" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M16.5 16.5 21 21"/></svg>
+      바이브 코딩, ChatGPT 활용법 검색
+    </div>
+    <div style="display:flex;align-items:center;gap:16px;">
+      <span class="body-strong">연수 안내</span>
+      <span class="body-strong">실습 자료</span>
+      <button class="btn btn-primary" type="button">연수 시작</button>
+    </div>
+  </div>
+
+  <div style="flex:1;display:grid;grid-template-columns:1.02fr .98fr;gap:56px;padding:56px 64px 64px;align-items:center;">
+    <div>
+      <div class="body-sm-strong rise d1" style="color:var(--primary);">OPENING · 도창초등학교 교원 연수</div>
+      <h1 class="display-xl rise d2" style="margin-top:20px;">
+        선생님의 아이디어를<br>교실 도구로<br>만들어 보세요
+      </h1>
+      <p class="body-md rise d3" style="margin-top:24px;max-width:560px;font-size:18px;">
+        도창초등학교 선생님들의 바이브 코딩 입문을 진심으로 응원합니다.<br>
+        새로운 배움의 시작을 함께합니다.
+      </p>
+      <div class="rise d4" style="display:flex;gap:12px;margin-top:32px;">
+        <button class="btn btn-primary btn-lg vbtn" type="button" data-video="assets/opening-video.mp4">응원 영상 재생</button>
+        <button class="btn btn-secondary btn-lg" type="button">연수 안내 보기</button>
+      </div>
+      <div class="rise d5" style="display:flex;gap:8px;margin-top:28px;">
+        <span class="chip chip-active">전체</span>
+        <span class="chip">ChatGPT</span>
+        <span class="chip">프롬프트</span>
+        <span class="chip">교실 도구</span>
+      </div>
+      <div class="caption-sm rise d5" style="margin-top:22px;">30초 · 내레이션 포함 · 약 45–50분 연수</div>
+    </div>
+
+    <!-- 핀 masonry : 이미지가 곧 카드, 8px 거터 -->
+    <div class="masonry rise d3">
+      <div class="pin" style="aspect-ratio:16/9;">
+        <img src="assets/opening-poster.jpg" alt="응원 영상">
+        <span class="pin-pill">응원 영상</span>
+      </div>
+      <div class="pin pin-text" style="height:150px;background:var(--surface-card);">
+        <div class="heading-md">프롬프트 4요소</div>
+        <div class="body-sm" style="margin-top:6px;">역할 · 목표 · 조건 · 형식</div>
+      </div>
+      <div class="pin pin-text" style="height:170px;background:var(--surface-dark);">
+        <div class="heading-md" style="color:var(--on-dark);">스타일 분석</div>
+        <div class="body-sm" style="margin-top:6px;color:rgba(255,255,255,.7);">찾지 말고 분석하기</div>
+      </div>
+      <div class="pin" style="aspect-ratio:16/9;">
+        <img src="assets/ending-poster.jpg" alt="엔딩 영상">
+        <span class="pin-pill">실습 미리보기</span>
+      </div>
+      <div class="pin pin-text" style="height:190px;background:var(--surface-card);">
+        <div class="heading-md">교실 퀴즈 앱</div>
+        <div class="body-sm" style="margin-top:6px;">문제 → 정답 → 다시 풀기</div>
+        <span class="chip" style="margin-top:14px;align-self:flex-start;height:32px;padding:6px 12px;font-size:12px;background:var(--canvas);">HTML 1개</span>
+      </div>
+      <div class="pin pin-text" style="height:140px;background:var(--surface-card);">
+        <div class="heading-md">Codex</div>
+        <div class="body-sm" style="margin-top:6px;">말로 만들고 고치기</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="position:absolute;left:32px;bottom:18px;" class="caption-sm">도창초등학교 교원 연수</div>
+  <div style="position:absolute;right:32px;bottom:18px;" class="caption-sm">01 / 78</div>
+</section>
+
+<!-- ================= 2쪽 · 연수 개요 (feature card + 카테고리 타일) ================= -->
+<section class="slide">
+  <div class="nav">
+    <div class="wordmark"><span class="dot">도</span>도창초 연수</div>
+    <div class="searchbar">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#91918c" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M16.5 16.5 21 21"/></svg>
+      오늘 만들 결과물 검색
+    </div>
+    <div style="display:flex;align-items:center;gap:16px;">
+      <span class="body-strong">연수 안내</span>
+      <span class="body-strong">실습 자료</span>
+      <button class="btn btn-primary" type="button">연수 시작</button>
+    </div>
+  </div>
+
+  <div style="flex:1;display:flex;flex-direction:column;gap:24px;padding:40px 64px 56px;">
+    <div class="rise d1">
+      <div class="body-sm-strong" style="color:var(--primary);">교원 실습 연수 · 도창초등학교</div>
+      <h2 class="display-lg" style="margin-top:12px;">ChatGPT 사용법과 바이브 코딩</h2>
+      <p class="body-md" style="margin-top:10px;font-size:18px;">수업 자료를 만들고, 작은 교실 도구를 완성하기</p>
+    </div>
+
+    <!-- feature card : 이미지 + 텍스트 비대칭 2단 -->
+    <div class="card-soft rise d2" style="display:grid;grid-template-columns:.46fr .54fr;gap:32px;align-items:center;padding:24px;border-radius:var(--r-lg);">
+      <div class="pin pin-lg" style="aspect-ratio:16/9;">
+        <img src="assets/opening-poster.jpg" alt="연수 미리보기">
+        <span class="pin-pill">오늘의 연수</span>
+      </div>
+      <div>
+        <h3 class="heading-xl">오늘은 두 가지 결과물을 완성합니다</h3>
+        <p class="body-md" style="margin-top:14px;font-size:17px;">
+          학년 · 목표 · 조건을 담은 프롬프트 한 개와, 문제 제시부터 다시 풀기까지 작동하는
+          교실 퀴즈 앱 한 개를 직접 만들어 봅니다.
+        </p>
+        <div style="display:flex;gap:10px;margin-top:20px;">
+          <span class="chip">약 45–50분</span>
+          <span class="chip">컴퓨터 · 크롬 준비</span>
+          <span class="chip">계정 없이 사용</span>
+        </div>
+        <div style="display:flex;gap:12px;margin-top:24px;">
+          <button class="btn btn-primary" type="button">오늘의 목표 보기</button>
+          <button class="btn btn-tertiary" type="button">준비물 확인 ›</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 카테고리 타일 3-up -->
+    <div class="rise d3" style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">
+      <div class="tile" style="display:flex;gap:14px;align-items:center;">
+        <div class="pin" style="width:72px;height:72px;flex:none;background:var(--canvas);display:grid;place-items:center;">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H9l-5 4V6a1 1 0 0 1 1-1z"/></svg>
+        </div>
+        <div>
+          <div class="body-strong">수업 자료 만들기</div>
+          <div class="body-sm" style="margin-top:4px;">프롬프트 1개</div>
+        </div>
+      </div>
+      <div class="tile" style="display:flex;gap:14px;align-items:center;">
+        <div class="pin" style="width:72px;height:72px;flex:none;background:var(--canvas);display:grid;place-items:center;">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 7 4 12l5 5M15 7l5 5-5 5"/></svg>
+        </div>
+        <div>
+          <div class="body-strong">작은 교실 도구</div>
+          <div class="body-sm" style="margin-top:4px;">퀴즈 앱 1개</div>
+        </div>
+      </div>
+      <div class="tile" style="display:flex;gap:14px;align-items:center;">
+        <div class="pin" style="width:72px;height:72px;flex:none;background:var(--canvas);display:grid;place-items:center;">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 4.6-3.2 8-8 9-4.8-1-8-4.4-8-9V6l8-3z"/><path d="M8.6 12.2l2.4 2.4 4.4-4.6"/></svg>
+        </div>
+        <div>
+          <div class="body-strong">검증 습관</div>
+          <div class="body-sm" style="margin-top:4px;">읽고 · 실행하고 · 고치기</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="position:absolute;left:32px;bottom:18px;" class="caption-sm">도창초등학교 교원 연수</div>
+  <div style="position:absolute;right:32px;bottom:18px;" class="caption-sm">02 / 78</div>
+</section>
+
+</div></div>
+
+<div id="vover">
+  <video id="vplayer" controls preload="metadata" playsinline>
+    <source src="assets/opening-video.mp4" type="video/mp4">
+  </video>
+  <button id="vclose" type="button">닫기 (ESC)</button>
+</div>
+
+<div id="note">Pinterest 스타일 미리보기 · 1–2쪽만 적용 (원본 덱은 그대로입니다)</div>
+<div id="nav">
+  <button id="prev" aria-label="이전">‹</button>
+  <span class="idx"><span id="cur">1</span> / 2</span>
+  <button id="next" aria-label="다음">›</button>
+</div>
+
+<script>
+(function(){
+  var stage=document.getElementById('stage');
+  var slides=[].slice.call(document.querySelectorAll('.slide'));
+  var i=0,scale=1,vopen=false;
+  var vover=document.getElementById('vover'),vfilm=document.getElementById('vplayer');
+
+  function fit(){
+    scale=Math.min(window.innerWidth/1600,window.innerHeight/900);
+    stage.style.transform='translate(-50%,-50%) scale('+scale+')';
+  }
+  function show(n){
+    closeVideo();
+    i=Math.max(0,Math.min(slides.length-1,n));
+    slides.forEach(function(el,k){el.classList.toggle('on',k===i);});
+    document.getElementById('cur').textContent=i+1;
+  }
+  function enterFS(el){var fn=el.requestFullscreen||el.webkitRequestFullscreen;if(fn){try{var r=fn.call(el);if(r&&r.catch)r.catch(function(){});}catch(e){}}}
+  function exitFS(){
+    if(!(document.fullscreenElement||document.webkitFullscreenElement))return;
+    var fn=document.exitFullscreen||document.webkitExitFullscreen;
+    if(fn){try{var r=fn.call(document);if(r&&r.catch)r.catch(function(){});}catch(e){}}
+  }
+  function openVideo(){
+    if(vopen)return;vopen=true;vover.classList.add('on');enterFS(vover);
+    try{vfilm.currentTime=0;var p=vfilm.play();if(p&&p.catch)p.catch(function(){});}catch(e){}
+  }
+  function closeVideo(){
+    if(!vopen)return;vopen=false;vover.classList.remove('on');
+    try{vfilm.pause();vfilm.currentTime=0;}catch(e){}
+    exitFS();
+  }
+  [].forEach.call(document.querySelectorAll('.vbtn'),function(b){
+    b.addEventListener('click',function(e){e.stopPropagation();openVideo();});
+  });
+  document.getElementById('vclose').addEventListener('click',function(e){e.stopPropagation();closeVideo();});
+  vfilm.addEventListener('ended',closeVideo);
+  ['fullscreenchange','webkitfullscreenchange'].forEach(function(ev){
+    document.addEventListener(ev,function(){
+      if(!(document.fullscreenElement||document.webkitFullscreenElement)&&vopen)closeVideo();
+    });
+  });
+
+  window.addEventListener('resize',fit);
+  document.getElementById('prev').onclick=function(e){e.stopPropagation();show(i-1);};
+  document.getElementById('next').onclick=function(e){e.stopPropagation();show(i+1);};
+  document.addEventListener('keydown',function(e){
+    if(vopen){if(e.key==='Escape')closeVideo();return;}
+    if(['ArrowRight','ArrowDown',' '].indexOf(e.key)>-1){e.preventDefault();show(i+1);}
+    if(['ArrowLeft','ArrowUp'].indexOf(e.key)>-1){e.preventDefault();show(i-1);}
+  });
+  document.addEventListener('click',function(e){
+    if(vopen||e.target.closest('#nav')||e.target.closest('.vbtn')||e.target.closest('#vover')||e.target.closest('button'))return;
+    show(i+1);
+  });
+  fit();show(0);
+})();
+</script>
+</body>
+</html>

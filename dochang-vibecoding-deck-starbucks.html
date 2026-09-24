@@ -398,6 +398,7 @@ ul.list li{display:flex;gap:12px;font-size:16px;line-height:1.5;color:var(--ink)
 .mk-box{border:1px solid var(--line);border-radius:14px;padding:12px 14px 10px;background:var(--white);box-shadow:rgba(0,0,0,.01) 0 .175px 1.041px, rgba(0,0,0,.02) 0 .8px 2.925px, rgba(0,0,0,.027) 0 2.025px 7.847px, rgba(0,0,0,.04) 0 4px 18px;}
 .mk-model{display:inline-flex;align-items:center;gap:6px;background:var(--bg);border:1px solid var(--line);
   border-radius:999px;padding:5px 12px;font-size:12.5px;font-weight:600;color:var(--ink);}
+.mk-shot{display:block;height:var(--mk-shot-h,345px);width:auto;max-width:100%;margin:10px auto 0;border-radius:12px;box-shadow:0 4px 18px rgba(0,0,0,.14);}
 .mk-menu{background:var(--white);border:1px solid var(--line);border-radius:12px;box-shadow:rgba(0,0,0,.01) 0 .175px 1.041px, rgba(0,0,0,.02) 0 .8px 2.925px, rgba(0,0,0,.027) 0 2.025px 7.847px, rgba(0,0,0,.04) 0 4px 18px;
   padding:8px 6px;margin-top:8px;}
 .mk-menu .t{font-size:11.5px;font-weight:600;color:var(--ink-25);padding:2px 8px 6px;}
@@ -1497,15 +1498,7 @@ ul.list li:hover:not(.noglow),
         </div>
       </div>
 
-      <div class="mk-menu">
-        <div class="t">모델 선택</div>
-        <div class="mk-opt">기본 <small>추천 모델 모음</small></div>
-        <div class="mk-opt">GPT-6 Astra <span class="chk">✓</span></div>
-        <div class="mk-opt">GPT-5.6 Sol</div>
-        <div class="mk-opt">GPT-5.6 Terra</div>
-        <div class="mk-opt">GPT-5.6 Luna</div>
-        <div class="mk-opt">GPT-5.5</div>
-      </div>
+      <img class="mk-shot" src="assets/model-select.png" alt="모델 선택 메뉴(현재 GPT-6 Sol Max): 기본(추천 모델 모음), GPT-6 Astra, GPT-6 Sol(선택됨), GPT-6 Luna, GPT-5.6 Sol, GPT-5.6 Terra, GPT-5.6 Luna, GPT-5.5">
 
       <div class="small" style="margin-top:12px;">모델 선택 · 추론 수준 · ＋ 버튼 · 음성 · 전송</div>
     </div>
@@ -5445,19 +5438,32 @@ ul.list li:hover:not(.noglow),
   window.addEventListener('resize', fit);
   document.getElementById('prev').onclick = function(e){ e.stopPropagation(); show(i - 1); };
   document.getElementById('next').onclick = function(e){ e.stopPropagation(); show(i + 1); };
-  document.addEventListener('keydown', function(e){
+  var NEXT_KEYS = ['ArrowRight','ArrowDown','PageDown',' ','MediaTrackNext'];
+  var PREV_KEYS = ['ArrowLeft','ArrowUp','PageUp','MediaTrackPrevious'];
+  /* 프리젠터(PageDown/PageUp)는 입력창·확대 화면·영상 재생 중에도 곧바로 이동 */
+  window.addEventListener('keydown', function(e){
+    var k = e.key;
+    var presenter = (k === 'PageDown' || k === 'PageUp' || k === 'MediaTrackNext' || k === 'MediaTrackPrevious');
     var t = e.target;
-    if (t && (t.isContentEditable || t.tagName === 'INPUT' || t.tagName === 'TEXTAREA')) return;
-    if (vopen){
-      if (e.key === 'Escape'){ e.preventDefault(); closeVideo(); }
-      else if (e.key === ' '){ e.preventDefault(); if (vfilm.paused) vfilm.play(); else vfilm.pause(); }
+    var typing = t && (t.isContentEditable || t.tagName === 'INPUT' || t.tagName === 'TEXTAREA');
+    if (typing && !presenter) return;
+    if (vopen && !presenter){
+      if (k === 'Escape'){ e.preventDefault(); closeVideo(); }
+      else if (k === ' '){ e.preventDefault(); if (vfilm.paused) vfilm.play(); else vfilm.pause(); }
       return;
     }
-    if (['ArrowRight','ArrowDown','PageDown',' '].indexOf(e.key) > -1){ e.preventDefault(); show(i + 1); }
-    if (['ArrowLeft','ArrowUp','PageUp'].indexOf(e.key) > -1){ e.preventDefault(); show(i - 1); }
-    if (e.key === 'Home') show(0);
-    if (e.key === 'End') show(total - 1);
-  });
+    var dir = NEXT_KEYS.indexOf(k) > -1 ? 1 : PREV_KEYS.indexOf(k) > -1 ? -1 : 0;
+    if (dir){
+      e.preventDefault(); e.stopPropagation();
+      if (typing && t.blur) t.blur();
+      var z = document.querySelector('.chs-zoom.on');
+      if (z) z.classList.remove('on');
+      show(i + dir);
+      return;
+    }
+    if (k === 'Home') show(0);
+    if (k === 'End') show(total - 1);
+  }, true);
 
   /* --- 예시 프롬프트 복사 --- */
   function pvFallback(txt, done){
@@ -5679,6 +5685,40 @@ ul.list li:hover:not(.noglow),
   var dnX = 0, dnY = 0;
   document.addEventListener('mousedown', function(e){ dnX = e.clientX; dnY = e.clientY; }, true);
 
+  /* --- 빈 영역 클릭 : 아래쪽 오른쪽 = 다음, 아래쪽 왼쪽 = 이전 (글씨·이미지 위에서는 이동하지 않음) --- */
+  var MEDIA = 'img,svg,video,canvas,picture,iframe,button,input,textarea,select,label';
+  function onMedia(el){
+    var stop = el && el.closest ? el.closest('.slide') : null;
+    for (; el && el !== stop && el.nodeType === 1; el = el.parentElement){
+      if (el.matches(MEDIA)) return true;
+      var bg = window.getComputedStyle(el).backgroundImage;
+      if (bg && bg.indexOf('url(') > -1) return true;
+    }
+    return false;
+  }
+  function onText(x, y){
+    var node, off;
+    if (document.caretPositionFromPoint){
+      var p = document.caretPositionFromPoint(x, y);
+      if (!p) return false;
+      node = p.offsetNode; off = p.offset;
+    } else if (document.caretRangeFromPoint){
+      var r0 = document.caretRangeFromPoint(x, y);
+      if (!r0) return false;
+      node = r0.startContainer; off = r0.startOffset;
+    } else return false;
+    if (!node || node.nodeType !== 3 || !node.nodeValue.trim()) return false;
+    var rg = document.createRange();
+    for (var k = Math.max(0, off - 1); k <= Math.min(node.length - 1, off); k++){
+      rg.setStart(node, k); rg.setEnd(node, k + 1);
+      var rs = rg.getClientRects();
+      for (var j = 0; j < rs.length; j++){
+        var b = rs[j];
+        if (x >= b.left - 4 && x <= b.right + 4 && y >= b.top - 4 && y <= b.bottom + 4) return true;
+      }
+    }
+    return false;
+  }
   document.addEventListener('click', function(e){
     if (vopen) return;
     if (e.target.closest('#nav') || e.target.closest('.vbtn') || e.target.closest('#vover') || e.target.closest('.cpy') || e.target.closest('[data-go]') || e.target.closest('[contenteditable]') || e.target.closest('a[href]') || e.target.closest('.chs-hot') || e.target.closest('.chs-zoom') || e.target.closest('.pcopy')) return;
@@ -5687,7 +5727,11 @@ ul.list li:hover:not(.noglow),
     /* 선택된 텍스트가 있으면 이동하지 않음 (복사할 시간 확보) */
     var sel = window.getSelection ? String(window.getSelection()) : '';
     if (sel && sel.replace(/\s/g, '').length > 0) return;
-    show(i + 1);
+    if (onMedia(e.target) || onText(e.clientX, e.clientY)) return;
+    var sr = stage.getBoundingClientRect();
+    var rx = (e.clientX - sr.left) / sr.width, ry = (e.clientY - sr.top) / sr.height;
+    if (ry < 0.5) return;
+    show(rx >= 0.5 ? i + 1 : i - 1);
   });
 
   setTimeout(function(){ var h=document.getElementById('hint'); if(h) h.classList.add('hide'); }, 6000);

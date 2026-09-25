@@ -3,253 +3,251 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>도창초등학교 교원 연수 : ChatGPT · 바이브 코딩</title>
+<title>도창초등학교 교원 연수 : ChatGPT · 바이브 코딩 (Apple 스타일)</title>
 <style>
-/* ============ FONT : SoDoSans 대체 Inter/Manrope + 한글 SUIT ============ */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:wght@500;600&display=swap');
+/* ============ FONT : SUIT ============ */
 @font-face{
   font-family:'SUIT Variable';
   src:url('https://cdn.jsdelivr.net/gh/sun-typeface/SUIT@2/fonts/variable/woff2/SUIT-Variable.woff2') format('woff2-variations');
   font-weight:100 900; font-style:normal; font-display:swap;
 }
+@font-face{
+  font-family:'SUIT';
+  src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_suit@1.0/SUIT-Regular.woff2') format('woff2');
+  font-weight:400; font-display:swap;
+}
+@font-face{
+  font-family:'SUIT';
+  src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_suit@1.0/SUIT-Bold.woff2') format('woff2');
+  font-weight:700; font-display:swap;
+}
 
-/* ============ TOKENS (DESIGN-starbucks.md) ============ */
+/* ============ TOKENS ============ */
 :root{
-  --bg:#f2f0eb;                  /* Neutral Warm : 페이지 캔버스 */
-  --ceramic:#edebe9;             /* Ceramic : 존 구분 */
+  --bg:#f5f5f7;
+  --ink:#1d1d1f;
+  --red:#0071e3;
+  --charcoal:#000000;
+  --ink-70:#424245;
+  --ink-45:#6e6e73;
+  --ink-25:#86868b;
+  --line:#d2d2d7;
+  --line-soft:#e8e8ed;
   --white:#ffffff;
-  --sb-green:#006241;            /* Starbucks Green : 제목 */
-  --red:#00754A;                 /* Green Accent : CTA·강조 (기존 --red 토큰 자리) */
-  --house:#1E3932;               /* House Green : 다크 밴드 */
-  --charcoal:#1E3932;
-  --uplift:#2b5148;              /* Green Uplift : 다크 위 카드 */
-  --green-light:#d4e9e2;
-  --gold:#cba258;
-  --ink:rgba(0,0,0,.87);         /* Text Black */
-  --ink-70:rgba(0,0,0,.87);
-  --ink-45:rgba(0,0,0,.58);      /* Text Black Soft */
-  --ink-25:rgba(0,0,0,.38);
-  --line:#e7e7e7;
-  --line-soft:#edebe9;
-  --d-line:rgba(255,255,255,.22);
-  --d-text:rgba(255,255,255,.70);
-  --d-dim:rgba(255,255,255,.58);
-  --font:'Inter','SUIT Variable','Helvetica Neue',Helvetica,Arial,sans-serif;
-  --serif:'Lora','Iowan Old Style',Georgia,serif;
-  --card-shadow:0 0 .5px 0 rgba(0,0,0,.14), 0 1px 1px 0 rgba(0,0,0,.24);
+  --d-line:rgba(255,255,255,.16);
+  --d-text:rgba(255,255,255,.8);
+  --d-dim:#86868b;
+  --blue-dark:#2997ff;
+  --ease-out:cubic-bezier(0.23, 1, 0.32, 1);
+  --font:-apple-system,BlinkMacSystemFont,'SF Pro Display','SF Pro Text','Apple SD Gothic Neo','SUIT Variable','SUIT','Pretendard','Malgun Gothic',system-ui,sans-serif;
   --mx:50%; --my:50%;
-  --r-card:12px; --r-pill:50px;
 }
 
 *{box-sizing:border-box;margin:0;padding:0;}
 html,body{height:100%;}
 body{
-  background:#dcd9d1;font-family:var(--font);color:var(--ink);
-  overflow:hidden;-webkit-font-smoothing:antialiased;letter-spacing:-.01em;
+  background:#e8e8ed;
+  font-family:var(--font);
+  color:var(--ink);
+  overflow:hidden;
+  -webkit-font-smoothing:antialiased;
+  letter-spacing:-.02em;
 }
 
-/* ============ STAGE ============ */
+/* ============ STAGE (16:9 fixed, scaled) ============ */
 #viewport{position:fixed;inset:0;overflow:hidden;}
 #stage{
   width:1600px;height:900px;position:absolute;left:50%;top:50%;
-  transform-origin:center center;transform:translate(-50%,-50%) scale(1);
+  transform-origin:center center;
+  transform:translate(-50%,-50%) scale(1);
   box-shadow:0 30px 80px rgba(0,0,0,.18);
 }
 .slide{
-  position:absolute;inset:0;background:var(--bg);
-  padding:60px 64px 58px;display:none;overflow:hidden;
+  position:absolute;inset:0;
+  background:var(--bg);
+  padding:74px 88px 70px;
+  display:none;
+  overflow:hidden;
 }
-.slide.on{display:flex;flex-direction:column;animation:fade .34s ease;}
+.slide.on{display:flex;flex-direction:column;animation:fade .38s ease;}
 .fill{flex:1;min-height:0;}
 .fill.grid{display:grid;align-items:stretch;}
 .fill .card{height:100%;min-height:0;}
 .colstack{display:flex;flex-direction:column;}
 .colstack>.card{height:auto;}
-@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
-.slide.dark{background:var(--house);color:#fff;}
-.slide.dark::before{content:none;}   /* 그라디언트·스포트라이트 없음 : 색면 대비로만 */
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.slide.dark{background:var(--charcoal);color:#fff;}
 
-/* ============ TYPOGRAPHY ============ */
+/* cursor spotlight on dark slides */
+.slide.dark::before{
+  content:"";position:absolute;inset:0;pointer-events:none;z-index:0;
+  background:radial-gradient(520px circle at var(--mx) var(--my), rgba(0,113,227,.16), transparent 62%);
+  transition:background .12s linear;
+}
+
+/* ============ COMMON PARTS ============ */
 .eyebrow{
-  font-size:14px;font-weight:600;letter-spacing:.1em;color:var(--sb-green);
-  display:flex;align-items:center;gap:10px;margin-bottom:14px;text-transform:uppercase;
+  font-size:14px;font-weight:700;letter-spacing:.22em;color:var(--ink-45);
+  display:flex;align-items:center;gap:12px;margin-bottom:18px;text-transform:uppercase;
   position:relative;z-index:2;
 }
-.dark .eyebrow{color:var(--green-light);}
-h1.title{font-size:54px;font-weight:600;line-height:1.2;letter-spacing:-.16px;color:var(--ink);position:relative;z-index:2;}
-h2.title{font-size:42px;font-weight:600;line-height:1.2;letter-spacing:-.16px;color:var(--ink);position:relative;z-index:2;}
-.title .r{color:var(--sb-green);}
+.eyebrow::before{content:"";width:22px;height:2px;background:var(--red);display:block;}
+.dark .eyebrow{color:var(--d-dim);}
+
+h1.title{font-size:54px;font-weight:800;line-height:1.22;letter-spacing:-.035em;position:relative;z-index:2;}
+h2.title{font-size:50px;font-weight:800;line-height:1.24;letter-spacing:-.035em;position:relative;z-index:2;}
+.title .r{color:var(--red);}
 .dark .title{color:#fff;}
-.dark .title .r{color:var(--green-light);}
-.lead{font-size:19px;line-height:1.75;color:var(--ink);font-weight:400;position:relative;z-index:2;}
+
+.lead{font-size:22px;line-height:1.8;color:var(--ink-70);font-weight:500;position:relative;z-index:2;}
 .dark .lead{color:var(--d-text);}
-.lead .b{color:var(--sb-green);font-weight:600;}
+.lead .b{color:var(--ink);font-weight:700;}
 .dark .lead .b{color:#fff;}
-.lead .r{color:var(--red);font-weight:600;}
-.dark .lead .r{color:var(--green-light);}
-.body{font-size:16px;line-height:1.5;color:var(--ink);font-weight:400;}
-.dark .body{color:var(--d-text);}
-.body .b{color:var(--sb-green);font-weight:600;}
-.dark .body .b{color:#fff;}
-.body .r{color:var(--red);font-weight:600;}
-.dark .body .r{color:var(--green-light);}
-.small{font-size:14px;line-height:1.5;color:var(--ink-45);font-weight:400;}
-.dark .small{color:var(--d-dim);}
-.kicker{font-size:24px;font-weight:600;line-height:1.3;letter-spacing:-.16px;color:var(--ink);}
-.dark .kicker{color:#fff;}
-.num{font-size:13px;font-weight:600;letter-spacing:.15em;color:var(--red);text-transform:uppercase;}
-.dark .num{color:var(--green-light);}
-.quote{
-  border-left:3px solid var(--red);padding:12px 0 12px 18px;
-  font-size:18px;font-weight:600;line-height:1.5;color:var(--ink);
-}
-.dark .quote{border-left-color:var(--green-light);color:#fff;}
-.stat-n{font-family:var(--serif);font-size:56px;font-weight:600;line-height:1;letter-spacing:-.5px;color:var(--sb-green);}
-.dark .stat-n{color:#fff;}
-.stat-l{font-size:14px;font-weight:400;color:var(--ink-45);margin-top:10px;}
-.dark .stat-l{color:var(--d-dim);}
-.rule{height:1px;background:var(--line);margin:22px 0;}
+.lead .r{color:var(--red);font-weight:700;}
+
+.rule{height:1px;background:var(--line);margin:26px 0;}
 .dark .rule{background:var(--d-line);}
 
-/* ============ CARDS : 12px + 속삭이는 2겹 그림자 ============ */
+.pager{
+  position:absolute;right:88px;bottom:38px;z-index:3;
+  font-size:13px;font-weight:700;letter-spacing:.14em;color:var(--ink-25);
+}
+.dark .pager{color:rgba(255,255,255,.3);}
+.pager b{color:var(--red);}
+.mark{
+  position:absolute;left:88px;bottom:38px;z-index:3;
+  font-size:12px;font-weight:700;letter-spacing:.2em;color:var(--ink-25);
+}
+.dark .mark{color:rgba(255,255,255,.3);}
+
 .card{
-  background:var(--white);border:none;border-radius:var(--r-card);padding:28px 30px;
-  box-shadow:var(--card-shadow);position:relative;z-index:2;
-  transition:transform .2s ease, box-shadow .2s ease;
+  background:var(--white);border:1px solid var(--line);border-radius:20px;padding:40px 40px 38px;
+  position:relative;z-index:2;
+  transition:transform .28s cubic-bezier(.22,1,.36,1), box-shadow .28s ease, border-color .28s ease;
 }
-.dark .card{background:var(--uplift);box-shadow:none;}
-.card.accent{background:var(--white);border-top:3px solid var(--red);}
-.dark .card.accent{background:var(--uplift);border-top:3px solid var(--green-light);}
-.card:hover{transform:translateY(-3px);box-shadow:0 0 .5px 0 rgba(0,0,0,.14), 0 8px 12px 0 rgba(0,0,0,.14);}
-.card:active{transform:scale(.99);}
+.dark .card{background:#1d1d1f;border-color:var(--d-line);}
+.card.accent{border-top:3px solid var(--red);}
+/* --- mouse interaction --- */
+.card:hover{transform:translateY(-7px);box-shadow:0 18px 40px rgba(38,38,43,.13);border-color:#c7c7cc;}
+.dark .card:hover{box-shadow:0 18px 44px rgba(0,0,0,.45);border-color:rgba(0,113,227,.5);}
+.card.accent:hover{border-color:var(--red);}
 
-/* ============ PILL BUTTONS : 50px + scale(0.95) ============ */
 .chip{
-  display:inline-flex;align-items:center;gap:8px;height:36px;padding:7px 16px;
-  border:1px solid var(--red);border-radius:var(--r-pill);background:transparent;
-  font-size:14px;font-weight:600;color:var(--red);line-height:1.2;letter-spacing:-.01em;
-  transition:all .2s ease;
+  display:inline-flex;align-items:center;gap:8px;height:34px;padding:0 15px;
+  border:1px solid var(--line);border-radius:999px;background:#fff;
+  font-size:14px;font-weight:700;color:var(--ink-70);
+  transition:transform .22s ease, background .22s ease, color .22s ease, border-color .22s ease;
 }
-.chip:hover{background:var(--green-light);}
-.chip:active{transform:scale(.95);}
+.chip:hover{transform:translateY(-3px);border-color:var(--red);color:var(--red);}
 .chip.red{background:var(--red);border-color:var(--red);color:#fff;}
-.chip.ink{background:var(--house);border-color:var(--house);color:#fff;}
-.dark .chip{border-color:#fff;color:#fff;}
-.dark .chip:hover{background:rgba(255,255,255,.12);}
-.dark .chip.red{background:#fff;border-color:#fff;color:var(--red);}
-.dark .chip.ink{background:transparent;border-color:#fff;color:#fff;}
+.chip.red:hover{color:#fff;filter:brightness(1.08);}
+.chip.ink{background:var(--ink);border-color:var(--ink);color:#fff;}
+.chip.ink:hover{color:#fff;}
 
-/* ============ ICONS : 원형 ============ */
-.icon{width:24px;height:24px;stroke:var(--sb-green);fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;}
+.num{font-size:15px;font-weight:800;color:var(--red);letter-spacing:.06em;}
+.kicker{font-size:25px;font-weight:800;letter-spacing:-.03em;}
+.body{font-size:18.5px;line-height:1.8;color:var(--ink-70);font-weight:500;}
+.dark .body{color:var(--d-text);}
+.body .r{color:var(--red);font-weight:700;}
+.body .b{color:var(--ink);font-weight:700;}
+.dark .body .b{color:#fff;}
+.small{font-size:16px;line-height:1.7;color:var(--ink-45);font-weight:500;}
+.dark .small{color:var(--d-dim);}
+
+.dot{width:6px;height:6px;border-radius:50%;background:var(--red);flex:none;margin-top:9px;}
+ul.list{list-style:none;display:flex;flex-direction:column;gap:13px;}
+ul.list li{display:flex;gap:13px;font-size:18.5px;line-height:1.7;color:var(--ink-70);font-weight:500;}
+.dark ul.list li{color:var(--d-text);}
+
+.icon{width:28px;height:28px;stroke:var(--ink);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;}
 .icon.red{stroke:var(--red);}
 .icon.w{stroke:#fff;}
 .ibox{
-  width:52px;height:52px;border:none;border-radius:50%;
-  display:grid;place-items:center;background:var(--green-light);
-  transition:transform .22s ease, background .22s ease;
+  width:60px;height:60px;border:1px solid var(--line);border-radius:3px;
+  display:grid;place-items:center;background:#fff;
+  transition:transform .3s cubic-bezier(.22,1,.36,1), background .3s ease, border-color .3s ease;
 }
-.dark .ibox{background:rgba(255,255,255,.12);}
-.ibox.red{background:var(--red);}
-.ibox.ink{background:var(--house);}
-.card:hover .ibox.ink{background:var(--red);}
-.step{transition:transform .2s ease;cursor:default;}
-.step:hover{transform:translateY(-3px);}
-.step:hover .ibox{transform:scale(1.06);}
-.st-label{transition:color .2s ease;}
-.step:hover .st-label{color:var(--sb-green);}
-.dark .step:hover .st-label{color:var(--green-light);}
-.dot{width:7px;height:7px;border-radius:50%;background:var(--red);flex:none;margin-top:8px;}
-.dark .dot{background:var(--green-light);}
-ul.list{list-style:none;display:flex;flex-direction:column;gap:12px;}
-ul.list li{display:flex;gap:12px;font-size:16px;line-height:1.5;color:var(--ink);font-weight:400;}
-.dark ul.list li{color:var(--d-text);}
+.dark .ibox{background:#2c2c2e;border-color:var(--d-line);}
+.ibox.red{background:var(--red);border-color:var(--red);}
+.ibox.ink{background:var(--ink);border-color:var(--ink);}
+.card:hover .ibox.ink{background:var(--red);border-color:var(--red);}
+.step:hover .ibox{transform:translateY(-6px) scale(1.06);}
+.step{transition:transform .28s cubic-bezier(.22,1,.36,1);cursor:default;}
+.step:hover{transform:translateY(-4px);}
+.step:hover .st-label{color:var(--red);}
+.st-label{transition:color .25s ease;}
 
-/* ============ PROMPT BLOCK (House Green 밴드) ============ */
+.quote{
+  border-left:3px solid var(--red);padding:12px 0 12px 18px;
+  font-size:19px;font-weight:700;line-height:1.6;color:var(--ink);
+}
+.dark .quote{color:#fff;}
+
+.stat-n{font-size:70px;font-weight:800;line-height:1;letter-spacing:-.05em;color:var(--red);}
+.stat-l{font-size:15px;font-weight:600;color:var(--ink-45);margin-top:10px;letter-spacing:-.01em;}
+.dark .stat-l{color:var(--d-dim);}
+
+.deco-dot{position:absolute;border-radius:50%;background:var(--red);}
+
+/* prompt / code block */
 .promptbox{
-  background:var(--house);border-radius:var(--r-card);border-left:none;
-  padding:30px 34px;position:relative;z-index:2;transition:transform .2s ease;
+  background:var(--charcoal);padding:34px 38px;position:relative;z-index:2;
+  border-left:3px solid var(--red);
+  transition:transform .28s cubic-bezier(.22,1,.36,1), box-shadow .28s ease;
 }
-.dark .promptbox{background:var(--uplift);}
-.promptbox:hover{transform:translateY(-3px);}
-.promptbox .plabel{font-size:13px;font-weight:600;letter-spacing:.15em;color:var(--green-light);text-transform:uppercase;}
-.promptbox p{margin-top:12px;font-size:19px;line-height:1.75;color:#fff;font-weight:400;}
-.promptbox .r{color:var(--green-light);font-weight:600;}
+.promptbox:hover{transform:translateY(-5px);box-shadow:0 18px 44px rgba(26,26,26,.28);}
+.promptbox .plabel{font-size:12px;font-weight:800;letter-spacing:.2em;color:rgba(255,255,255,.4);}
+.promptbox p{margin-top:12px;font-size:20px;line-height:1.72;color:#fff;font-weight:600;}
+.promptbox .r{color:var(--red);font-weight:800;}
 .promptbox .code{
-  margin-top:14px;font-family:'Inter','SUIT Variable',monospace;
-  font-size:18px;line-height:1.75;color:#fff;font-weight:400;white-space:pre-wrap;
+  margin-top:16px;font-family:'JetBrains Mono','Consolas','D2Coding',ui-monospace,monospace;
+  font-size:19px;line-height:1.85;color:#fff;font-weight:500;white-space:pre-wrap;
+  letter-spacing:-.01em;
 }
-.promptbox .code .r{color:var(--green-light);font-weight:600;}
+.promptbox .code .r{color:var(--red);font-weight:700;}
 
-/* ============ DIVIDER (House Green) ============ */
-.divider .partno{font-size:14px;font-weight:600;letter-spacing:.15em;color:var(--green-light);margin-bottom:22px;text-transform:uppercase;position:relative;z-index:2;}
-.divider .ptitle{font-family:var(--serif);font-size:66px;font-weight:600;line-height:1.2;letter-spacing:-.5px;color:#fff;position:relative;z-index:2;}
-.divider .psub{font-size:19px;font-weight:400;line-height:1.75;color:var(--d-text);margin-top:22px;position:relative;z-index:2;}
-.toc{list-style:none;display:flex;flex-direction:column;position:relative;z-index:2;}
+/* ============ CHAPTER DIVIDER ============ */
+.divider .partno{
+  font-size:15px;font-weight:800;letter-spacing:.3em;color:var(--red);margin-bottom:26px;
+  position:relative;z-index:2;
+}
+.divider .ptitle{
+  font-size:74px;font-weight:800;line-height:1.14;letter-spacing:-.045em;color:#fff;position:relative;z-index:2;
+}
+.divider .psub{font-size:23px;font-weight:500;color:var(--d-text);margin-top:26px;position:relative;z-index:2;}
+.toc{list-style:none;display:flex;flex-direction:column;gap:0;position:relative;z-index:2;}
 .toc li{
-  display:flex;align-items:center;gap:18px;padding:15px 4px;border-bottom:1px solid var(--d-line);
-  font-size:17px;font-weight:400;color:var(--d-text);
-  transition:padding-left .22s ease,color .22s ease;
+  display:flex;align-items:center;gap:20px;padding:17px 4px;border-bottom:1px solid var(--d-line);
+  font-size:19px;font-weight:600;color:var(--d-text);
+  transition:padding-left .25s ease,color .25s ease;
 }
-.toc li:hover{padding-left:12px;color:#fff;}
-.tocn{font-size:13px;font-weight:600;letter-spacing:.1em;color:var(--green-light);width:32px;flex:none;}
+.toc li:hover{padding-left:16px;color:#fff;}
+.toc li:hover .tocn{color:var(--red);}
+.tocn{font-size:14px;font-weight:800;letter-spacing:.12em;color:rgba(255,255,255,.32);width:34px;flex:none;transition:color .25s ease;}
 
-.toc li[data-go]{cursor:pointer;}
-.toc.dense li{padding:8px 12px;font-size:15.5px;gap:12px;}
-.toc.dense .tocn{font-size:11px;width:24px;}
+/* ============ OPENING VIDEO ============ */
+.vbtn:hover{filter:brightness(1.08);transform:translateY(-3px);box-shadow:0 14px 30px rgba(0,113,227,.32);}
+.vbtn:active{transform:translateY(0);}
 
-/* ============ FOOT MARKS ============ */
-.pager{position:absolute;right:64px;bottom:28px;z-index:3;font-size:13px;font-weight:400;color:var(--ink-45);}
-.dark .pager{color:var(--d-dim);}
-.pager b{color:var(--sb-green);font-weight:600;}
-.dark .pager b{color:var(--green-light);}
-.mark{position:absolute;left:64px;bottom:28px;z-index:3;font-size:13px;font-weight:400;color:var(--ink-45);}
-.dark .mark{color:var(--d-dim);}
-
-.deco-dot{display:none;}
-.pulse{display:none;}
-
-/* ============ OPENING VIDEO BUTTON (Green Accent pill) ============ */
-.vbtn{
-  border-radius:var(--r-pill)!important;border:1px solid var(--red)!important;
-  background:var(--red)!important;padding:14px 28px!important;
-  transition:all .2s ease;
+#vover{
+  position:fixed;inset:0;z-index:90;background:#000000;
+  display:none;place-items:center;
 }
-.vbtn:active{transform:scale(.95);}
-.dark .vbtn{background:#fff!important;border-color:#fff!important;}
-.dark .vbtn span{color:var(--red)!important;}
-.dark .vbtn .icon.w{stroke:var(--red)!important;}
-
-#vover{position:fixed;inset:0;z-index:90;background:var(--house);display:none;place-items:center;}
 #vover.on{display:grid;animation:fade .3s ease;}
 #vover:fullscreen{width:100vw;height:100vh;background:#000;}
-#vover video{width:100%;height:100%;max-height:100vh;object-fit:contain;background:#000;display:block;}
-#vclose{
-  position:absolute;right:32px;top:28px;z-index:4;height:40px;padding:7px 20px;
-  border:1px solid #fff;border-radius:var(--r-pill);background:transparent;color:#fff;cursor:pointer;
-  font-family:var(--font);font-size:14px;font-weight:600;letter-spacing:-.01em;transition:all .2s ease;
+#vover:-webkit-full-screen{width:100vw;height:100vh;background:#000;}
+#vover video{
+  width:100%;height:100%;max-height:100vh;object-fit:contain;
+  background:#000;outline:none;display:block;
 }
-#vclose:hover{background:#fff;color:var(--red);}
-#vclose:active{transform:scale(.95);}
-#vhint{position:absolute;left:32px;bottom:28px;z-index:4;font-size:13px;font-weight:400;color:rgba(255,255,255,.7);}
-
-/* ============ COVER MOTION ============ */
-.cover-bg{position:absolute;inset:0;z-index:0;}
-@keyframes spin{to{transform:rotate(360deg)}}
-@keyframes spinr{to{transform:rotate(-360deg)}}
-@keyframes flow{to{stroke-dashoffset:-400}}
-@keyframes float1{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
-@keyframes float2{0%,100%{transform:translateY(0)}50%{transform:translateY(10px)}}
-@keyframes blink{0%,45%{opacity:1}50%,100%{opacity:0}}
-@keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
-.ring{transform-origin:center;animation:spin 52s linear infinite;}
-.ring.rev{animation:spinr 68s linear infinite;}
-.flowline{stroke-dasharray:14 12;animation:flow 9s linear infinite;}
-.fl1{animation:float1 6s ease-in-out infinite;}
-.fl2{animation:float2 7.5s ease-in-out infinite;}
-.caret{animation:blink 1.1s step-end infinite;}
-.rise{animation:rise .8s cubic-bezier(.22,1,.36,1) both;}
-.d1{animation-delay:.06s}.d2{animation-delay:.16s}.d3{animation-delay:.26s}.d4{animation-delay:.36s}.d5{animation-delay:.46s}
-.px{transition:transform .5s cubic-bezier(.22,1,.36,1);will-change:transform;}
+#vclose{
+  position:absolute;right:40px;top:34px;z-index:4;opacity:.55;display:flex;align-items:center;gap:10px;
+  background:none;border:1px solid var(--d-line);color:#fff;cursor:pointer;
+  padding:12px 20px;font-family:var(--font);font-size:15px;font-weight:700;letter-spacing:-.01em;
+  transition:background .25s ease,border-color .25s ease;
+}
+#vclose:hover{background:var(--red);border-color:var(--red);opacity:1;}
+#vhint{position:absolute;left:40px;bottom:86px;z-index:4;opacity:.75;font-size:13px;font-weight:600;letter-spacing:.14em;color:rgba(255,255,255,.4);}
 
 /* ============ ChatGPT 입력창 목업 ============ */
 .gpt-mock{background:var(--bg);border:1px solid var(--line);border-radius:16px;padding:22px 30px 18px;}
@@ -264,7 +262,7 @@ ul.list li{display:flex;gap:12px;font-size:16px;line-height:1.5;color:var(--ink)
 .gpt-ph{flex:1;min-width:0;font-size:19px;color:var(--ink-25);font-weight:400;}
 .gpt-ph[contenteditable]{
   color:var(--ink);outline:none;cursor:text;caret-color:var(--red);
-  white-space:nowrap;overflow-x:auto;overflow-y:hidden;padding:4px 2px;border-radius:8px;
+  white-space:nowrap;overflow-x:auto;overflow-y:hidden;padding:4px 2px;border-radius:14px;
 }
 .gpt-ph[contenteditable]::-webkit-scrollbar{display:none;}
 .gpt-ph[contenteditable]:empty::before{content:attr(data-ph);color:var(--ink-25);}
@@ -272,7 +270,7 @@ ul.list li{display:flex;gap:12px;font-size:16px;line-height:1.5;color:var(--ink)
 .gpt-reason{display:flex;align-items:center;gap:5px;font-size:17px;color:var(--ink-45);font-weight:400;}
 .gpt-mic{width:26px;height:26px;stroke:var(--ink-70);fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;}
 .gpt-voice{
-  width:46px;height:46px;border-radius:50%;background:#0075de;display:grid;place-items:center;flex:none;
+  width:46px;height:46px;border-radius:50%;background:#0071e3;display:grid;place-items:center;flex:none;
   transition:background .2s ease, transform .2s ease;
 }
 .gpt-bar:hover .gpt-voice{background:var(--blue-active);transform:scale(1.06);}
@@ -287,8 +285,8 @@ ul.list li{display:flex;gap:12px;font-size:16px;line-height:1.5;color:var(--ink)
 .gpt-legend div:hover b{background:var(--red);border-color:var(--red);color:#fff;transform:scale(1.06);}
 
 /* ============ 입력창 팝오버 (+ / High) ============ */
-.gpt-trig{position:relative;display:inline-flex;align-items:center;cursor:pointer;outline:none;border-radius:8px;padding:4px;transition:background .16s ease;}
-.gpt-trig:hover,.gpt-trig:focus-within{background:#e6f2ec;}
+.gpt-trig{position:relative;display:inline-flex;align-items:center;cursor:pointer;outline:none;border-radius:14px;padding:4px;transition:background .16s ease;}
+.gpt-trig:hover,.gpt-trig:focus-within{background:#eef5fd;}
 .gpt-pop{
   position:absolute;top:calc(100% + 16px);background:var(--white);border:1px solid var(--line);
   border-radius:14px;box-shadow:0 12px 30px rgba(0,0,0,.13), 0 2px 8px rgba(0,0,0,.06);
@@ -304,20 +302,20 @@ ul.list li{display:flex;gap:12px;font-size:16px;line-height:1.5;color:var(--ink)
 .gpt-pop-l::before{left:22px;}
 .gpt-pop-r{right:-8px;width:250px;padding:16px 18px;}
 .gpt-pop-r::before{right:28px;}
-.gp-row{display:flex;align-items:center;gap:12px;padding:8px 12px;border-radius:8px;transition:background .15s ease;}
-.gp-row.sel{background:#edebe9;}
-.gp-row:hover{background:#e6f2ec;}
+.gp-row{display:flex;align-items:center;gap:12px;padding:8px 12px;border-radius:14px;transition:background .15s ease;}
+.gp-row.sel{background:#f5f5f7;}
+.gp-row:hover{background:#eef5fd;}
 .gp-t{font-size:15.5px;font-weight:600;color:var(--ink);white-space:nowrap;}
 .gp-d{font-size:14px;color:var(--ink-25);}
-.gp-app{width:22px;height:22px;border-radius:6px;display:grid;place-items:center;flex:none;font-size:12px;font-weight:700;color:#fff;}
+.gp-app{width:22px;height:22px;border-radius:12px;display:grid;place-items:center;flex:none;font-size:12px;font-weight:700;color:#fff;}
 .gp-hint{padding:9px 12px 3px;margin-top:5px;border-top:1px solid var(--line-soft);font-size:13.5px;color:var(--ink-25);}
 /* 추론 수준 슬라이더 */
 .rs-head{display:flex;align-items:center;gap:10px;}
 .rs-title{flex:1;text-align:center;}
-.rs-title b{display:block;font-size:17px;font-weight:600;color:#0075de;}
+.rs-title b{display:block;font-size:17px;font-weight:600;color:#0071e3;}
 .rs-title span{display:block;font-size:13.5px;color:var(--ink-45);margin-top:2px;}
 .rs-track{position:relative;height:30px;border-radius:999px;background:#eceff1;margin-top:14px;}
-.rs-fill{position:absolute;left:0;top:0;bottom:0;width:58%;border-radius:999px;background:#0075de;}
+.rs-fill{position:absolute;left:0;top:0;bottom:0;width:58%;border-radius:999px;background:#0071e3;}
 .rs-dot{position:absolute;top:50%;width:5px;height:5px;border-radius:50%;transform:translate(-50%,-50%);}
 .rs-knob{position:absolute;left:58%;top:50%;width:26px;height:26px;border-radius:50%;background:#fff;
   transform:translate(-50%,-50%);box-shadow:0 1px 5px rgba(0,0,0,.28);}
@@ -325,14 +323,14 @@ ul.list li{display:flex;gap:12px;font-size:16px;line-height:1.5;color:var(--ink)
 /* ============ + 메뉴 목업 ============ */
 .pm{background:var(--white);border:1px solid var(--line);border-radius:14px;box-shadow:rgba(0,0,0,.01) 0 .175px 1.041px, rgba(0,0,0,.02) 0 .8px 2.925px, rgba(0,0,0,.027) 0 2.025px 7.847px, rgba(0,0,0,.04) 0 4px 18px;padding:10px 8px;}
 .pm-row{
-  display:flex;align-items:center;gap:14px;padding:10px 14px;border-radius:8px;
+  display:flex;align-items:center;gap:14px;padding:10px 14px;border-radius:14px;
   transition:background .16s ease, transform .2s cubic-bezier(.22,1,.36,1);
 }
-.pm-row.sel{background:#edebe9;}
-.pm-row:hover{background:#e6f2ec;transform:scale(1.015);}
+.pm-row.sel{background:#f5f5f7;}
+.pm-row:hover{background:#eef5fd;transform:scale(1.015);}
 .pm-row:hover .pm-t{color:var(--red);}
 .pm-ic{width:26px;height:26px;display:grid;place-items:center;flex:none;}
-.pm-app{width:24px;height:24px;border-radius:6px;display:grid;place-items:center;flex:none;
+.pm-app{width:24px;height:24px;border-radius:12px;display:grid;place-items:center;flex:none;
   font-size:13px;font-weight:700;color:#fff;letter-spacing:-.3px;}
 .pm-t{font-size:17px;font-weight:600;color:var(--ink);white-space:nowrap;transition:color .16s ease;}
 .pm-d{font-size:15px;font-weight:400;color:var(--ink-25);}
@@ -348,21 +346,21 @@ ul.list li{display:flex;gap:12px;font-size:16px;line-height:1.5;color:var(--ink)
 .sb-head{display:flex;align-items:center;gap:10px;padding:4px 10px 12px;}
 .sb-logo{font-size:19px;font-weight:700;color:var(--ink);letter-spacing:-.3px;flex:1;}
 .sb-row{
-  display:flex;align-items:center;gap:12px;padding:8px 10px;border-radius:8px;
+  display:flex;align-items:center;gap:12px;padding:8px 10px;border-radius:14px;
   transition:background .16s ease, transform .2s cubic-bezier(.22,1,.36,1);
 }
-.sb-row.sel{background:#edebe9;}
-.sb-row:hover{background:#e6f2ec;transform:scale(1.015);}
+.sb-row.sel{background:#f5f5f7;}
+.sb-row:hover{background:#eef5fd;transform:scale(1.015);}
 .sb-row:hover .sb-t{color:var(--red);}
 .sb-t{font-size:16px;font-weight:500;color:var(--ink);transition:color .16s ease;}
 .sb-badge{font-size:11px;font-weight:600;color:var(--ink-45);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:2px 8px;}
-.sb-badge.new{color:var(--red);border-color:#b9dccb;background:#e6f2ec;}
+.sb-badge.new{color:var(--red);border-color:#c6dcf7;background:#eef5fd;}
 .sb-label{font-size:13px;font-weight:600;color:var(--ink-25);padding:14px 10px 6px;}
-.sb-pin{display:flex;align-items:center;gap:12px;padding:6px 10px;border-radius:8px;
+.sb-pin{display:flex;align-items:center;gap:12px;padding:6px 10px;border-radius:14px;
   font-size:15px;color:var(--ink-70);transition:background .16s ease;}
-.sb-pin:hover{background:#e6f2ec;color:var(--ink);}
+.sb-pin:hover{background:#eef5fd;color:var(--ink);}
 .sb-fade{height:26px;background:linear-gradient(to bottom,rgba(255,255,255,0),#fff);margin-top:-14px;}
-.sb-more{position:relative;border-radius:8px;outline:none;}
+.sb-more{position:relative;border-radius:14px;outline:none;}
 .sb-more .sb-arrow{margin-left:auto;font-size:15px;color:var(--ink-25);transition:color .16s ease,transform .2s ease;}
 .sb-more:hover .sb-arrow,.sb-more:focus-within .sb-arrow{color:var(--red);transform:translateX(3px);}
 .sb-fly{                      /* 더 보기 옆(오른쪽)으로 펼쳐지되 카드 안쪽에 머무름 */
@@ -379,11 +377,11 @@ ul.list li{display:flex;gap:12px;font-size:16px;line-height:1.5;color:var(--ink)
 .mk{background:var(--white);border:1px solid var(--line);border-radius:12px;box-shadow:rgba(0,0,0,.01) 0 .175px 1.041px, rgba(0,0,0,.02) 0 .8px 2.925px, rgba(0,0,0,.027) 0 2.025px 7.847px, rgba(0,0,0,.04) 0 4px 18px;padding:10px 8px;position:relative;}
 .mk-head{display:flex;align-items:center;gap:8px;padding:2px 8px 8px;}
 .mk-logo{flex:1;font-size:15px;font-weight:700;color:var(--ink);letter-spacing:-.2px;}
-.mk-row{display:flex;align-items:center;gap:9px;padding:5px 8px;border-radius:6px;font-size:13.5px;color:var(--ink);transition:background .16s ease;}
-.mk-row.sel{background:#edebe9;}
-.mk-row:hover{background:#e6f2ec;}
+.mk-row{display:flex;align-items:center;gap:9px;padding:5px 8px;border-radius:12px;font-size:13.5px;color:var(--ink);transition:background .16s ease;}
+.mk-row.sel{background:#f5f5f7;}
+.mk-row:hover{background:#eef5fd;}
 .mk-badge{font-size:10px;font-weight:600;color:var(--ink-45);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:1px 6px;}
-.mk-badge.new{color:var(--red);background:#e6f2ec;border-color:#b9dccb;}
+.mk-badge.new{color:var(--red);background:#eef5fd;border-color:#c6dcf7;}
 .mk-label{font-size:11.5px;font-weight:600;color:var(--ink-25);padding:8px 8px 3px;}
 .mk-pin{display:flex;align-items:center;gap:9px;padding:4px 8px;font-size:12.5px;color:var(--ink-70);}
 .mk-fade{height:18px;background:linear-gradient(to bottom,rgba(255,255,255,0),#fff);margin-top:-10px;}
@@ -393,7 +391,7 @@ ul.list li{display:flex;gap:12px;font-size:16px;line-height:1.5;color:var(--ink)
   border:1px solid var(--line);border-radius:999px;box-shadow:rgba(0,0,0,.01) 0 .175px 1.041px, rgba(0,0,0,.02) 0 .8px 2.925px, rgba(0,0,0,.027) 0 2.025px 7.847px, rgba(0,0,0,.04) 0 4px 18px;}
 .mk-ph{flex:1;font-size:13.5px;color:var(--ink-25);}
 .mk-hi{font-size:12.5px;color:var(--ink-45);display:flex;align-items:center;gap:3px;}
-.mk-voice{width:30px;height:30px;border-radius:50%;background:#0075de;display:grid;place-items:center;flex:none;}
+.mk-voice{width:30px;height:30px;border-radius:50%;background:#0071e3;display:grid;place-items:center;flex:none;}
 
 .mk-box{border:1px solid var(--line);border-radius:14px;padding:12px 14px 10px;background:var(--white);box-shadow:rgba(0,0,0,.01) 0 .175px 1.041px, rgba(0,0,0,.02) 0 .8px 2.925px, rgba(0,0,0,.027) 0 2.025px 7.847px, rgba(0,0,0,.04) 0 4px 18px;}
 .mk-model{display:inline-flex;align-items:center;gap:6px;background:var(--bg);border:1px solid var(--line);
@@ -402,12 +400,12 @@ ul.list li{display:flex;gap:12px;font-size:16px;line-height:1.5;color:var(--ink)
 .mk-menu{background:var(--white);border:1px solid var(--line);border-radius:12px;box-shadow:rgba(0,0,0,.01) 0 .175px 1.041px, rgba(0,0,0,.02) 0 .8px 2.925px, rgba(0,0,0,.027) 0 2.025px 7.847px, rgba(0,0,0,.04) 0 4px 18px;
   padding:8px 6px;margin-top:8px;}
 .mk-menu .t{font-size:11.5px;font-weight:600;color:var(--ink-25);padding:2px 8px 6px;}
-.mk-opt{display:flex;align-items:center;gap:8px;padding:5px 8px;border-radius:6px;font-size:13px;color:var(--ink);transition:background .16s ease;}
-.mk-opt:hover{background:#e6f2ec;}
+.mk-opt{display:flex;align-items:center;gap:8px;padding:5px 8px;border-radius:12px;font-size:13px;color:var(--ink);transition:background .16s ease;}
+.mk-opt:hover{background:#eef5fd;}
 .mk-opt .chk{margin-left:auto;color:var(--red);font-weight:700;}
 .mk-opt small{color:var(--ink-25);font-size:11.5px;}
 .mk-tools{display:flex;gap:8px;margin-top:9px;flex-wrap:wrap;}
-.mk-tool{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:8px;
+.mk-tool{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:14px;
   padding:4px 9px;font-size:12px;color:var(--ink-70);background:var(--white);}
 
 
@@ -428,28 +426,28 @@ h2.title{font-size:44px;}
 .chip{font-size:16px;height:38px;}
 
 .card{transition:transform .22s cubic-bezier(.22,1,.36,1), box-shadow .22s ease, background .22s ease, border-color .22s ease;}
-.card:hover{transform:translateY(-4px) scale(1.022);background:#e6f2ec;border-color:var(--red);z-index:5;}
+.card:hover{transform:translateY(-4px) scale(1.022);background:#eef5fd;border-color:var(--red);z-index:5;}
 .card:hover .kicker,.card:hover .st-label{color:var(--red);}
 .card:hover .body,.card:hover ul.list li{color:var(--ink);}
 .card:hover .small{color:var(--ink-70);}
-.dark .card:hover{background:rgba(0,117,74,.38);border-color:var(--red);}
+.dark .card:hover{background:rgba(0,113,227,.24);border-color:var(--red);}
 .dark .card:hover .kicker,.dark .card:hover .st-label,
 .dark .card:hover .body,.dark .card:hover ul.list li,.dark .card:hover .small{color:#fff;}
 .card:active{transform:translateY(-2px) scale(1.005);}
 
 ul.list li{
-  font-size:18px;line-height:1.55;border-radius:8px;padding:5px 9px;margin:-5px -9px;
+  font-size:18px;line-height:1.55;border-radius:14px;padding:5px 9px;margin:-5px -9px;
   transition:background .18s ease, color .18s ease, transform .22s cubic-bezier(.22,1,.36,1);
 }
-ul.list li:hover{background:#e6f2ec;color:var(--ink);transform:scale(1.025);}
-.dark ul.list li:hover{background:rgba(0,117,74,.38);color:#fff;}
+ul.list li:hover{background:#eef5fd;color:var(--ink);transform:scale(1.025);}
+.dark ul.list li:hover{background:rgba(0,113,227,.24);color:#fff;}
 
 .chip{transition:all .2s cubic-bezier(.22,1,.36,1);}
 .chip:hover{transform:translateY(-2px) scale(1.06);}
 .step{transition:transform .22s cubic-bezier(.22,1,.36,1);}
 .step:hover{transform:translateY(-3px) scale(1.035);}
 .step:hover .st-label{color:var(--red);}
-.toc li:hover{background:#fff;color:#1a1a1a;font-weight:600;transform:scale(1.015);}
+.toc li:hover{background:#fff;color:#1d1d1f;font-weight:600;transform:scale(1.015);}
 .toc li:hover .tocn{color:var(--red);}
 .promptbox{transition:transform .22s cubic-bezier(.22,1,.36,1), box-shadow .2s ease;}
 .promptbox:hover{transform:scale(1.012);}
@@ -461,7 +459,7 @@ ul.list li:hover{background:#e6f2ec;color:var(--ink);transform:scale(1.025);}
   padding:18px 18px 16px;display:flex;flex-direction:column;
   transition:transform .2s cubic-bezier(.22,1,.36,1), border-color .2s ease, background .2s ease;
 }
-.pr:hover{transform:translateY(-4px) scale(1.02);border-color:var(--red);background:#e6f2ec;}
+.pr:hover{transform:translateY(-4px) scale(1.02);border-color:var(--red);background:#eef5fd;}
 .pr.best{border-color:var(--red);border-width:2px;}
 .pr-tag{
   position:absolute;top:-11px;left:18px;background:var(--red);color:#fff;
@@ -495,7 +493,7 @@ ul.list li:hover{background:#e6f2ec;color:var(--ink);transform:scale(1.025);}
 .ex-img.wide img{object-fit:contain;object-position:center;background:#fff;}
 .ex-img img{width:100%;height:100%;object-fit:cover;object-position:top center;display:block;
   transition:transform .35s cubic-bezier(.22,1,.36,1);}
-.ex:hover{transform:translateY(-8px) scale(1.11);z-index:20;box-shadow:0 18px 44px rgba(0,0,0,.16);border-color:var(--red);background:#e6f2ec;}
+.ex:hover{transform:translateY(-8px) scale(1.11);z-index:20;box-shadow:0 18px 44px rgba(0,0,0,.16);border-color:var(--red);background:#eef5fd;}
 .ex:hover .ex-img img{transform:scale(1.08);}
 .ex-head{display:flex;align-items:center;gap:10px;margin-top:12px;}
 .ex-ic{width:34px;height:34px;border-radius:9px;display:grid;place-items:center;flex:none;background:var(--ink);}
@@ -559,7 +557,7 @@ ul.list li:hover{background:#e6f2ec;color:var(--ink);transform:scale(1.025);}
   cursor:pointer;transition:background .18s ease,color .18s ease,border-color .18s ease;
 }
 .cpy svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
-.cpy:hover{border-color:var(--red);color:var(--red);background:#e6f2ec;}
+.cpy:hover{border-color:var(--red);color:var(--red);background:#eef5fd;}
 .cpy.done{border-color:var(--red);background:var(--red);color:#fff;}
 .pv-body{
   flex:1;min-height:0;overflow:auto;padding:12px 14px 14px;display:flex;flex-direction:column;
@@ -567,7 +565,7 @@ ul.list li:hover{background:#e6f2ec;color:var(--ink);transform:scale(1.025);}
   user-select:text;-webkit-user-select:text;
 }
 .pv-body b{color:var(--ink);font-weight:700;}
-.pv-body .hl{background:#e6f2ec;border-radius:3px;padding:0 3px;}
+.pv-body .hl{background:#eef5fd;border-radius:3px;padding:0 3px;}
 .pv-li{position:relative;padding-left:15px;margin-top:6px;}
 .pv-li::before{content:'·';position:absolute;left:4px;top:0;color:var(--red);font-weight:700;}
 .pv-sub{margin:4px 0 0 2px;color:var(--ink-45);}
@@ -582,7 +580,7 @@ ul.list li:hover{background:#e6f2ec;color:var(--ink);transform:scale(1.025);}
 .pv-ar{margin:3px 0 0 3px;color:var(--ink-45);font-size:11px;line-height:1;}
 .pv-q{
   margin-top:9px;padding:8px 11px;background:var(--bg);border:1px solid var(--line);
-  border-left:2px solid var(--red);border-radius:8px;font-size:13px;line-height:1.5;color:var(--ink);
+  border-left:2px solid var(--red);border-radius:14px;font-size:13px;line-height:1.5;color:var(--ink);
 }
 .pv-ql{display:block;font-size:10.5px;font-weight:700;letter-spacing:.06em;color:var(--red);margin-bottom:4px;}
 .pv-flow{font-size:14px;font-weight:700;color:var(--ink);letter-spacing:-.01em;}
@@ -596,13 +594,17 @@ ul.list li:hover{background:#e6f2ec;color:var(--ink);transform:scale(1.025);}
   background:var(--white);border:1px solid var(--line);border-radius:12px;cursor:pointer;
   transition:transform .2s cubic-bezier(.22,1,.36,1),border-color .2s ease,background .2s ease,box-shadow .2s ease;
 }
-.toc-go:hover{transform:translateX(7px);border-color:var(--red);background:#e6f2ec;box-shadow:0 10px 26px rgba(0,0,0,.07);}
+.toc-go:hover{transform:translateX(7px);border-color:var(--red);background:#eef5fd;box-shadow:0 10px 26px rgba(0,0,0,.07);}
 .tg-n{font-size:19px;font-weight:800;color:var(--ink-45);letter-spacing:-.02em;flex:none;width:30px;}
 .toc-go:hover .tg-n{color:var(--red);}
 .tg-t{font-size:19px;font-weight:700;color:var(--ink);flex:1;letter-spacing:-.2px;}
 .tg-c{font-size:13px;font-weight:600;color:var(--ink-45);flex:none;}
 .tg-a{width:17px;height:17px;flex:none;fill:none;stroke:var(--ink-45);stroke-width:2;stroke-linecap:round;stroke-linejoin:round;opacity:.4;transition:opacity .2s ease,stroke .2s ease;}
 .toc-go:hover .tg-a{opacity:1;stroke:var(--red);}
+
+.toc li[data-go]{cursor:pointer;}
+.toc.dense li{padding:8px 12px;font-size:15.5px;gap:12px;}
+.toc.dense .tocn{font-size:11px;width:24px;}
 
 /* ============ 프롬프트 구성 요소 미니 카드 ============ */
 .ec{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:11px 14px;}
@@ -613,7 +615,7 @@ ul.list li:hover{background:#e6f2ec;color:var(--ink);transform:scale(1.025);}
 /* ============ 칸 안의 예시 프롬프트 ============ */
 .pq{
   margin-top:13px;padding:10px 12px;background:var(--bg);border:1px solid var(--line);
-  border-left:2px solid var(--red);border-radius:8px;
+  border-left:2px solid var(--red);border-radius:14px;
   font-size:15px;line-height:1.55;font-weight:500;color:var(--ink-70);word-break:keep-all;
 }
 .card:hover .pq{color:var(--ink);}
@@ -643,7 +645,7 @@ ul.list li:hover{background:#e6f2ec;color:var(--ink);transform:scale(1.025);}
   color:var(--ink);font-size:15px;font-weight:600;white-space:nowrap;
   transition:transform .2s cubic-bezier(.22,1,.36,1), border-color .2s ease, box-shadow .2s ease;
 }
-.site-go .pin-logo{width:22px;height:22px;fill:#e60023;flex:none;}
+.site-go .pin-logo{width:22px;height:22px;fill:#0071e3;flex:none;}
 .site-go .icon{width:18px;height:18px;flex:none;}
 .site-go.dl{font-size:14.5px;padding:8px 14px 8px 12px;}
 .site-go b{font-weight:800;color:var(--red);}
@@ -663,7 +665,7 @@ ul.list li:hover{background:#e6f2ec;color:var(--ink);transform:scale(1.025);}
 .dlc .site-go{justify-content:center;width:100%;}
 
 /* ============ Chrome 기본 브라우저 설정 단계 ============ */
-.chs{display:grid;grid-template-columns:.34fr .66fr;gap:16px;height:425px;}
+.chs{display:grid;grid-template-columns:.34fr .66fr;gap:16px;height:364px;}
 .chs-col{display:flex;flex-direction:column;gap:7px;min-width:0;min-height:0;}
 .chs-lb{display:flex;align-items:center;gap:7px;font-size:13.5px;font-weight:700;color:var(--ink-45);}
 .chs-n{
@@ -685,7 +687,7 @@ ul.list li:hover{background:#e6f2ec;color:var(--ink);transform:scale(1.025);}
 /* 클릭 지점 */
 .chs-hot, .chs-zhot{
   position:absolute;left:2%;width:96%;top:83%;height:3.6%;
-  border:2px solid var(--red);border-radius:6px;background:transparent;cursor:pointer;padding:0;
+  border:2px solid var(--red);border-radius:12px;background:transparent;cursor:pointer;padding:0;
   box-shadow:0 0 0 3px rgba(0,0,0,.06);animation:chspulse 1.8s ease-in-out infinite;
 }
 @keyframes chspulse{
@@ -709,7 +711,7 @@ ul.list li:hover{background:#e6f2ec;color:var(--ink);transform:scale(1.025);}
 
 /* 꼭 확인할 부분 */
 .chs-mark{
-  position:absolute;border:2px solid var(--red);border-radius:6px;
+  position:absolute;border:2px solid var(--red);border-radius:12px;
   opacity:0;transform:scale(.98);transition:opacity .3s ease .12s, transform .3s ease .12s;
 }
 .chs.open .chs-mark{opacity:1;transform:none;}
@@ -781,7 +783,7 @@ ul.list li:hover{background:#e6f2ec;color:var(--ink);transform:scale(1.025);}
 .chs-zoom .chs-mark{cursor:pointer;}
 .chs-zhint{
   position:absolute;left:50%;bottom:18px;transform:translateX(-50%);
-  background:rgba(255,255,255,.94);color:#1a1a1a;font-size:13px;font-weight:700;
+  background:rgba(255,255,255,.94);color:#1d1d1f;font-size:13px;font-weight:700;
   padding:7px 14px;border-radius:999px;pointer-events:none;
 }
 
@@ -834,7 +836,7 @@ ul.list li:hover{background:#e6f2ec;color:var(--ink);transform:scale(1.025);}
   padding:10px;height:100%;display:flex;align-items:center;justify-content:center;min-height:0;
   transition:border-color .2s ease, box-shadow .2s ease;
 }
-.shot img{width:100%;height:100%;object-fit:contain;display:block;border-radius:8px;}
+.shot img{width:100%;height:100%;object-fit:contain;display:block;border-radius:14px;}
 
 /* ============ 70쪽 결과물 미리보기 ============ */
 .s70shot{
@@ -852,10 +854,10 @@ ul.list li:hover{background:#e6f2ec;color:var(--ink);transform:scale(1.025);}
 .card:hover .s78ill img{transform:scale(1.06);}
 
 /* ============ 컴퓨터 유즈 · 태극기 ============ */
-.tgk{width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:6px;background:#fff;}
+.tgk{width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:12px;background:#fff;}
 .cu-step{display:flex;align-items:flex-start;gap:12px;}
 .cu-n{
-  flex:none;width:26px;height:26px;border-radius:8px;background:var(--ink);color:#fff;
+  flex:none;width:26px;height:26px;border-radius:14px;background:var(--ink);color:#fff;
   display:grid;place-items:center;font-size:13px;font-weight:800;margin-top:1px;
 }
 .cu-step:last-child .cu-n{background:var(--red);}
@@ -863,7 +865,7 @@ ul.list li:hover{background:#e6f2ec;color:var(--ink);transform:scale(1.025);}
 .spec:last-child{border-bottom:none;}
 .spec b{flex:none;width:112px;font-size:15px;font-weight:800;color:var(--red);}
 .spec span{font-size:15.5px;color:var(--ink);font-weight:600;line-height:1.5;}
-.swatch{display:inline-block;width:14px;height:14px;border-radius:4px;border:1px solid rgba(0,0,0,.15);vertical-align:-2px;margin-right:5px;}
+.swatch{display:inline-block;width:14px;height:14px;border-radius:20px;border:1px solid rgba(0,0,0,.15);vertical-align:-2px;margin-right:5px;}
 
 /* ============ 20쪽 포스터 낙하 · 먼지 ============ */
 .rfstage{position:relative;min-height:0;display:flex;}
@@ -1058,8 +1060,8 @@ ul.list li:hover:not(.noglow),
 .dark .card:hover:not(.noglow),
 .dark .step:hover:not(.noglow),
 .dark .promptbox:hover:not(.noglow){
-  border-color:#00e5ff !important;
-  box-shadow:0 0 0 2px #00e5ff, 0 0 0 6px rgba(0,229,255,.28), 0 0 30px rgba(0,229,255,.75),
+  border-color:rgba(0,113,227,.45) !important;
+  box-shadow:0 0 0 3px rgba(0,113,227,.14), 0 14px 34px rgba(0,0,0,.10),
              0 12px 30px rgba(0,0,0,.12) !important;
 }
 .chip:hover:not(.noglow),
@@ -1068,12 +1070,12 @@ ul.list li:hover:not(.noglow),
 .cpy:hover:not(.noglow),
 .vbtn:hover:not(.noglow),
 .dark .chip:hover:not(.noglow){
-  border-color:#00e5ff !important;
-  box-shadow:0 0 0 2px #00e5ff, 0 0 18px rgba(0,229,255,.7) !important;
+  border-color:rgba(0,113,227,.45) !important;
+  box-shadow:0 0 0 3px rgba(0,113,227,.16) !important;
 }
-.toc li:hover:not(.noglow), ul.list li:hover:not(.noglow){border-bottom-color:#00e5ff !important;}
+.toc li:hover:not(.noglow), ul.list li:hover:not(.noglow){border-bottom-color:rgba(0,113,227,.45) !important;}
 
-/* ============ PRINT ============ */
+/* ============ PRINT (PDF 내보내기) ============ */
 @page{size:1600px 900px;margin:0;}
 @media print{
   body{background:#fff;overflow:visible;}
@@ -1089,30 +1091,122 @@ ul.list li:hover:not(.noglow),
   *{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
 }
 
-/* ============ NAV : 다음 버튼은 Frap 스타일 원형 CTA ============ */
+/* ============ NAV ============ */
 #bar{position:fixed;left:0;top:0;height:3px;background:var(--red);z-index:20;transition:width .3s ease;}
-#nav{position:fixed;right:24px;bottom:22px;z-index:20;display:flex;gap:10px;align-items:center;opacity:.55;transition:opacity .2s;}
+#nav{
+  position:fixed;right:22px;bottom:18px;z-index:20;display:flex;gap:8px;align-items:center;
+  opacity:.28;transition:opacity .2s;
+}
 #nav:hover{opacity:1;}
 #nav button{
-  width:40px;height:40px;border:1px solid var(--red);background:transparent;color:var(--red);
-  border-radius:50%;cursor:pointer;font-size:15px;font-family:var(--font);font-weight:600;
-  transition:all .2s ease;
+  width:34px;height:34px;border:1px solid #BEBEC2;background:#fff;color:var(--ink);
+  border-radius:3px;cursor:pointer;font-size:15px;font-family:var(--font);font-weight:700;
 }
-#nav button:hover{background:var(--green-light);}
-#nav button:active{transform:scale(.95);}
-#nav #next{
-  width:56px;height:56px;background:var(--red);border-color:var(--red);color:#fff;font-size:20px;
-  box-shadow:0 0 6px rgba(0,0,0,.24), 0 8px 12px rgba(0,0,0,.14);
-}
-#nav #next:hover{background:#006241;}
-#nav #next:active{box-shadow:0 0 6px rgba(0,0,0,.24), 0 8px 12px rgba(0,0,0,0);transform:scale(.95);}
-#nav .idx{font-size:13px;font-weight:600;color:var(--ink-45);padding:0 6px;}
+#nav button:hover{background:var(--ink);color:#fff;border-color:var(--ink);}
+#nav .idx{font-size:13px;font-weight:700;color:#4A4A50;padding:0 6px;}
+
+/* ============ COVER MOTION ============ */
+.cover-bg{position:absolute;inset:0;z-index:0;}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes spinr{to{transform:rotate(-360deg)}}
+@keyframes flow{to{stroke-dashoffset:-400}}
+@keyframes pulse{0%,100%{opacity:.25;transform:scale(1)}50%{opacity:.7;transform:scale(1.14)}}
+@keyframes float1{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+@keyframes float2{0%,100%{transform:translateY(0)}50%{transform:translateY(12px)}}
+@keyframes blink{0%,45%{opacity:1}50%,100%{opacity:0}}
+@keyframes rise{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
+.ring{transform-origin:center;animation:spin 46s linear infinite;}
+.ring.rev{animation:spinr 62s linear infinite;}
+.flowline{stroke-dasharray:14 12;animation:flow 9s linear infinite;}
+.pulse{transform-origin:center;animation:pulse 2.8s ease-in-out infinite;}
+.fl1{animation:float1 6s ease-in-out infinite;}
+.fl2{animation:float2 7.5s ease-in-out infinite;}
+.caret{animation:blink 1.1s step-end infinite;}
+.rise{animation:rise .8s cubic-bezier(.22,1,.36,1) both;}
+.d1{animation-delay:.1s}.d2{animation-delay:.25s}.d3{animation-delay:.4s}.d4{animation-delay:.55s}.d5{animation-delay:.7s}
+.px{transition:transform .5s cubic-bezier(.22,1,.36,1);will-change:transform;}
 #hint{
-  position:fixed;left:50%;bottom:20px;transform:translateX(-50%);z-index:20;
-  font-size:13px;font-weight:400;color:rgba(0,0,0,.45);opacity:.6;font-family:var(--font);
+  position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:20;
+  font-size:12px;font-weight:600;letter-spacing:.1em;color:#7A7A82;opacity:.5;font-family:var(--font);
   transition:opacity .6s ease;pointer-events:none;
 }
 #hint.hide{opacity:0;}
+</style>
+
+<style id="apple-design">
+/* ── Apple design layer ───────────────────────────────────────── */
+body{background:#e8e8ed;letter-spacing:-0.005em;}
+#stage{box-shadow:0 30px 80px rgba(0,0,0,.12);}
+
+/* 슬라이드는 프리젠터 입력에 즉시 반응 */
+.slide.on{animation:none;}
+.slide.dark::before{content:none;}
+
+/* 타이포: 큰 글자는 자간을 좁히고, 굵기는 700, 행간은 촘촘하게 */
+h1.title{font-weight:700;letter-spacing:-0.028em;line-height:1.12;}
+h2.title{font-weight:700;letter-spacing:-0.024em;line-height:1.16;}
+.dark .title .r{color:var(--blue-dark);}
+.kicker{font-weight:700;letter-spacing:-0.02em;}
+.lead{line-height:1.6;letter-spacing:-0.008em;}
+.eyebrow{font-size:17px;font-weight:600;letter-spacing:-0.01em;text-transform:none;color:var(--ink-45);}
+.eyebrow::before{display:none;}
+.dark .eyebrow{color:var(--d-dim);}
+.pager,.mark{letter-spacing:0.01em;font-weight:600;}
+.num{letter-spacing:0;}
+
+/* 표면: 테두리 대신 둥근 모서리와 깊이 */
+.card{border-color:transparent;border-radius:22px;
+  transition:transform .3s var(--ease-out), box-shadow .3s var(--ease-out), background-color .2s ease, border-color .2s ease;}
+.dark .card{background:#1d1d1f;border-color:transparent;}
+.card.accent{border-top:0;}
+.card:hover{transform:none;box-shadow:none;border-color:transparent;}
+.chip{border-color:transparent;background:#e8e8ed;color:var(--ink);font-weight:600;
+  transition:transform .2s var(--ease-out), background-color .2s ease, color .2s ease;}
+.chip:hover{transform:none;color:var(--ink);border-color:transparent;}
+.chip.red,.chip.red:hover{background:var(--red);color:#fff;filter:none;}
+.chip.ink{background:var(--ink);}
+.dark .chip{background:#2c2c2e;color:#f5f5f7;}
+.vbtn{border-radius:980px !important;}
+
+/* 호버는 마우스가 있는 기기에서만, 살짝 떠오르며 깊이만 더함 */
+@media (hover: hover) and (pointer: fine){
+  .card:hover{transform:translateY(-3px);box-shadow:0 14px 34px rgba(0,0,0,.10);}
+  .dark .card:hover{box-shadow:0 14px 34px rgba(0,0,0,.6);}
+  .chip:hover{background:#dcdce1;}
+  .chip.red:hover{background:#0077ed;}
+}
+
+/* 반응: 누르는 순간(pointer-down) 바로 피드백 */
+.card:active,.chip:active,.vbtn:active,.cpy:active,#nav button:active{transform:scale(.97);transition-duration:.1s;}
+
+/* 소재: 하단 이동 버튼을 반투명 유리 알약으로 */
+#nav{background:rgba(255,255,255,.72);-webkit-backdrop-filter:saturate(180%) blur(20px);backdrop-filter:saturate(180%) blur(20px);
+  border:1px solid rgba(255,255,255,.5);box-shadow:0 8px 24px rgba(0,0,0,.10);border-radius:999px;padding:6px 8px;opacity:.55;}
+#nav button{border:0;border-radius:999px;background:transparent;color:var(--ink);}
+#nav:hover{opacity:1;}
+@media (hover: hover) and (pointer: fine){ #nav button:hover{background:rgba(0,0,0,.07);color:var(--ink);border-color:transparent;} }
+body.on-dark #nav{background:rgba(29,29,31,.72);border-color:rgba(255,255,255,.12);box-shadow:0 8px 24px rgba(0,0,0,.4);}
+body.on-dark #nav button,body.on-dark #nav span{color:#f5f5f7;}
+@media (hover: hover) and (pointer: fine){ body.on-dark #nav button:hover{background:rgba(255,255,255,.14);color:#fff;} }
+#bar{background:var(--red);}
+
+/* 파트 구분 장: 대문자 넓은 자간 → 차분한 라벨, 큰 제목은 좁은 자간 */
+.divider .partno{font-size:19px;font-weight:600;letter-spacing:0.01em;color:var(--blue-dark);}
+.divider .ptitle{font-weight:700;letter-spacing:-0.032em;line-height:1.08;}
+
+/* 접근성: 동작·투명도·대비 설정 */
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;}
+  .card,.chip,.vbtn,.px{transition:opacity .2s ease, background-color .2s ease, color .2s ease !important;transform:none !important;}
+}
+@media (prefers-reduced-transparency: reduce){
+  #nav{background:#ffffff;-webkit-backdrop-filter:none;backdrop-filter:none;}
+}
+@media (prefers-contrast: more){
+  .card{border:1px solid #6e6e73;}
+  .dark .card{border:1px solid #aeaeb2;}
+  #nav{background:#ffffff;border:1px solid #1d1d1f;}
+}
 </style>
 </head>
 <body>
@@ -1172,12 +1266,12 @@ ul.list li:hover:not(.noglow),
         <path d="M40 0H0V40" fill="none" stroke="rgba(255,255,255,.045)" stroke-width="1"/>
       </pattern>
       <radialGradient id="glow" cx="50%" cy="50%" r="50%">
-        <stop offset="0%" stop-color="#00754A" stop-opacity=".42"/>
-        <stop offset="100%" stop-color="#00754A" stop-opacity="0"/>
+        <stop offset="0%" stop-color="#0071e3" stop-opacity=".42"/>
+        <stop offset="100%" stop-color="#0071e3" stop-opacity="0"/>
       </radialGradient>
       <linearGradient id="lg" x1="0" y1="0" x2="1" y2="0">
-        <stop offset="0%" stop-color="#00754A" stop-opacity=".1"/>
-        <stop offset="100%" stop-color="#00754A" stop-opacity=".95"/>
+        <stop offset="0%" stop-color="#0071e3" stop-opacity=".1"/>
+        <stop offset="100%" stop-color="#0071e3" stop-opacity=".95"/>
       </linearGradient>
     </defs>
     <rect width="1600" height="900" fill="url(#cg)"/>
@@ -1187,12 +1281,12 @@ ul.list li:hover:not(.noglow),
     <g class="px" data-d="14" style="transform-box:fill-box">
       <g class="ring" style="transform-origin:1160px 450px">
         <circle cx="1160" cy="450" r="258" fill="none" stroke="rgba(255,255,255,.14)" stroke-width="1"/>
-        <circle cx="1160" cy="192" r="5" fill="#00754A"/>
+        <circle cx="1160" cy="192" r="5" fill="#0071e3"/>
         <circle cx="1418" cy="450" r="3.5" fill="rgba(255,255,255,.55)"/>
       </g>
       <g class="ring rev" style="transform-origin:1160px 450px">
         <circle cx="1160" cy="450" r="334" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="1" stroke-dasharray="4 10"/>
-        <circle cx="826" cy="450" r="4" fill="rgba(0,117,74,.85)"/>
+        <circle cx="826" cy="450" r="4" fill="rgba(0,113,227,.85)"/>
       </g>
     </g>
 
@@ -1203,15 +1297,15 @@ ul.list li:hover:not(.noglow),
 
       <!-- prompt node -->
       <g class="fl1">
-        <rect x="838" y="398" width="128" height="104" rx="3" fill="#2b5148" stroke="rgba(255,255,255,.2)"/>
+        <rect x="838" y="398" width="128" height="104" rx="3" fill="#1d1d1f" stroke="rgba(255,255,255,.2)"/>
         <path d="M862 432h64M862 450h48M862 468h32" stroke="rgba(255,255,255,.45)" stroke-width="2.5" stroke-linecap="round"/>
-        <rect x="900" y="462" width="3" height="12" fill="#00754A" class="caret"/>
+        <rect x="900" y="462" width="3" height="12" fill="#0071e3" class="caret"/>
         <text x="902" y="386" text-anchor="middle" font-family="SUIT Variable,sans-serif" font-size="13" font-weight="800" letter-spacing="2" fill="rgba(255,255,255,.4)">PROMPT</text>
       </g>
 
       <!-- build node -->
       <g>
-        <rect x="1108" y="392" width="112" height="116" rx="3" fill="#00754A"/>
+        <rect x="1108" y="392" width="112" height="116" rx="3" fill="#0071e3"/>
         <g class="ring" style="transform-origin:1164px 450px">
           <circle cx="1164" cy="450" r="26" fill="none" stroke="#fff" stroke-width="2" stroke-dasharray="8 7"/>
         </g>
@@ -1221,8 +1315,8 @@ ul.list li:hover:not(.noglow),
 
       <!-- launch node -->
       <g class="fl2">
-        <rect x="1343" y="398" width="124" height="104" rx="3" fill="#2b5148" stroke="rgba(0,117,74,.55)"/>
-        <use href="#i-rocket" x="1381" y="418" width="48" height="48" style="stroke:#00754A;fill:none;stroke-width:1.3;stroke-linecap:round;stroke-linejoin:round"/>
+        <rect x="1343" y="398" width="124" height="104" rx="3" fill="#1d1d1f" stroke="rgba(0,113,227,.55)"/>
+        <use href="#i-rocket" x="1381" y="418" width="48" height="48" style="stroke:#0071e3;fill:none;stroke-width:1.3;stroke-linecap:round;stroke-linejoin:round"/>
         <text x="1405" y="386" text-anchor="middle" font-family="SUIT Variable,sans-serif" font-size="13" font-weight="800" letter-spacing="2" fill="rgba(255,255,255,.4)">LAUNCH</text>
       </g>
     </g>
@@ -1230,11 +1324,11 @@ ul.list li:hover:not(.noglow),
     <!-- floating particles -->
     <g class="px" data-d="40">
       <rect x="880" y="200" width="16" height="16" fill="none" stroke="rgba(255,255,255,.22)" class="fl2"/>
-      <rect x="1420" y="640" width="22" height="22" fill="none" stroke="rgba(0,117,74,.5)" class="fl1"/>
+      <rect x="1420" y="640" width="22" height="22" fill="none" stroke="rgba(0,113,227,.5)" class="fl1"/>
       <circle cx="1000" cy="720" r="5" fill="rgba(255,255,255,.2)" class="fl1"/>
-      <circle cx="1330" cy="196" r="7" fill="rgba(0,117,74,.45)" class="fl2"/>
+      <circle cx="1330" cy="196" r="7" fill="rgba(0,113,227,.45)" class="fl2"/>
       <path d="M1520 300h26M1533 287v26" stroke="rgba(255,255,255,.18)" stroke-width="2" class="fl1"/>
-      <path d="M760 620h22M771 609v22" stroke="rgba(0,117,74,.42)" stroke-width="2" class="fl2"/>
+      <path d="M760 620h22M771 609v22" stroke="rgba(0,113,227,.42)" stroke-width="2" class="fl2"/>
     </g>
   </svg>
 
@@ -1266,7 +1360,7 @@ ul.list li:hover:not(.noglow),
 
 <section class="slide" data-ch="OPENING · 연수 개요">
   <div class="deco-dot" style="width:112px;height:112px;left:-68px;bottom:-68px;"></div>
-  <div style="position:absolute;right:0;top:0;width:560px;height:900px;background:#edebe9;"></div>
+  <div style="position:absolute;right:0;top:0;width:560px;height:900px;background:#f5f5f7;"></div>
 
   <div class="fill grid" style="grid-template-columns:1.06fr .94fr;gap:60px;align-items:center;">
     <div>
@@ -1274,7 +1368,7 @@ ul.list li:hover:not(.noglow),
       <h1 class="title" style="font-size:58px;">
         <span class="r">ChatGPT</span> 사용법과<br>바이브 코딩
       </h1>
-      <div style="font-size:23px;font-weight:600;color:var(--ink);margin-top:24px;line-height:1.6;">
+      <div style="font-size:23px;font-weight:600;color:var(--ink-70);margin-top:24px;line-height:1.6;">
         수업 자료를 만들고,<br>작은 교실 도구를 완성하기
       </div>
       <div class="rule" style="width:420px;margin:36px 0 28px;"></div>
@@ -1374,9 +1468,9 @@ ul.list li:hover:not(.noglow),
   <h2 class="title">AI가 <span class="r">초안</span>을 만들고, 교사가 <span class="r">판단</span>합니다</h2>
 
   <div class="fill grid" style="grid-template-columns:1fr 92px 1fr;margin-top:44px;">
-    <div class="card" style="display:flex;flex-direction:column;background:#edebe9;border-color:#e7e7e7;">
+    <div class="card" style="display:flex;flex-direction:column;background:#f5f5f7;border-color:#d2d2d7;">
       <div style="display:flex;align-items:center;gap:16px;">
-        <div class="ibox" style="background:#edebe9;border-color:#e7e7e7;"><svg class="icon" style="stroke:var(--ink-45)"><use href="#i-bot"/></svg></div>
+        <div class="ibox" style="background:#f5f5f7;border-color:#d2d2d7;"><svg class="icon" style="stroke:var(--ink-45)"><use href="#i-bot"/></svg></div>
         <div>
           <div style="font-size:12px;font-weight:800;letter-spacing:.18em;color:var(--ink-25);">AI</div>
           <div class="kicker" style="margin-top:2px;color:var(--ink-45);">ChatGPT에 맡길 일</div>
@@ -1388,7 +1482,7 @@ ul.list li:hover:not(.noglow),
         <li><span class="dot" style="background:var(--ink-25)"></span><span>문장 · 난이도 · 형식 바꾸기</span></li>
         <li><span class="dot" style="background:var(--ink-25)"></span><span>자료를 요약하고 비교하기</span></li>
       </ul>
-      <div style="margin-top:auto;padding-top:28px;height:10px;"><div style="height:10px;background:#d9d5cc;width:55%;"></div></div>
+      <div style="margin-top:auto;padding-top:28px;height:10px;"><div style="height:10px;background:#e8e8ed;width:55%;"></div></div>
     </div>
 
     <div style="display:grid;place-items:center;"><svg class="icon red" style="width:30px;height:30px"><use href="#i-arrow"/></svg></div>
@@ -1431,18 +1525,18 @@ ul.list li:hover:not(.noglow),
       <div class="mk" style="margin-top:14px;">
         <div class="mk-head">
           <div class="mk-logo">ChatGPT</div>
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#615d59" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M16.5 16.5 21 21"/></svg> <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#615d59" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M14 4v16"/></svg>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#6e6e73" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M16.5 16.5 21 21"/></svg> <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#6e6e73" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M14 4v16"/></svg>
         </div>
-        <div class="mk-row"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#31302e" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M15.2 4.3 19.7 8.8 8.5 20H4v-4.5L15.2 4.3z"/></svg> 새 채팅</div>
-        <div class="mk-row"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0075de" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="8.5" cy="9.5" r="1.6"/><path d="M4 18l5-5 3.5 3.5L16 13l4 5"/></svg> 이미지 <span class="mk-badge">업데이트</span></div>
-        <div class="mk-row"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#31302e" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="5" height="16" rx="1.5"/><rect x="10" y="4" width="5" height="16" rx="1.5"/><rect x="17" y="4" width="4" height="16" rx="1.5"/></svg> 라이브러리</div>
-        <div class="mk-row"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#31302e" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a1 1 0 0 1 1-1h5l2 2h9a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V7z"/></svg> 프로젝트</div>
-        <div class="mk-row"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#31302e" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg> 예약</div>
-        <div class="mk-row sel"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#31302e" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.5"/></svg> 플러그인</div>
-        <div class="mk-row"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#31302e" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="12" r="1.4"/><circle cx="12" cy="12" r="1.4"/><circle cx="19" cy="12" r="1.4"/></svg> 더 보기 <span class="mk-badge new">사이트 · GPT</span></div>
+        <div class="mk-row"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1d1d1f" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M15.2 4.3 19.7 8.8 8.5 20H4v-4.5L15.2 4.3z"/></svg> 새 채팅</div>
+        <div class="mk-row"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0071e3" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="8.5" cy="9.5" r="1.6"/><path d="M4 18l5-5 3.5 3.5L16 13l4 5"/></svg> 이미지 <span class="mk-badge">업데이트</span></div>
+        <div class="mk-row"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1d1d1f" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="5" height="16" rx="1.5"/><rect x="10" y="4" width="5" height="16" rx="1.5"/><rect x="17" y="4" width="4" height="16" rx="1.5"/></svg> 라이브러리</div>
+        <div class="mk-row"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1d1d1f" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a1 1 0 0 1 1-1h5l2 2h9a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V7z"/></svg> 프로젝트</div>
+        <div class="mk-row"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1d1d1f" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg> 예약</div>
+        <div class="mk-row sel"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1d1d1f" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.5"/></svg> 플러그인</div>
+        <div class="mk-row"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1d1d1f" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="12" r="1.4"/><circle cx="12" cy="12" r="1.4"/><circle cx="19" cy="12" r="1.4"/></svg> 더 보기 <span class="mk-badge new">사이트 · GPT</span></div>
         <div class="mk-label">고정됨</div>
-        <div class="mk-pin"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#615d59" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 3 8l9 5 9-5-9-5z"/><path d="M3 8v8l9 5 9-5V8"/></svg> 카드뉴스 제작소</div>
-        <div class="mk-pin"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#615d59" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 3 8l9 5 9-5-9-5z"/><path d="M3 8v8l9 5 9-5V8"/></svg> 홍보 포스터 제작소</div>
+        <div class="mk-pin"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#6e6e73" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 3 8l9 5 9-5-9-5z"/><path d="M3 8v8l9 5 9-5V8"/></svg> 카드뉴스 제작소</div>
+        <div class="mk-pin"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#6e6e73" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 3 8l9 5 9-5-9-5z"/><path d="M3 8v8l9 5 9-5V8"/></svg> 홍보 포스터 제작소</div>
         <div class="mk-fade"></div>
       </div>
 
@@ -1459,10 +1553,10 @@ ul.list li:hover:not(.noglow),
       <div class="mk" style="margin-top:14px;padding:14px 14px 16px;">
         <div class="mk-hero">오늘은 무슨 이야기를 할까요?</div>
         <div class="mk-bar">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#31302e" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1d1d1f" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
           <span class="mk-ph">ChatGPT에게 물어보세요</span>
-          <span class="mk-hi">High <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#615d59" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span>
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#31302e" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>
+          <span class="mk-hi">High <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#6e6e73" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span>
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#1d1d1f" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>
           <span class="mk-voice"><svg width="15" height="15" viewBox="0 0 24 24" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><path d="M6 10v4M10 7v10M14 5v14M18 9v6"/></svg></span>
         </div>
         <div style="display:flex;justify-content:space-between;margin-top:10px;padding:0 4px;">
@@ -1485,16 +1579,16 @@ ul.list li:hover:not(.noglow),
       <div class="mk-box" style="margin-top:14px;">
         <div class="small" style="font-size:13px;color:var(--ink-25);">무엇이든 작업하세요</div>
         <div style="display:flex;align-items:center;gap:8px;margin-top:12px;">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#31302e" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1d1d1f" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
           <span style="flex:1;"></span>
-          <span class="mk-model">GPT-6 Sol <span style="color:var(--ink-25);">Max</span> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#615d59" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#31302e" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>
-          <span class="mk-voice" style="background:#0075de;"><svg width="14" height="14" viewBox="0 0 24 24" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M12 19V5M6 11l6-6 6 6"/></svg></span>
+          <span class="mk-model">GPT-6 Sol <span style="color:var(--ink-25);">Max</span> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#6e6e73" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1d1d1f" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>
+          <span class="mk-voice" style="background:#0071e3;"><svg width="14" height="14" viewBox="0 0 24 24" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M12 19V5M6 11l6-6 6 6"/></svg></span>
         </div>
         <div class="mk-tools">
-          <span class="mk-tool"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#615d59" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a1 1 0 0 1 1-1h5l2 2h9a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V7z"/></svg> 프로젝트</span>
-          <span class="mk-tool"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#615d59" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="5" height="16" rx="1.5"/><rect x="10" y="4" width="5" height="16" rx="1.5"/><rect x="17" y="4" width="4" height="16" rx="1.5"/></svg> 파일</span>
-          <span class="mk-tool"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#615d59" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.5"/></svg> 플러그인</span>
+          <span class="mk-tool"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6e6e73" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a1 1 0 0 1 1-1h5l2 2h9a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V7z"/></svg> 프로젝트</span>
+          <span class="mk-tool"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6e6e73" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="5" height="16" rx="1.5"/><rect x="10" y="4" width="5" height="16" rx="1.5"/><rect x="17" y="4" width="4" height="16" rx="1.5"/></svg> 파일</span>
+          <span class="mk-tool"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6e6e73" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.5"/></svg> 플러그인</span>
         </div>
       </div>
 
@@ -1523,29 +1617,29 @@ ul.list li:hover:not(.noglow),
     <div class="sb">
       <div class="sb-head">
         <div class="sb-logo">ChatGPT</div>
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#615d59" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M16.5 16.5 21 21"/></svg>
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#615d59" stroke-width="1.8"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M14 4v16"/></svg>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6e6e73" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M16.5 16.5 21 21"/></svg>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6e6e73" stroke-width="1.8"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M14 4v16"/></svg>
       </div>
-      <div class="sb-row"><span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#31302e" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M15.2 4.3 19.7 8.8 8.5 20H4v-4.5L15.2 4.3z"/></svg></span><span class="sb-t">새 채팅</span></div>
-      <div class="sb-row"><span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#31302e" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="8.5" cy="9.5" r="1.6"/><path d="M4 18l5-5 3.5 3.5L16 13l4 5"/></svg></span><span class="sb-t">이미지</span><span class="sb-badge">업데이트</span></div>
-      <div class="sb-row"><span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#31302e" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="5" height="16" rx="1.5"/><rect x="10" y="4" width="5" height="16" rx="1.5"/><rect x="17" y="4" width="4" height="16" rx="1.5"/></svg></span><span class="sb-t">라이브러리</span></div>
-      <div class="sb-row"><span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#31302e" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a1 1 0 0 1 1-1h5l2 2h9a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V7z"/></svg></span><span class="sb-t">프로젝트</span></div>
-      <div class="sb-row"><span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#31302e" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><span class="sb-t">예약</span></div>
-      <div class="sb-row sel"><span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#31302e" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.5"/></svg></span><span class="sb-t">플러그인</span></div>
+      <div class="sb-row"><span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1d1d1f" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M15.2 4.3 19.7 8.8 8.5 20H4v-4.5L15.2 4.3z"/></svg></span><span class="sb-t">새 채팅</span></div>
+      <div class="sb-row"><span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1d1d1f" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="8.5" cy="9.5" r="1.6"/><path d="M4 18l5-5 3.5 3.5L16 13l4 5"/></svg></span><span class="sb-t">이미지</span><span class="sb-badge">업데이트</span></div>
+      <div class="sb-row"><span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1d1d1f" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="5" height="16" rx="1.5"/><rect x="10" y="4" width="5" height="16" rx="1.5"/><rect x="17" y="4" width="4" height="16" rx="1.5"/></svg></span><span class="sb-t">라이브러리</span></div>
+      <div class="sb-row"><span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1d1d1f" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a1 1 0 0 1 1-1h5l2 2h9a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V7z"/></svg></span><span class="sb-t">프로젝트</span></div>
+      <div class="sb-row"><span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1d1d1f" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><span class="sb-t">예약</span></div>
+      <div class="sb-row sel"><span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1d1d1f" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.5"/></svg></span><span class="sb-t">플러그인</span></div>
       <div class="sb-more" tabindex="0">
-      <div class="sb-row"><span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#31302e" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="12" r="1.4"/><circle cx="12" cy="12" r="1.4"/><circle cx="19" cy="12" r="1.4"/></svg></span><span class="sb-t">더 보기</span><span class="sb-arrow">›</span></div>
+      <div class="sb-row"><span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1d1d1f" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="12" r="1.4"/><circle cx="12" cy="12" r="1.4"/><circle cx="19" cy="12" r="1.4"/></svg></span><span class="sb-t">더 보기</span><span class="sb-arrow">›</span></div>
       <div class="sb-fly">
-        <div class="sb-row"><span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#615d59" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></span><span class="sb-t">사이트</span><span class="sb-badge new">신규</span></div>
-        <div class="sb-row"><span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#615d59" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 3 8l9 5 9-5-9-5z"/><path d="M3 8v8l9 5 9-5V8"/><path d="M12 13v8"/></svg></span><span class="sb-t">GPT</span></div>
+        <div class="sb-row"><span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6e6e73" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></span><span class="sb-t">사이트</span><span class="sb-badge new">신규</span></div>
+        <div class="sb-row"><span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6e6e73" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 3 8l9 5 9-5-9-5z"/><path d="M3 8v8l9 5 9-5V8"/><path d="M12 13v8"/></svg></span><span class="sb-t">GPT</span></div>
       </div>
       </div>
 
       <div class="sb-label">고정됨</div>
-      <div class="sb-pin"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#615d59" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 3 8l9 5 9-5-9-5z"/><path d="M3 8v8l9 5 9-5V8"/><path d="M12 13v8"/></svg> 무무 풍자 뉴스 카드 메이커</div>
-      <div class="sb-pin"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#615d59" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 3 8l9 5 9-5-9-5z"/><path d="M3 8v8l9 5 9-5V8"/><path d="M12 13v8"/></svg> GPT 설계 마스터</div>
-      <div class="sb-pin"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#615d59" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 3 8l9 5 9-5-9-5z"/><path d="M3 8v8l9 5 9-5V8"/><path d="M12 13v8"/></svg> 잉크 펜화 프롬프트 메이커</div>
-      <div class="sb-pin"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#615d59" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 3 8l9 5 9-5-9-5z"/><path d="M3 8v8l9 5 9-5V8"/><path d="M12 13v8"/></svg> 손그림 타이포 스티커 메이커</div>
-      <div class="sb-pin"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#615d59" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 3 8l9 5 9-5-9-5z"/><path d="M3 8v8l9 5 9-5V8"/><path d="M12 13v8"/></svg> 카드뉴스 제작소</div>
+      <div class="sb-pin"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6e6e73" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 3 8l9 5 9-5-9-5z"/><path d="M3 8v8l9 5 9-5V8"/><path d="M12 13v8"/></svg> 무무 풍자 뉴스 카드 메이커</div>
+      <div class="sb-pin"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6e6e73" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 3 8l9 5 9-5-9-5z"/><path d="M3 8v8l9 5 9-5V8"/><path d="M12 13v8"/></svg> GPT 설계 마스터</div>
+      <div class="sb-pin"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6e6e73" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 3 8l9 5 9-5-9-5z"/><path d="M3 8v8l9 5 9-5V8"/><path d="M12 13v8"/></svg> 잉크 펜화 프롬프트 메이커</div>
+      <div class="sb-pin"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6e6e73" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 3 8l9 5 9-5-9-5z"/><path d="M3 8v8l9 5 9-5V8"/><path d="M12 13v8"/></svg> 손그림 타이포 스티커 메이커</div>
+      <div class="sb-pin"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6e6e73" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 3 8l9 5 9-5-9-5z"/><path d="M3 8v8l9 5 9-5V8"/><path d="M12 13v8"/></svg> 카드뉴스 제작소</div>
       <div class="sb-fade"></div>
     </div>
 
@@ -1609,30 +1703,30 @@ ul.list li:hover:not(.noglow),
 
         <div class="gpt-bar">
           <span class="gpt-trig" tabindex="0" aria-label="+ 버튼">
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#31302e" stroke-width="1.9" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#1d1d1f" stroke-width="1.9" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
             <div class="gpt-pop gpt-pop-l">
-            <div class="gp-row"><span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#31302e" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 11.5 12 20a5 5 0 0 1-7-7l8.5-8.5a3.5 3.5 0 0 1 5 5L10 18a2 2 0 0 1-3-3l8-8"/></svg></span><span class="gp-t">사진 및 파일 추가</span><span class="gp-d">컴퓨터에서 업로드하세요</span></div>
-            <div class="gp-row"><span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#31302e" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="5" height="16" rx="1.5"/><rect x="10" y="4" width="5" height="16" rx="1.5"/><rect x="17" y="4" width="4" height="16" rx="1.5"/></svg></span><span class="gp-t">라이브러리에서 가져오기</span><span class="gp-d">Google Drive를 포함해 파일 탐색 및 검색</span></div>
-            <div class="gp-row"><span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0075de" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="8.5" cy="9.5" r="1.6"/><path d="M4 18l5-5 3.5 3.5L16 13l4 5"/></svg></span><span class="gp-t">이미지 만들기</span><span class="gp-d">무엇이든 시각화하세요</span></div>
-            <div class="gp-row"><span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0075de" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9S14.5 18.4 12 21c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/></svg></span><span class="gp-t">웹 검색</span><span class="gp-d">실시간 뉴스 및 정보를 찾아보세요</span></div>
-            <div class="gp-row"><span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0075de" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 16.5 17 5l4 4L7 20.5 3 21z"/><path d="M14.5 7.5 17.5 10.5"/></svg></span><span class="gp-t">심층 리서치</span><span class="gp-d">상세 보고서 받기</span></div>
-            <div class="gp-row sel"><span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#31302e" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17c3-1 4-9 7-9s3 6 5.5 6S19 9 21 8"/></svg></span><span class="gp-t">스케치</span><span class="gp-d">그림을 그려 이미지로 첨부</span></div>
+            <div class="gp-row"><span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1d1d1f" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 11.5 12 20a5 5 0 0 1-7-7l8.5-8.5a3.5 3.5 0 0 1 5 5L10 18a2 2 0 0 1-3-3l8-8"/></svg></span><span class="gp-t">사진 및 파일 추가</span><span class="gp-d">컴퓨터에서 업로드하세요</span></div>
+            <div class="gp-row"><span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1d1d1f" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="5" height="16" rx="1.5"/><rect x="10" y="4" width="5" height="16" rx="1.5"/><rect x="17" y="4" width="4" height="16" rx="1.5"/></svg></span><span class="gp-t">라이브러리에서 가져오기</span><span class="gp-d">Google Drive를 포함해 파일 탐색 및 검색</span></div>
+            <div class="gp-row"><span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0071e3" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="8.5" cy="9.5" r="1.6"/><path d="M4 18l5-5 3.5 3.5L16 13l4 5"/></svg></span><span class="gp-t">이미지 만들기</span><span class="gp-d">무엇이든 시각화하세요</span></div>
+            <div class="gp-row"><span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0071e3" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9S14.5 18.4 12 21c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/></svg></span><span class="gp-t">웹 검색</span><span class="gp-d">실시간 뉴스 및 정보를 찾아보세요</span></div>
+            <div class="gp-row"><span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0071e3" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 16.5 17 5l4 4L7 20.5 3 21z"/><path d="M14.5 7.5 17.5 10.5"/></svg></span><span class="gp-t">심층 리서치</span><span class="gp-d">상세 보고서 받기</span></div>
+            <div class="gp-row sel"><span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1d1d1f" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17c3-1 4-9 7-9s3 6 5.5 6S19 9 21 8"/></svg></span><span class="gp-t">스케치</span><span class="gp-d">그림을 그려 이미지로 첨부</span></div>
             <div class="gp-row"><span class="gp-app" style="background:#2b3fd6;">C</span><span class="gp-t">Canva</span><span class="gp-d">Create, review, edit designs</span></div>
             <div class="gp-row"><span class="gp-app" style="background:#dd1100;">W</span><span class="gp-t">Wolfram</span><span class="gp-d">Add computation &amp; knowledge</span></div>
-            <div class="gp-row"><span class="gp-app" style="background:#1c1b1a;">G</span><span class="gp-t">GitHub</span><span class="gp-d">Triage PRs, issues, CI, and publish flows</span></div>
+            <div class="gp-row"><span class="gp-app" style="background:#1d1d1f;">G</span><span class="gp-t">GitHub</span><span class="gp-d">Triage PRs, issues, CI, and publish flows</span></div>
               <div class="gp-hint">입력하여 플러그인, 파일, 폴더 및 스킬 검색</div>
             </div>
           </span>
           <span class="gpt-ph" contenteditable="true" role="textbox" spellcheck="false" data-ph="ChatGPT에게 물어보세요"></span>
           <span class="gpt-trig" tabindex="0" aria-label="추론 수준">
             <span class="gpt-reason">High
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#615d59" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#6e6e73" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
             </span>
             <div class="gpt-pop gpt-pop-r">
               <div class="rs-head">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#615d59" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8z"/></svg>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6e6e73" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8z"/></svg>
                 <div class="rs-title"><b>높음 ›</b><span>GPT-6 Astra</span></div>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#615d59" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11a8 8 0 1 1-2.3-5.6M20 4v5h-5"/></svg>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6e6e73" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11a8 8 0 1 1-2.3-5.6M20 4v5h-5"/></svg>
               </div>
               <div class="rs-track">
                 <div class="rs-fill"></div>
@@ -1711,16 +1805,16 @@ ul.list li:hover:not(.noglow),
 
     <div class="pm">
       <div class="pm-group">기본 제공 <span></span></div>
-      <div class="pm-row"><span class="pm-ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#31302e" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 11.5 12 20a5 5 0 0 1-7-7l8.5-8.5a3.5 3.5 0 0 1 5 5L10 18a2 2 0 0 1-3-3l8-8"/></svg></span><span class="pm-t">사진 및 파일 추가</span><span class="pm-d">컴퓨터에서 업로드하세요</span></div>
-      <div class="pm-row"><span class="pm-ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#31302e" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="5" height="16" rx="1.5"/><rect x="10" y="4" width="5" height="16" rx="1.5"/><rect x="17" y="4" width="4" height="16" rx="1.5"/></svg></span><span class="pm-t">라이브러리에서 가져오기</span><span class="pm-d">Google Drive를 포함해 파일 탐색 및 검색</span></div>
-      <div class="pm-row"><span class="pm-ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0075de" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="8.5" cy="9.5" r="1.6"/><path d="M4 18l5-5 3.5 3.5L16 13l4 5"/></svg></span><span class="pm-t">이미지 만들기</span><span class="pm-d">무엇이든 시각화하세요</span></div>
-      <div class="pm-row"><span class="pm-ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0075de" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9S14.5 18.4 12 21c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/></svg></span><span class="pm-t">웹 검색</span><span class="pm-d">실시간 뉴스 및 정보를 찾아보세요</span></div>
-      <div class="pm-row"><span class="pm-ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0075de" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 16.5 17 5l4 4L7 20.5 3 21z"/><path d="M14.5 7.5 17.5 10.5"/></svg></span><span class="pm-t">심층 리서치</span><span class="pm-d">상세 보고서 받기</span></div>
-      <div class="pm-row sel"><span class="pm-ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#31302e" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17c3-1 4-9 7-9s3 6 5.5 6S19 9 21 8"/></svg></span><span class="pm-t">스케치</span><span class="pm-d">그림을 그려 이미지로 첨부</span></div>
+      <div class="pm-row"><span class="pm-ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1d1d1f" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 11.5 12 20a5 5 0 0 1-7-7l8.5-8.5a3.5 3.5 0 0 1 5 5L10 18a2 2 0 0 1-3-3l8-8"/></svg></span><span class="pm-t">사진 및 파일 추가</span><span class="pm-d">컴퓨터에서 업로드하세요</span></div>
+      <div class="pm-row"><span class="pm-ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1d1d1f" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="5" height="16" rx="1.5"/><rect x="10" y="4" width="5" height="16" rx="1.5"/><rect x="17" y="4" width="4" height="16" rx="1.5"/></svg></span><span class="pm-t">라이브러리에서 가져오기</span><span class="pm-d">Google Drive를 포함해 파일 탐색 및 검색</span></div>
+      <div class="pm-row"><span class="pm-ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0071e3" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="8.5" cy="9.5" r="1.6"/><path d="M4 18l5-5 3.5 3.5L16 13l4 5"/></svg></span><span class="pm-t">이미지 만들기</span><span class="pm-d">무엇이든 시각화하세요</span></div>
+      <div class="pm-row"><span class="pm-ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0071e3" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9S14.5 18.4 12 21c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/></svg></span><span class="pm-t">웹 검색</span><span class="pm-d">실시간 뉴스 및 정보를 찾아보세요</span></div>
+      <div class="pm-row"><span class="pm-ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0071e3" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 16.5 17 5l4 4L7 20.5 3 21z"/><path d="M14.5 7.5 17.5 10.5"/></svg></span><span class="pm-t">심층 리서치</span><span class="pm-d">상세 보고서 받기</span></div>
+      <div class="pm-row sel"><span class="pm-ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1d1d1f" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17c3-1 4-9 7-9s3 6 5.5 6S19 9 21 8"/></svg></span><span class="pm-t">스케치</span><span class="pm-d">그림을 그려 이미지로 첨부</span></div>
       <div class="pm-group" style="margin-top:6px;">설치한 플러그인 <span></span></div>
       <div class="pm-row"><span class="pm-ic"><span class="pm-app" style="background:#2b3fd6;">C</span></span><span class="pm-t">Canva</span><span class="pm-d">Create, review, edit designs</span></div>
       <div class="pm-row"><span class="pm-ic"><span class="pm-app" style="background:#dd1100;">W</span></span><span class="pm-t">Wolfram</span><span class="pm-d">Add computation &amp; knowledge</span></div>
-      <div class="pm-row"><span class="pm-ic"><span class="pm-app" style="background:#1c1b1a;">G</span></span><span class="pm-t">GitHub</span><span class="pm-d">Triage PRs, issues, CI, and publish flows</span></div>
+      <div class="pm-row"><span class="pm-ic"><span class="pm-app" style="background:#1d1d1f;">G</span></span><span class="pm-t">GitHub</span><span class="pm-d">Triage PRs, issues, CI, and publish flows</span></div>
       <div class="pm-hint">입력하여 플러그인, 파일, 폴더 및 스킬 검색</div>
     </div>
 
@@ -1760,7 +1854,7 @@ ul.list li:hover:not(.noglow),
             <div class="small" style="font-size:14px;">계산 · 지식 데이터 보강</div>
           </div>
           <div style="display:flex;align-items:center;gap:12px;">
-            <span class="pm-app" style="background:#1c1b1a;">G</span>
+            <span class="pm-app" style="background:#1d1d1f;">G</span>
             <div class="body" style="font-size:16px;font-weight:600;color:var(--ink);">GitHub</div>
             <div class="small" style="font-size:14px;">PR · 이슈 · CI 확인, 배포 흐름</div>
           </div>
@@ -1858,25 +1952,25 @@ ul.list li:hover:not(.noglow),
       <div class="kicker" style="font-size:22px;">Instant</div>
       <div class="small" style="margin-top:8px;">빠른 일상 답변</div>
       <div class="pq">“오늘 서울 날씨에 맞는 옷차림을 3줄로 알려줘.”</div>
-      <div style="margin-top:auto;padding-top:18px;"><div style="height:10px;background:#d9d5cc;width:20%;"></div></div>
+      <div style="margin-top:auto;padding-top:18px;"><div style="height:10px;background:#e8e8ed;width:20%;"></div></div>
     </div>
     <div class="card step" style="display:flex;flex-direction:column;padding:26px 20px;height:auto;">
       <div class="kicker" style="font-size:22px;">Medium</div>
       <div class="small" style="margin-top:8px;">일반 문서 · 요약</div>
       <div class="pq">“이 글을 핵심 내용 5가지로 요약하고 쉽게 설명해줘.”</div>
-      <div style="margin-top:auto;padding-top:18px;"><div style="height:10px;background:#cfcabf;width:40%;"></div></div>
+      <div style="margin-top:auto;padding-top:18px;"><div style="height:10px;background:#c7c7cc;width:40%;"></div></div>
     </div>
     <div class="card step" style="display:flex;flex-direction:column;padding:26px 20px;height:auto;">
       <div class="kicker" style="font-size:22px;">High</div>
       <div class="small" style="margin-top:8px;">복잡한 비교 · 계획</div>
       <div class="pq">“초등학교 AI 연수 2시간 운영안을 단계별로 설계해줘.”</div>
-      <div style="margin-top:auto;padding-top:18px;"><div style="height:10px;background:#9fc9b8;width:60%;"></div></div>
+      <div style="margin-top:auto;padding-top:18px;"><div style="height:10px;background:#a9cbf2;width:60%;"></div></div>
     </div>
     <div class="card step" style="display:flex;flex-direction:column;padding:26px 20px;height:auto;">
       <div class="kicker" style="font-size:22px;">Extra High</div>
       <div class="small" style="margin-top:8px;">여러 조건 · 자료 분석</div>
       <div class="pq">“3개 연수안을 비용 · 효과 · 준비시간 기준으로 비교하고 개선안을 제시해줘.”</div>
-      <div style="margin-top:auto;padding-top:18px;"><div style="height:10px;background:#4e8f73;width:80%;"></div></div>
+      <div style="margin-top:auto;padding-top:18px;"><div style="height:10px;background:#4a97ea;width:80%;"></div></div>
     </div>
     <div class="card step" style="display:flex;flex-direction:column;padding:26px 20px;height:auto;">
       <div class="kicker" style="font-size:22px;">Pro</div>
@@ -1886,7 +1980,7 @@ ul.list li:hover:not(.noglow),
     </div>
   </div>
 
-  <div style="display:flex;align-items:center;gap:14px;margin-top:24px;padding:20px 28px;background:var(--charcoal);position:relative;z-index:2;">
+  <div style="display:flex;align-items:center;gap:14px;margin-top:24px;padding:20px 28px;background:var(--ink);position:relative;z-index:2;">
     <svg class="icon w" style="width:20px;height:20px"><use href="#i-target"/></svg>
     <div style="color:#fff;font-size:18px;font-weight:600;">
       기본은 <span style="color:var(--red);font-weight:800;">빠른 답변으로 시작</span>하고, 답이 얕거나 복잡하면 <span style="color:var(--red);font-weight:800;">High 이상</span>으로 올리기
@@ -2180,12 +2274,12 @@ ul.list li:hover:not(.noglow),
 
     <div style="display:grid;grid-template-columns:1fr 92px 1fr;flex:1;min-height:0;align-items:stretch;">
 
-      <div class="card" style="display:flex;flex-direction:column;padding:18px 22px;background:#edebe9;border-color:#e7e7e7;">
+      <div class="card" style="display:flex;flex-direction:column;padding:18px 22px;background:#f5f5f7;border-color:#d2d2d7;">
         <div style="display:flex;align-items:center;gap:10px;">
           <span style="font-size:11px;font-weight:800;letter-spacing:.18em;color:var(--ink-25);">BEFORE</span>
           <span class="kicker" style="font-size:17px;color:var(--ink-45);">처음 요청</span>
         </div>
-        <div style="margin-top:14px;border-left:3px solid #e7e7e7;padding:8px 0 8px 16px;font-size:19px;font-weight:700;color:var(--ink-45);">
+        <div style="margin-top:14px;border-left:3px solid #d2d2d7;padding:8px 0 8px 16px;font-size:19px;font-weight:700;color:var(--ink-45);">
           “환경 수업 자료 만들어줘.”
         </div>
         <p class="body" style="margin-top:auto;padding-top:12px;font-size:15px;color:var(--ink-45);">학년과 수업 목표가 없어 원하는 결과를 판단하기 어렵습니다.</p>
@@ -2210,12 +2304,12 @@ ul.list li:hover:not(.noglow),
 
     <div style="display:grid;grid-template-columns:1fr 92px 1fr;flex:1;min-height:0;align-items:stretch;">
 
-      <div class="card" style="display:flex;flex-direction:column;padding:18px 22px;background:#edebe9;border-color:#e7e7e7;">
+      <div class="card" style="display:flex;flex-direction:column;padding:18px 22px;background:#f5f5f7;border-color:#d2d2d7;">
         <div style="display:flex;align-items:center;gap:10px;">
           <span style="font-size:11px;font-weight:800;letter-spacing:.18em;color:var(--ink-25);">BEFORE</span>
           <span class="kicker" style="font-size:17px;color:var(--ink-45);">처음 요청</span>
         </div>
-        <div style="margin-top:14px;border-left:3px solid #e7e7e7;padding:8px 0 8px 16px;font-size:19px;font-weight:700;color:var(--ink-45);">
+        <div style="margin-top:14px;border-left:3px solid #d2d2d7;padding:8px 0 8px 16px;font-size:19px;font-weight:700;color:var(--ink-45);">
           “분수 수업 자료 만들어줘.”
         </div>
         <p class="body" style="margin-top:auto;padding-top:12px;font-size:15px;color:var(--ink-45);">학년과 조건이 없어 활동 수와 정리 형식이 매번 달라집니다.</p>
@@ -2425,7 +2519,7 @@ ul.list li:hover:not(.noglow),
 
     <div style="display:flex;flex-direction:column;gap:16px;min-height:0;">
 
-      <div class="card" style="flex:1;height:auto;display:flex;flex-direction:column;justify-content:center;padding:22px 26px;background:#edebe9;border-color:#e7e7e7;">
+      <div class="card" style="flex:1;height:auto;display:flex;flex-direction:column;justify-content:center;padding:22px 26px;background:#f5f5f7;border-color:#d2d2d7;">
         <div style="font-size:12px;font-weight:800;letter-spacing:.18em;color:var(--ink-25);">WHAT</div>
         <div class="kicker" style="margin-top:8px;color:var(--ink-45);font-size:26px;">무엇을 그렸나?</div>
         <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:16px;">
@@ -2604,7 +2698,7 @@ ul.list li:hover:not(.noglow),
     </div>
   </div>
 
-  <div style="display:flex;align-items:center;gap:14px;margin-top:24px;padding:20px 28px;background:var(--charcoal);position:relative;z-index:2;">
+  <div style="display:flex;align-items:center;gap:14px;margin-top:24px;padding:20px 28px;background:var(--ink);position:relative;z-index:2;">
     <svg class="icon w" style="width:20px;height:20px"><use href="#i-layers"/></svg>
     <div style="color:#fff;font-size:19px;font-weight:600;">
       <span style="color:var(--red);font-weight:800;">잘게 나눌수록</span> 프롬프트는 정확해진다
@@ -2620,7 +2714,7 @@ ul.list li:hover:not(.noglow),
   <p class="lead" style="margin-top:18px;">‘예쁘게’보다 <span class="b">구체적인 시각 언어</span>가 필요하다</p>
 
   <div class="fill grid" style="grid-template-columns:.85fr 92px 1.15fr;margin-top:38px;">
-    <div class="card" style="display:flex;flex-direction:column;justify-content:center;background:#edebe9;border-color:#e7e7e7;">
+    <div class="card" style="display:flex;flex-direction:column;justify-content:center;background:#f5f5f7;border-color:#d2d2d7;">
       <div style="font-size:12px;font-weight:800;letter-spacing:.18em;color:var(--ink-25);">✕ &nbsp;막연한 표현</div>
       <div class="rule" style="margin:22px 0;"></div>
       <ul class="list" style="gap:18px;">
@@ -2645,7 +2739,7 @@ ul.list li:hover:not(.noglow),
     </div>
   </div>
 
-  <div style="display:flex;align-items:center;gap:14px;margin-top:24px;padding:20px 28px;background:var(--charcoal);position:relative;z-index:2;">
+  <div style="display:flex;align-items:center;gap:14px;margin-top:24px;padding:20px 28px;background:var(--ink);position:relative;z-index:2;">
     <svg class="icon w" style="width:20px;height:20px"><use href="#i-target"/></svg>
     <div style="color:#fff;font-size:19px;font-weight:600;">
       <span style="color:var(--red);font-weight:800;">구체적일수록</span> 결과가 정확해진다
@@ -2776,7 +2870,7 @@ ul.list li:hover:not(.noglow),
     </div>
   </div>
 
-  <div style="display:flex;align-items:center;justify-content:center;gap:22px;margin-top:26px;padding:26px 32px;background:var(--charcoal);position:relative;z-index:2;">
+  <div style="display:flex;align-items:center;justify-content:center;gap:22px;margin-top:26px;padding:26px 32px;background:var(--ink);position:relative;z-index:2;">
     <span style="font-size:24px;font-weight:800;color:#fff;">내용</span>
     <span style="font-size:24px;font-weight:800;color:var(--red);">+</span>
     <span style="font-size:24px;font-weight:800;color:#fff;">스타일</span>
@@ -2793,7 +2887,7 @@ ul.list li:hover:not(.noglow),
   <p class="lead" style="margin-top:18px;">‘다시 그려줘’보다 <span class="b">차이를 분석하게</span> 한다</p>
 
   <div class="fill grid" style="grid-template-columns:1.15fr .85fr;gap:34px;margin-top:32px;">
-    <div class="promptbox" style="display:flex;flex-direction:column;justify-content:center;background:#2b5148;">
+    <div class="promptbox" style="display:flex;flex-direction:column;justify-content:center;background:#1d1d1f;">
       <div class="plabel">PROMPT</div>
       <pre class="code">레퍼런스 이미지와 생성 이미지를 <span class="r">비교</span>해줘.
 
@@ -2961,7 +3055,7 @@ ul.list li:hover:not(.noglow),
     </div>
 
     <div class="colstack" style="gap:22px;">
-      <div class="card" style="flex:1;display:flex;flex-direction:column;justify-content:center;background:#edebe9;border-color:#e7e7e7;">
+      <div class="card" style="flex:1;display:flex;flex-direction:column;justify-content:center;background:#f5f5f7;border-color:#d2d2d7;">
         <div style="font-size:12px;font-weight:800;letter-spacing:.18em;color:var(--ink-25);">BARRIER 01</div>
         <div class="kicker" style="margin-top:10px;color:var(--ink-45);">배워야 할 것들</div>
         <div style="display:flex;gap:9px;margin-top:20px;flex-wrap:wrap;">
@@ -3011,7 +3105,7 @@ ul.list li:hover:not(.noglow),
     </div>
   </div>
 
-  <div style="display:flex;align-items:center;gap:14px;margin-top:30px;padding:24px 30px;background:var(--charcoal);position:relative;z-index:2;">
+  <div style="display:flex;align-items:center;gap:14px;margin-top:30px;padding:24px 30px;background:var(--ink);position:relative;z-index:2;">
     <svg class="icon w" style="width:20px;height:20px"><use href="#i-target"/></svg>
     <div style="color:#fff;font-size:20px;font-weight:600;">
       코드를 쓰는 것보다 <span style="color:var(--red);font-weight:800;">원하는 것을 설명하는 일</span>이 중요해지고 있습니다.
@@ -3074,15 +3168,15 @@ ul.list li:hover:not(.noglow),
     </div>
     <div style="display:flex;flex-direction:column;gap:18px;">
       <div class="card step" style="display:flex;align-items:center;gap:22px;padding:30px 32px;">
-        <div class="ibox" style="flex:none;background:#2b5148;border-color:var(--d-line)"><svg class="icon" style="stroke:var(--red)"><use href="#i-chat"/></svg></div>
+        <div class="ibox" style="flex:none;background:#2c2c2e;border-color:var(--d-line)"><svg class="icon" style="stroke:var(--red)"><use href="#i-chat"/></svg></div>
         <div><div class="num">01</div><div class="st-label" style="font-size:21px;font-weight:700;margin-top:4px;color:#fff;">원하는 것을 설명한다</div></div>
       </div>
       <div class="card step" style="display:flex;align-items:center;gap:22px;padding:30px 32px;">
-        <div class="ibox" style="flex:none;background:#2b5148;border-color:var(--d-line)"><svg class="icon" style="stroke:var(--red)"><use href="#i-check"/></svg></div>
+        <div class="ibox" style="flex:none;background:#2c2c2e;border-color:var(--d-line)"><svg class="icon" style="stroke:var(--red)"><use href="#i-check"/></svg></div>
         <div><div class="num">02</div><div class="st-label" style="font-size:21px;font-weight:700;margin-top:4px;color:#fff;">AI가 만든 결과를 확인한다</div></div>
       </div>
       <div class="card step" style="display:flex;align-items:center;gap:22px;padding:30px 32px;">
-        <div class="ibox" style="flex:none;background:#2b5148;border-color:var(--d-line)"><svg class="icon" style="stroke:var(--red)"><use href="#i-loop"/></svg></div>
+        <div class="ibox" style="flex:none;background:#2c2c2e;border-color:var(--d-line)"><svg class="icon" style="stroke:var(--red)"><use href="#i-loop"/></svg></div>
         <div><div class="num">03</div><div class="st-label" style="font-size:21px;font-weight:700;margin-top:4px;color:#fff;">오류도 대화로 수정한다</div></div>
       </div>
     </div>
@@ -3122,7 +3216,7 @@ ul.list li:hover:not(.noglow),
     </div>
   </div>
 
-  <div style="display:flex;align-items:center;gap:14px;margin-top:26px;padding:20px 28px;background:var(--charcoal);position:relative;z-index:2;">
+  <div style="display:flex;align-items:center;gap:14px;margin-top:26px;padding:20px 28px;background:var(--ink);position:relative;z-index:2;">
     <svg class="icon w" style="width:20px;height:20px"><use href="#i-loop"/></svg>
     <div style="color:#fff;font-size:18px;font-weight:600;">
       핵심은 <span style="color:var(--red);font-weight:800;">한 번의 정답이 아니라, 짧은 반복</span>입니다.
@@ -3152,15 +3246,15 @@ ul.list li:hover:not(.noglow),
 
     <!-- compare : 검색 vs 전담 개발자 -->
     <div class="colstack" style="gap:18px;">
-      <div class="card" style="flex:1;padding:32px 32px;background:#edebe9;border-color:#e7e7e7;display:flex;flex-direction:column;justify-content:center;">
+      <div class="card" style="flex:1;padding:32px 32px;background:#f5f5f7;border-color:#d2d2d7;display:flex;flex-direction:column;justify-content:center;">
         <div style="display:flex;align-items:center;gap:14px;">
-          <div class="ibox" style="background:#edebe9;border-color:#e7e7e7;"><svg class="icon" style="stroke:#8A8A92"><use href="#i-search"/></svg></div>
+          <div class="ibox" style="background:#f5f5f7;border-color:#d2d2d7;"><svg class="icon" style="stroke:#86868b"><use href="#i-search"/></svg></div>
           <div>
             <div style="font-size:12px;font-weight:800;letter-spacing:.18em;color:var(--ink-25);">BEFORE</div>
             <div class="kicker" style="color:var(--ink-45);">검색형 AI</div>
           </div>
         </div>
-        <div style="margin-top:18px;height:10px;background:#d9d5cc;width:36%;"></div>
+        <div style="margin-top:18px;height:10px;background:#e8e8ed;width:36%;"></div>
         <div class="body" style="margin-top:14px;font-size:16px;color:var(--ink-45);">답변만 제공 · 실행은 사람의 몫 · 매번 수동 개입</div>
       </div>
 
@@ -3189,7 +3283,7 @@ ul.list li:hover:not(.noglow),
   <h2 class="title">기존 코딩 <span class="r">VS</span> 바이브 코딩</h2>
 
   <div class="fill grid" style="grid-template-columns:1fr 92px 1fr;margin-top:44px;">
-    <div class="card" style="display:flex;flex-direction:column;background:#edebe9;border-color:#e7e7e7;">
+    <div class="card" style="display:flex;flex-direction:column;background:#f5f5f7;border-color:#d2d2d7;">
       <div style="font-size:12px;font-weight:800;letter-spacing:.18em;color:var(--ink-25);">A · 기존 코딩</div>
       <div class="kicker" style="margin-top:10px;color:var(--ink-45);">문법 중심</div>
       <div class="rule" style="margin:24px 0;"></div>
@@ -3284,7 +3378,7 @@ ul.list li:hover:not(.noglow),
 
     <!-- Claude -->
     <div class="card" style="padding:0;overflow:hidden;display:flex;flex-direction:column;">
-      <div style="background:var(--charcoal);padding:30px 38px;display:flex;align-items:center;gap:14px;">
+      <div style="background:var(--ink);padding:30px 38px;display:flex;align-items:center;gap:14px;">
         <svg class="icon w" style="width:24px;height:24px"><use href="#i-layers"/></svg>
         <div style="color:#fff;font-size:28px;font-weight:800;letter-spacing:-.03em;">Claude <span style="opacity:.7">(Code)</span></div>
       </div>
@@ -3399,7 +3493,7 @@ ul.list li:hover:not(.noglow),
 </section>
 
 <section class="slide dark" data-ch="PART 04 · 바이브 코딩 전 필수 세팅">
-  <div class="deco-dot" style="width:520px;height:520px;right:-190px;top:-190px;background:#00754A;opacity:.1;"></div>
+  <div class="deco-dot" style="width:520px;height:520px;right:-190px;top:-190px;background:#0071e3;opacity:.1;"></div>
   
 
   <div class="fill" style="position:relative;z-index:2;display:flex;flex-direction:column;">
@@ -3548,7 +3642,7 @@ ul.list li:hover:not(.noglow),
     </div>
   </div>
 
-  <div style="display:flex;align-items:center;gap:16px;margin-top:34px;padding:26px 32px;background:var(--charcoal);">
+  <div style="display:flex;align-items:center;gap:16px;margin-top:34px;padding:26px 32px;background:var(--ink);">
     <svg class="icon w" style="width:22px;height:22px"><use href="#i-chip"/></svg>
     <div style="color:#fff;font-size:17px;font-weight:600;">
       세 축의 중심에는 <span style="color:#fff;font-weight:800;">AI 비서</span>가 있습니다 — 가입만 끝내면
@@ -3568,11 +3662,11 @@ ul.list li:hover:not(.noglow),
     <!-- public vs private compare -->
     <div class="colstack" style="gap:22px;">
       <div style="display:flex;gap:22px;flex:none;">
-        <div class="card" style="flex:1;background:#edebe9;border-color:#e7e7e7;padding:32px 30px;">
+        <div class="card" style="flex:1;background:#f5f5f7;border-color:#d2d2d7;padding:32px 30px;">
           <svg class="icon" style="stroke:var(--ink-25);width:28px;height:28px"><use href="#i-unlock"/></svg>
           <div style="font-size:20px;font-weight:800;color:var(--ink-45);margin-top:16px;">Public</div>
           <div style="font-size:14px;color:var(--ink-25);font-weight:600;margin-top:4px;">공개 · 기본값 주의</div>
-          <div style="margin-top:20px;height:8px;background:#d9d5cc;"></div>
+          <div style="margin-top:20px;height:8px;background:#e8e8ed;"></div>
         </div>
         <div class="card" style="flex:1;border-color:var(--red);padding:32px 30px;">
           <svg class="icon red" style="width:28px;height:28px"><use href="#i-lock"/></svg>
@@ -3606,7 +3700,7 @@ ul.list li:hover:not(.noglow),
         비서가 코드를 업로드할 때 기본값이 <span class="b">Public(공개)</span>일 수 있습니다.
         나만의 아이디어가 유출되지 않도록 <span class="r">반드시 지시하세요.</span>
       </p>
-      <div style="margin-top:26px;background:var(--charcoal);padding:26px 28px;">
+      <div style="margin-top:26px;background:var(--ink);padding:26px 28px;">
         <div style="font-size:12px;font-weight:800;letter-spacing:.2em;color:rgba(255,255,255,.4);">PROMPT</div>
         <div style="margin-top:12px;font-size:19px;line-height:1.6;color:#fff;font-weight:600;">
           “혹시 깃허브에 <span style="color:var(--red);font-weight:800;">퍼블릭</span>으로 반영되어 있으면
@@ -3660,8 +3754,8 @@ ul.list li:hover:not(.noglow),
       <div style="font-size:14px;color:var(--red);font-weight:700;margin-top:5px;">자동 배포 · 포장</div>
     </div>
     <div style="display:grid;place-items:center;"><svg class="icon red" style="width:24px;height:24px"><use href="#i-arrow"/></svg></div>
-    <div style="text-align:center;padding:40px 24px;background:var(--charcoal);align-self:stretch;display:flex;flex-direction:column;justify-content:center;">
-      <div class="ibox" style="margin:0 auto;background:#2b5148;border-color:rgba(255,255,255,.16);"><svg class="icon w"><use href="#i-link"/></svg></div>
+    <div style="text-align:center;padding:40px 24px;background:var(--ink);align-self:stretch;display:flex;flex-direction:column;justify-content:center;">
+      <div class="ibox" style="margin:0 auto;background:#3a3a3c;border-color:rgba(255,255,255,.16);"><svg class="icon w"><use href="#i-link"/></svg></div>
       <div style="font-size:22px;font-weight:800;margin-top:16px;color:#fff;">.vercel.app</div>
       <div style="font-size:14px;color:rgba(255,255,255,.5);font-weight:600;margin-top:5px;">누구나 접속 가능한 주소</div>
     </div>
@@ -3706,8 +3800,8 @@ ul.list li:hover:not(.noglow),
         <div style="display:flex;gap:8px;margin-top:22px;">
           <div style="flex:1;height:14px;background:var(--red);"></div>
           <div style="flex:1;height:14px;background:var(--red);"></div>
-          <div style="flex:1;height:14px;background:#e7e7e7;"></div>
-          <div style="flex:1;height:14px;background:#e7e7e7;"></div>
+          <div style="flex:1;height:14px;background:#d2d2d7;"></div>
+          <div style="flex:1;height:14px;background:#d2d2d7;"></div>
         </div>
         <div style="display:flex;justify-content:space-between;margin-top:10px;font-size:13px;font-weight:700;color:var(--ink-25);">
           <span style="color:var(--red)">무료 사용 구간</span><span>추가 생성 시 유료</span>
@@ -3873,7 +3967,7 @@ ul.list li:hover:not(.noglow),
         </div>
       </div>
 
-      <div style="margin-top:18px;background:#2b5148;border-left:3px solid var(--red);padding:24px 26px;">
+      <div style="margin-top:18px;background:#1d1d1f;border-left:3px solid var(--red);padding:24px 26px;">
         <div style="font-size:12px;font-weight:800;letter-spacing:.2em;color:rgba(255,255,255,.4);">PROMPT</div>
         <div style="margin-top:10px;font-size:21px;line-height:1.6;color:#fff;font-weight:700;">
           “이 주소의 디자인을 참고해서 내 앱을 똑같이 업데이트해 줘.”
@@ -3899,7 +3993,7 @@ ul.list li:hover:not(.noglow),
           <svg class="icon" style="stroke:var(--red);width:22px;height:22px"><use href="#i-chat"/></svg>
           <div style="font-size:14px;color:var(--d-text);font-weight:700;margin-top:10px;">URL 전달</div>
         </div>
-        <div style="flex:1;border:1px solid var(--red);padding:20px;text-align:center;background:rgba(0,117,74,.12);">
+        <div style="flex:1;border:1px solid var(--red);padding:20px;text-align:center;background:rgba(0,113,227,.12);">
           <svg class="icon" style="stroke:var(--red);width:22px;height:22px"><use href="#i-rocket"/></svg>
           <div style="font-size:14px;color:#fff;font-weight:700;margin-top:10px;">즉시 재배포</div>
         </div>
@@ -3946,28 +4040,28 @@ ul.list li:hover:not(.noglow),
 
   <div class="fill grid" style="grid-template-columns:repeat(4,1fr);gap:24px;margin-top:44px;">
     <div class="card step" style="display:flex;flex-direction:column;justify-content:center;">
-      <div class="ibox" style="background:#2b5148;border-color:var(--d-line)"><svg class="icon" style="stroke:var(--red)"><use href="#i-file"/></svg></div>
+      <div class="ibox" style="background:#2c2c2e;border-color:var(--d-line)"><svg class="icon" style="stroke:var(--red)"><use href="#i-file"/></svg></div>
       <div class="num" style="margin-top:24px;">01</div>
       <div class="kicker" style="margin-top:8px;color:#fff;font-size:23px;">파일 생성</div>
       <div class="rule" style="margin:18px 0;"></div>
       <div class="body" style="font-size:17px;">아이디어를 실제 파일로</div>
     </div>
     <div class="card step" style="display:flex;flex-direction:column;justify-content:center;">
-      <div class="ibox" style="background:#2b5148;border-color:var(--d-line)"><svg class="icon" style="stroke:var(--red)"><use href="#i-code"/></svg></div>
+      <div class="ibox" style="background:#2c2c2e;border-color:var(--d-line)"><svg class="icon" style="stroke:var(--red)"><use href="#i-code"/></svg></div>
       <div class="num" style="margin-top:24px;">02</div>
       <div class="kicker" style="margin-top:8px;color:#fff;font-size:23px;">코드 작성</div>
       <div class="rule" style="margin:18px 0;"></div>
       <div class="body" style="font-size:17px;">여러 파일을 함께 구성</div>
     </div>
     <div class="card step" style="display:flex;flex-direction:column;justify-content:center;">
-      <div class="ibox" style="background:#2b5148;border-color:var(--d-line)"><svg class="icon" style="stroke:var(--red)"><use href="#i-play"/></svg></div>
+      <div class="ibox" style="background:#2c2c2e;border-color:var(--d-line)"><svg class="icon" style="stroke:var(--red)"><use href="#i-play"/></svg></div>
       <div class="num" style="margin-top:24px;">03</div>
       <div class="kicker" style="margin-top:8px;color:#fff;font-size:23px;">실행 · 확인</div>
       <div class="rule" style="margin:18px 0;"></div>
       <div class="body" style="font-size:17px;">작동 결과와 오류를 확인</div>
     </div>
     <div class="card step" style="display:flex;flex-direction:column;justify-content:center;">
-      <div class="ibox" style="background:#2b5148;border-color:var(--d-line)"><svg class="icon" style="stroke:var(--red)"><use href="#i-loop"/></svg></div>
+      <div class="ibox" style="background:#2c2c2e;border-color:var(--d-line)"><svg class="icon" style="stroke:var(--red)"><use href="#i-loop"/></svg></div>
       <div class="num" style="margin-top:24px;">04</div>
       <div class="kicker" style="margin-top:8px;color:#fff;font-size:23px;">수정 · 반복</div>
       <div class="rule" style="margin:18px 0;"></div>
@@ -4006,7 +4100,7 @@ ul.list li:hover:not(.noglow),
     </div>
 
     <div class="card" style="padding:0;overflow:hidden;display:flex;flex-direction:column;">
-      <div style="background:var(--charcoal);padding:30px 38px;display:flex;align-items:center;gap:14px;">
+      <div style="background:var(--ink);padding:30px 38px;display:flex;align-items:center;gap:14px;">
         <svg class="icon w" style="width:24px;height:24px"><use href="#i-code"/></svg>
         <div style="color:#fff;font-size:27px;font-weight:800;letter-spacing:-.03em;">Codex · 함께 만든다</div>
       </div>
@@ -4021,7 +4115,7 @@ ul.list li:hover:not(.noglow),
     </div>
   </div>
 
-  <div style="display:flex;align-items:center;gap:14px;margin-top:24px;padding:22px 30px;background:var(--charcoal);position:relative;z-index:2;">
+  <div style="display:flex;align-items:center;gap:14px;margin-top:24px;padding:22px 30px;background:var(--ink);position:relative;z-index:2;">
     <svg class="icon w" style="width:20px;height:20px"><use href="#i-link"/></svg>
     <div style="color:#fff;font-size:19px;font-weight:600;">
       ChatGPT가 <span style="color:var(--red);font-weight:800;">함께 생각한다면</span>, Codex는 <span style="color:var(--red);font-weight:800;">함께 만든다.</span>
@@ -4073,7 +4167,7 @@ ul.list li:hover:not(.noglow),
     </div>
   </div>
 
-  <div style="display:flex;align-items:center;gap:14px;margin-top:26px;padding:20px 28px;background:var(--charcoal);position:relative;z-index:2;">
+  <div style="display:flex;align-items:center;gap:14px;margin-top:26px;padding:20px 28px;background:var(--ink);position:relative;z-index:2;">
     <svg class="icon w" style="width:20px;height:20px"><use href="#i-loop"/></svg>
     <div style="color:#fff;font-size:18px;font-weight:600;">
       03 ~ 04는 <span style="color:var(--red);font-weight:800;">다시 반복</span> — 완성은 대화 속에서 가까워집니다.
@@ -4375,7 +4469,7 @@ ul.list li:hover:not(.noglow),
     </div>
   </div>
 
-  <div style="display:flex;align-items:center;gap:14px;margin-top:24px;padding:20px 28px;background:var(--charcoal);position:relative;z-index:2;">
+  <div style="display:flex;align-items:center;gap:14px;margin-top:24px;padding:20px 28px;background:var(--ink);position:relative;z-index:2;">
     <svg class="icon w" style="width:20px;height:20px"><use href="#i-loop"/></svg>
     <div style="color:#fff;font-size:17px;font-weight:600;">
       한 번에 <span style="color:var(--red);font-weight:800;">한 항목</span>을 개선하고, 바꾸기 전 파일은 <span style="color:var(--red);font-weight:800;">별도로 보관</span>합니다.
@@ -4532,21 +4626,21 @@ ul.list li:hover:not(.noglow),
       <div class="kicker" style="margin-top:10px;color:#fff;">목표</div>
       <div class="rule" style="margin:22px 0;"></div>
       <p class="body">무엇을 완성할지 설명합니다.</p>
-      <div class="ibox" style="margin-top:auto;background:#2b5148;border-color:var(--d-line)"><svg class="icon" style="stroke:var(--red)"><use href="#i-target"/></svg></div>
+      <div class="ibox" style="margin-top:auto;background:#2c2c2e;border-color:var(--d-line)"><svg class="icon" style="stroke:var(--red)"><use href="#i-target"/></svg></div>
     </div>
     <div class="card step" style="display:flex;flex-direction:column;">
       <div class="num">02</div>
       <div class="kicker" style="margin-top:10px;color:#fff;">파일 · 맥락</div>
       <div class="rule" style="margin:22px 0;"></div>
       <p class="body">자료와 필요한 정보를 모읍니다.</p>
-      <div class="ibox" style="margin-top:auto;background:#2b5148;border-color:var(--d-line)"><svg class="icon" style="stroke:var(--red)"><use href="#i-file"/></svg></div>
+      <div class="ibox" style="margin-top:auto;background:#2c2c2e;border-color:var(--d-line)"><svg class="icon" style="stroke:var(--red)"><use href="#i-file"/></svg></div>
     </div>
     <div class="card step" style="display:flex;flex-direction:column;">
       <div class="num">03</div>
       <div class="kicker" style="margin-top:10px;color:#fff;">결과물</div>
       <div class="rule" style="margin:22px 0;"></div>
       <p class="body">문서 · 스프레드시트 · 발표자료 등을 검토하고 다듬습니다.</p>
-      <div class="ibox" style="margin-top:auto;background:#2b5148;border-color:var(--d-line)"><svg class="icon" style="stroke:var(--red)"><use href="#i-layers"/></svg></div>
+      <div class="ibox" style="margin-top:auto;background:#2c2c2e;border-color:var(--d-line)"><svg class="icon" style="stroke:var(--red)"><use href="#i-layers"/></svg></div>
     </div>
   </div>
 
@@ -4588,7 +4682,7 @@ ul.list li:hover:not(.noglow),
     </div>
   </div>
 
-  <div style="display:flex;align-items:center;gap:14px;margin-top:26px;padding:22px 28px;background:var(--charcoal);position:relative;z-index:2;">
+  <div style="display:flex;align-items:center;gap:14px;margin-top:26px;padding:22px 28px;background:var(--ink);position:relative;z-index:2;">
     <svg class="icon w" style="width:20px;height:20px"><use href="#i-loop"/></svg>
     <div style="color:#fff;font-size:19px;font-weight:600;">
       바이브 코딩의 방식은 <span style="color:var(--red);font-weight:800;">코드가 없어도 작동합니다.</span>
@@ -4713,7 +4807,7 @@ ul.list li:hover:not(.noglow),
     </div>
   </div>
 
-  <div style="display:flex;align-items:center;gap:14px;margin-top:24px;padding:22px 30px;background:var(--charcoal);position:relative;z-index:2;">
+  <div style="display:flex;align-items:center;gap:14px;margin-top:24px;padding:22px 30px;background:var(--ink);position:relative;z-index:2;">
     <svg class="icon w" style="width:20px;height:20px"><use href="#i-target"/></svg>
     <div style="color:#fff;font-size:19px;font-weight:600;">
       <span style="color:var(--red);font-weight:800;">만들려는 결과물</span>에 따라 도구를 선택합니다.
@@ -4751,12 +4845,12 @@ ul.list li:hover:not(.noglow),
 
   <div class="fill grid" style="grid-template-columns:1fr 92px 1fr;gap:0;margin-top:26px;align-items:stretch;">
 
-    <div class="card" style="display:flex;flex-direction:column;padding:26px 30px;background:#edebe9;border-color:#e7e7e7;">
+    <div class="card" style="display:flex;flex-direction:column;padding:26px 30px;background:#f5f5f7;border-color:#d2d2d7;">
       <div style="display:flex;align-items:center;gap:10px;">
         <span style="font-size:11px;font-weight:800;letter-spacing:.18em;color:var(--ink-25);">BEFORE</span>
         <span class="kicker" style="font-size:19px;color:var(--ink-45);">말로 알려주는 AI</span>
       </div>
-      <div style="margin-top:16px;border-left:3px solid #e7e7e7;padding:8px 0 8px 16px;font-size:20px;font-weight:700;color:var(--ink-45);">
+      <div style="margin-top:16px;border-left:3px solid #d2d2d7;padding:8px 0 8px 16px;font-size:20px;font-weight:700;color:var(--ink-45);">
         “왼쪽 도구 상자에서 원 도구를 고르고, 색상은 여기서 바꾸세요.”
       </div>
       <p class="body" style="margin-top:auto;padding-top:14px;font-size:15.5px;color:var(--ink-45);word-break:keep-all;">설명을 읽고 <b>사람이 하나씩 따라 해야</b> 합니다. 메뉴를 못 찾으면 거기서 멈춥니다.</p>
@@ -5047,15 +5141,15 @@ ul.list li:hover:not(.noglow),
 
     <div style="display:flex;flex-direction:column;gap:18px;">
       <div class="card step" style="flex:1;display:flex;align-items:center;gap:20px;padding:26px 30px;">
-        <div class="ibox" style="flex:none;background:#2b5148;border-color:var(--d-line)"><svg class="icon" style="stroke:var(--red)"><use href="#i-layers"/></svg></div>
+        <div class="ibox" style="flex:none;background:#2c2c2e;border-color:var(--d-line)"><svg class="icon" style="stroke:var(--red)"><use href="#i-layers"/></svg></div>
         <div><div class="num">EXAMPLE 01</div><div class="st-label" style="font-size:21px;font-weight:800;margin-top:4px;color:#fff;">PPT Skill</div><div class="small">발표자료</div></div>
       </div>
       <div class="card step" style="flex:1;display:flex;align-items:center;gap:20px;padding:26px 30px;">
-        <div class="ibox" style="flex:none;background:#2b5148;border-color:var(--d-line)"><svg class="icon" style="stroke:var(--red)"><use href="#i-img"/></svg></div>
+        <div class="ibox" style="flex:none;background:#2c2c2e;border-color:var(--d-line)"><svg class="icon" style="stroke:var(--red)"><use href="#i-img"/></svg></div>
         <div><div class="num">EXAMPLE 02</div><div class="st-label" style="font-size:21px;font-weight:800;margin-top:4px;color:#fff;">Image Skill</div><div class="small">배경 · 사진</div></div>
       </div>
       <div class="card step" style="flex:1;display:flex;align-items:center;gap:20px;padding:26px 30px;">
-        <div class="ibox" style="flex:none;background:#2b5148;border-color:var(--d-line)"><svg class="icon" style="stroke:var(--red)"><use href="#i-code"/></svg></div>
+        <div class="ibox" style="flex:none;background:#2c2c2e;border-color:var(--d-line)"><svg class="icon" style="stroke:var(--red)"><use href="#i-code"/></svg></div>
         <div><div class="num">EXAMPLE 03</div><div class="st-label" style="font-size:21px;font-weight:800;margin-top:4px;color:#fff;">Webapp Skill</div><div class="small">작동하는 앱</div></div>
       </div>
     </div>
@@ -5069,12 +5163,12 @@ ul.list li:hover:not(.noglow),
   <h2 class="title">한 번 만든 작업 방식을 <span class="r">다시 사용합니다</span></h2>
 
   <div class="fill grid" style="grid-template-columns:1fr 92px 1fr;margin-top:44px;">
-    <div class="card" style="display:flex;flex-direction:column;justify-content:center;background:#edebe9;border-color:#e7e7e7;">
+    <div class="card" style="display:flex;flex-direction:column;justify-content:center;background:#f5f5f7;border-color:#d2d2d7;">
       <div style="font-size:12px;font-weight:800;letter-spacing:.18em;color:var(--ink-25);">WITHOUT A SKILL</div>
       <div style="font-size:34px;font-weight:800;line-height:1.4;color:var(--ink-45);margin-top:18px;">
         매번 디자인 · 순서 ·<br>규칙을 설명
       </div>
-      <div style="margin-top:28px;height:10px;background:#d9d5cc;width:100%;"></div>
+      <div style="margin-top:28px;height:10px;background:#e8e8ed;width:100%;"></div>
       <div class="small" style="margin-top:14px;">같은 설명을 반복 → 결과도 매번 달라짐</div>
     </div>
 
@@ -5218,7 +5312,7 @@ ul.list li:hover:not(.noglow),
     </div>
   </div>
 
-  <div style="display:flex;align-items:center;gap:14px;margin-top:26px;padding:22px 28px;background:var(--charcoal);position:relative;z-index:2;">
+  <div style="display:flex;align-items:center;gap:14px;margin-top:26px;padding:22px 28px;background:var(--ink);position:relative;z-index:2;">
     <svg class="icon w" style="width:20px;height:20px"><use href="#i-brain"/></svg>
     <div style="color:#fff;font-size:19px;font-weight:600;">
       AI 시대의 코딩 능력은 <span style="color:var(--red);font-weight:800;">질문과 판단의 능력</span>이다.
@@ -5245,15 +5339,15 @@ ul.list li:hover:not(.noglow),
     <div style="display:flex;flex-direction:column;gap:18px;">
       <div style="font-size:12px;font-weight:800;letter-spacing:.22em;color:var(--red);">THREE ACTIONS · START SMALL</div>
       <div class="card step" style="display:flex;align-items:center;gap:22px;padding:26px 30px;">
-        <div class="ibox" style="flex:none;background:#2b5148;border-color:var(--d-line)"><svg class="icon" style="stroke:var(--red)"><use href="#i-chat"/></svg></div>
+        <div class="ibox" style="flex:none;background:#2c2c2e;border-color:var(--d-line)"><svg class="icon" style="stroke:var(--red)"><use href="#i-chat"/></svg></div>
         <div><div class="num">01</div><div class="st-label" style="font-size:20px;font-weight:700;margin-top:4px;color:#fff;">아이디어를 말하고</div><div class="small">누구를 위해 무엇을 만들지 설명해보세요.</div></div>
       </div>
       <div class="card step" style="display:flex;align-items:center;gap:22px;padding:26px 30px;">
-        <div class="ibox" style="flex:none;background:#2b5148;border-color:var(--d-line)"><svg class="icon" style="stroke:var(--red)"><use href="#i-play"/></svg></div>
+        <div class="ibox" style="flex:none;background:#2c2c2e;border-color:var(--d-line)"><svg class="icon" style="stroke:var(--red)"><use href="#i-play"/></svg></div>
         <div><div class="num">02</div><div class="st-label" style="font-size:20px;font-weight:700;margin-top:4px;color:#fff;">결과를 보고</div><div class="small">처음부터 완벽하려 하지 말고 직접 실행하세요.</div></div>
       </div>
       <div class="card step" style="display:flex;align-items:center;gap:22px;padding:26px 30px;">
-        <div class="ibox" style="flex:none;background:#2b5148;border-color:var(--d-line)"><svg class="icon" style="stroke:var(--red)"><use href="#i-loop"/></svg></div>
+        <div class="ibox" style="flex:none;background:#2c2c2e;border-color:var(--d-line)"><svg class="icon" style="stroke:var(--red)"><use href="#i-loop"/></svg></div>
         <div><div class="num">03</div><div class="st-label" style="font-size:20px;font-weight:700;margin-top:4px;color:#fff;">조금씩 고쳐보세요</div><div class="small">한 번의 요청보다 다음 요청이 더 중요합니다.</div></div>
       </div>
     </div>
@@ -5280,15 +5374,15 @@ ul.list li:hover:not(.noglow),
 
     <div style="display:flex;flex-direction:column;gap:18px;">
       <div class="card step" style="display:flex;align-items:center;gap:20px;padding:26px 30px;">
-        <div class="ibox" style="flex:none;background:#2b5148;border-color:var(--d-line)"><svg class="icon" style="stroke:var(--red)"><use href="#i-search"/></svg></div>
+        <div class="ibox" style="flex:none;background:#2c2c2e;border-color:var(--d-line)"><svg class="icon" style="stroke:var(--red)"><use href="#i-search"/></svg></div>
         <div class="st-label" style="font-size:20px;font-weight:700;color:#fff;">오늘 발견한 작은 불편 하나</div>
       </div>
       <div class="card step" style="display:flex;align-items:center;gap:20px;padding:26px 30px;">
-        <div class="ibox" style="flex:none;background:#2b5148;border-color:var(--d-line)"><svg class="icon" style="stroke:var(--red)"><use href="#i-chat"/></svg></div>
+        <div class="ibox" style="flex:none;background:#2c2c2e;border-color:var(--d-line)"><svg class="icon" style="stroke:var(--red)"><use href="#i-chat"/></svg></div>
         <div class="st-label" style="font-size:20px;font-weight:700;color:#fff;">한 문장으로 설명해 보기</div>
       </div>
       <div class="card step" style="display:flex;align-items:center;gap:20px;padding:26px 30px;">
-        <div class="ibox" style="flex:none;background:#2b5148;border-color:var(--d-line)"><svg class="icon" style="stroke:var(--red)"><use href="#i-rocket"/></svg></div>
+        <div class="ibox" style="flex:none;background:#2c2c2e;border-color:var(--d-line)"><svg class="icon" style="stroke:var(--red)"><use href="#i-rocket"/></svg></div>
         <div class="st-label" style="font-size:20px;font-weight:700;color:#fff;">내일 쓸 도구로 만들어 보기</div>
       </div>
     </div>
@@ -5737,6 +5831,16 @@ ul.list li:hover:not(.noglow),
   setTimeout(function(){ var h=document.getElementById('hint'); if(h) h.classList.add('hide'); }, 6000);
 
   fit(); show(0);
+})();
+</script>
+
+<script id="apple-nav-material">
+/* 어두운 장에서는 하단 버튼도 어두운 유리 소재로 */
+(function(){
+  var sync=function(){var on=document.querySelector(".slide.on");document.body.classList.toggle("on-dark",!!(on&&on.classList.contains("dark")));};
+  var mo=new MutationObserver(sync);
+  Array.prototype.forEach.call(document.querySelectorAll(".slide"),function(s){mo.observe(s,{attributes:true,attributeFilter:["class"]});});
+  sync();
 })();
 </script>
 </body>
